@@ -1,6 +1,7 @@
 ﻿using FreeSql;
 using LibraryManagementSystem.LogSys;
 using LibraryManagementSystem.Tool;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -98,6 +99,29 @@ namespace LibraryManagementSystem.Config
         /// 借阅时长超过(>=)这个值才计算信誉值变动(防止无意义反复借阅刷信誉分)
         /// </summary>
         public int CreditBorrowLimit { get; set; } = 2;
+        /// <summary>
+        /// 会员初始信誉值
+        /// </summary>
+        public int InitialCreditValue { get; set; } = 30;
+
+        // 密码加密配置
+        /// <summary>
+        /// 盐长度(Byte)
+        /// </summary>
+        public int SaltSize { get; set; } = 16;
+        /// <summary>
+        /// PBKDF2加密算法类型
+        /// </summary>
+        public string PBKDF2PrfString { get; set; } = "HMACSHA256";
+        /// <summary>
+        /// PBKDF2加密算法迭代次数
+        /// </summary>
+        public int PBKDF2IterationTimes { get; set; } = 1000;
+        /// <summary>
+        /// PBKDF2加密算法生成长度(Byte)
+        /// </summary>
+        public int PBKDF2SizeRequested { get; set; } = 32;
+
         // FreeSql数据库连接字符串Raw
         private static readonly string MySqlConnStr = @"Data Source={0};Port={1};User ID={2};Password={3}; Initial Catalog={4};Charset={5}; SslMode={6};Min pool size={7}";
         private static readonly string PostgreSQLConnStr = @"Host={0};Port={1};Username={2};Password={3}; Database={4};Pooling={5};Minimum Pool Size={6}";
@@ -139,6 +163,20 @@ namespace LibraryManagementSystem.Config
                     "oracle" => String.Format(OracleConnStr, User, Password, DataSource, Pooling, MinPoolSize),
                     "sqlite" => String.Format(SqliteConnStr, DataSource, Attachs, Pooling, MinPoolSize),
                     _ => String.Format(SqliteConnStr, DataSource, Attachs, Pooling, MinPoolSize),
+                };
+            }
+        }
+        [JsonIgnore()]
+        public KeyDerivationPrf PBKDF2Prf
+        {
+            get
+            {
+                return (PBKDF2PrfString.ToUpper()) switch
+                {
+                    "HMACSHA1" => KeyDerivationPrf.HMACSHA1,
+                    "HMACSHA256" => KeyDerivationPrf.HMACSHA256,
+                    "HMACSHA512" => KeyDerivationPrf.HMACSHA512,
+                    _ => KeyDerivationPrf.HMACSHA256
                 };
             }
         }

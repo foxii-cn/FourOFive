@@ -52,8 +52,8 @@ namespace LibraryManagementSystem.Controller
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Warning(ex, "{LogName}: {MemberId}借书{BookId}失败",
-                                    LogName, member.Id, book.Id);
+                LoggerHolder.Instance.Warning("{LogName}: {MemberId}借书{BookId}失败({ExceptionMessage})",
+                                    LogName, member.Id, book.Id,ex.Message);
                 throw;
             }
         }
@@ -93,10 +93,28 @@ namespace LibraryManagementSystem.Controller
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Warning(ex, "{LogName}: {MemberId}还书{BookId}失败",
-                                    LogName, member.Id, book.Id);
+                LoggerHolder.Instance.Warning("{LogName}: {MemberId}还书{BookId}失败({ExceptionMessage})",
+                                    LogName, member.Id, book.Id,ex.Message);
                 throw;
             }
+        }
+        public static List<LeaseLog> TardyLease(Member member=null)
+        {
+            string leaseConditionString = "GiveBack is NULL";
+            if (member != null && member.Id != null)
+                leaseConditionString = String.Format("{0} and MemberId='{1}'", leaseConditionString,member.Id);
+            List<LeaseLog> leaseLogs;
+            try
+            {
+                leaseLogs=DatabaseService<LeaseLog>.Query(leaseConditionString);
+            }
+            catch (Exception ex)
+            {
+                LoggerHolder.Instance.Warning( "{LogName}: 查询未还记录失败({ExceptionMessage})",
+                                    LogName,ex.Message);
+                throw;
+            }
+            return leaseLogs;
         }
     }
 }

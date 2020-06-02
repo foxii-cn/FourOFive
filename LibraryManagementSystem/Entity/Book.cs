@@ -16,6 +16,6 @@ namespace LibraryManagementSystem.Entity
         [Column()]
         public int Sum { set; get; } = 0;
         [Column()]
-        public string Position { set; get; } = null;
+        public string Position { set; get; }
     }
 }

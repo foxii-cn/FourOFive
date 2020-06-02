@@ -10,6 +10,8 @@ namespace LibraryManagementSystem.Entity
         [Column(IsNullable = false)]
         public string UserName { get; set; }
         [Column(IsNullable = false)]
+        public string Salt { get; set; }
+        [Column(IsNullable = false)]
         public string Password { get; set; }
         [Column(IsNullable = false)]
         public string Name { get; set; }
