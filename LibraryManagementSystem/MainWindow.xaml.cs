@@ -1,9 +1,4 @@
 ﻿using LibraryManagementSystem.Config;
-using LibraryManagementSystem.Controller;
-using LibraryManagementSystem.DAO;
-using LibraryManagementSystem.Entity;
-using LibraryManagementSystem.LogSys;
-using LibraryManagementSystem.Service;
 using System.Windows;
 
 namespace LibraryManagementSystem

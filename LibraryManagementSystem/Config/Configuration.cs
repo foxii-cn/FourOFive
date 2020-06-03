@@ -86,11 +86,11 @@ namespace LibraryManagementSystem.Config
         /// <summary>
         /// 信誉超过(>=)Key,获得Value借书时长(天)
         /// </summary>
-        public Dictionary<int,int> CreditReward { get; set; } = new Dictionary<int, int> { { 0,15 }, { 30, 30 }, { 60, 60 } };
+        public Dictionary<int, int> CreditReward { get; set; } = new Dictionary<int, int> { { 0, 15 }, { 30, 30 }, { 60, 60 } };
         /// <summary>
         /// 还书时间减最后期限间隔天数超过(>=)Key,减少Value信誉值
         /// </summary>
-        public Dictionary<int, int> GiveBackPunishment { get; set; } = new Dictionary<int, int> { { 15, 2 } , { 30, 10 }, { 60, 40 }};
+        public Dictionary<int, int> GiveBackPunishment { get; set; } = new Dictionary<int, int> { { 15, 2 }, { 30, 10 }, { 60, 40 } };
         /// <summary>
         /// 最后期限减还书时间间隔天数超过(>=)Key,增加Value信誉值
         /// </summary>

@@ -1,8 +1,6 @@
 ﻿using LibraryManagementSystem.Config;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace LibraryManagementSystem.Service
 {
@@ -12,7 +10,7 @@ namespace LibraryManagementSystem.Service
         /// 我相信这里用不到这个东西
         /// </summary>
         public static readonly string LogName = "CreditService";
-        public static int GetAccreditedDays( int creditValue)
+        public static int GetAccreditedDays(int creditValue)
         {
             int[] keys = Configuration.Instance.CreditReward.Keys.ToArray();
             int index = Array.BinarySearch(keys, creditValue);
@@ -23,7 +21,7 @@ namespace LibraryManagementSystem.Service
         }
         public static int GetCreditValue(DateTime borrowTime, DateTime deadlineTime, DateTime giveBackTime, int creditValue)
         {
-            if ((giveBackTime-borrowTime).Days<Configuration.Instance.CreditBorrowLimit)
+            if ((giveBackTime - borrowTime).Days < Configuration.Instance.CreditBorrowLimit)
                 return creditValue;
             int differDays = (deadlineTime - giveBackTime).Days;
             int[] rewardKeys = Configuration.Instance.GiveBackReward.Keys.ToArray();

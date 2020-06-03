@@ -16,7 +16,7 @@ namespace LibraryManagementSystem.Service
             int rows;
             try
             {
-                 insert = Sql.Instance.Insert(elements);
+                insert = Sql.Instance.Insert(elements);
             }
             catch (Exception ex)
             {
@@ -26,7 +26,7 @@ namespace LibraryManagementSystem.Service
             }
             try
             {
-                rows= insert.ExecuteAffrows();
+                rows = insert.ExecuteAffrows();
             }
             catch (Exception ex)
             {
@@ -106,12 +106,12 @@ namespace LibraryManagementSystem.Service
             catch (Exception ex)
             {
                 LoggerHolder.Instance.Error(ex, "{LogName}: 为类型{T}以条件{Condition}创建查询对象失败",
-                                    LogName,typeof(T),condition);
+                                    LogName, typeof(T), condition);
                 throw;
             }
             try
             {
-                elements=select.ToList();
+                elements = select.ToList();
             }
             catch (Exception ex)
             {

@@ -13,7 +13,7 @@ namespace LibraryManagementSystem.Tool
             string json;
             try
             {
-                json= JsonConvert.SerializeObject(element, formatting ? Formatting.Indented : Formatting.None);
+                json = JsonConvert.SerializeObject(element, formatting ? Formatting.Indented : Formatting.None);
             }
             catch (Exception ex)
             {
@@ -32,7 +32,7 @@ namespace LibraryManagementSystem.Tool
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Error(ex, "{LogName}: 解析Json{Value}时出错", 
+                LoggerHolder.Instance.Error(ex, "{LogName}: 解析Json{Value}时出错",
                     LogName, value);
                 throw;
             }
@@ -46,7 +46,7 @@ namespace LibraryManagementSystem.Tool
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Error(ex, "{LogName}: 解析Json{Value}到{Element}时出错", 
+                LoggerHolder.Instance.Error(ex, "{LogName}: 解析Json{Value}到{Element}时出错",
                     LogName, value, element);
                 throw;
             }

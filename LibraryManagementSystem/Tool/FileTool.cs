@@ -19,7 +19,7 @@ namespace LibraryManagementSystem.Tool
             catch (Exception ex)
             {
                 LoggerHolder.Instance.Error(ex, "{LogName}: 以编码{Encoding}读取文件{Path}时出错",
-                    LogName,encoding, path);
+                    LogName, encoding, path);
                 throw;
             }
             return text;
@@ -33,7 +33,7 @@ namespace LibraryManagementSystem.Tool
             catch (Exception ex)
             {
                 LoggerHolder.Instance.Error(ex, "{LogName}: 以编码{Encoding}写入{Text}到文件{Path}时出错",
-                    LogName,encoding, text, path);
+                    LogName, encoding, text, path);
                 throw;
             }
         }
