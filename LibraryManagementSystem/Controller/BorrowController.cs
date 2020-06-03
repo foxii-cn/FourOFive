@@ -45,7 +45,7 @@ namespace LibraryManagementSystem.Controller
                     if (accreditedDays == 0)
                         throw new Exception("借阅人信誉过低");
                     bSnap.Margin--;
-                    DatabaseService<Book>.Update(new string[] { "Margin" }, bSnap);
+                    DatabaseService<Book>.Update(bSnap, String.Format("Margin={0}", bSnap.Margin));
                     LeaseLog leaseLog = new LeaseLog { BookId = bSnap.Id, MemberId = mSnap.Id, Deadline = DateTime.Today.AddDays(accreditedDays + 1) };
                     DatabaseService<LeaseLog>.Create(leaseLog);
                 });
@@ -53,7 +53,7 @@ namespace LibraryManagementSystem.Controller
             catch (Exception ex)
             {
                 LoggerHolder.Instance.Warning("{LogName}: {MemberId}借书{BookId}失败({ExceptionMessage})",
-                                    LogName, member.Id, book.Id,ex.Message);
+                                    LogName, member.Id, book.Id, ex.Message);
                 throw;
             }
         }
@@ -86,32 +86,32 @@ namespace LibraryManagementSystem.Controller
                     bSnap.Margin++;
                     leaseLog.GiveBack = giveBack;
                     mSnap.CreditValue = CreditService.GetCreditValue(leaseLog.CreateTime, (DateTime)leaseLog.Deadline, giveBack, mSnap.CreditValue);
-                    DatabaseService<Book>.Update(new string[] { "Margin" }, bSnap);
-                    DatabaseService<Member>.Update(new string[] { "CreditValue" }, mSnap);
-                    DatabaseService<LeaseLog>.Update(new string[] { "GiveBack" }, leaseLog);
+                    DatabaseService<Book>.Update(bSnap, String.Format("Margin={0}", bSnap.Margin));
+                    DatabaseService<Member>.Update(mSnap, String.Format("CreditValue={0}", mSnap.CreditValue));
+                    DatabaseService<LeaseLog>.Update(leaseLog, String.Format("GiveBack='{0}'", leaseLog.GiveBack));
                 });
             }
             catch (Exception ex)
             {
                 LoggerHolder.Instance.Warning("{LogName}: {MemberId}还书{BookId}失败({ExceptionMessage})",
-                                    LogName, member.Id, book.Id,ex.Message);
+                                    LogName, member.Id, book.Id, ex.Message);
                 throw;
             }
         }
-        public static List<LeaseLog> TardyLease(Member member=null)
+        public static List<LeaseLog> TardyLease(Member member = null)
         {
             string leaseConditionString = "GiveBack is NULL";
             if (member != null && member.Id != null)
-                leaseConditionString = String.Format("{0} and MemberId='{1}'", leaseConditionString,member.Id);
+                leaseConditionString = String.Format("{0} and MemberId='{1}'", leaseConditionString, member.Id);
             List<LeaseLog> leaseLogs;
             try
             {
-                leaseLogs=DatabaseService<LeaseLog>.Query(leaseConditionString);
+                leaseLogs = DatabaseService<LeaseLog>.Query(leaseConditionString);
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Warning( "{LogName}: 查询未还记录失败({ExceptionMessage})",
-                                    LogName,ex.Message);
+                LoggerHolder.Instance.Warning("{LogName}: 查询未还记录失败({ExceptionMessage})",
+                                    LogName, ex.Message);
                 throw;
             }
             return leaseLogs;

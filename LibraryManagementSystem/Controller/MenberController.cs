@@ -41,5 +41,9 @@ namespace LibraryManagementSystem.Controller
             else
                 return null;
         }
+        public static bool LogIn(string userName, string password)
+        {
+            return false;
+        }
     }
 }

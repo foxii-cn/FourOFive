@@ -36,18 +36,18 @@ namespace LibraryManagementSystem.Service
             }
             return rows;
         }
-        public static int Delete(params T[] elements)
+        public static int Delete(object dywhere)
         {
             FreeSql.IDelete<T> delete;
             int rows;
             try
             {
-                delete = Sql.Instance.Delete<T>(elements);
+                delete = Sql.Instance.Delete<T>(dywhere);
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Error(ex, "{LogName}: 为{Elements}创建删除对象失败",
-                                    LogName, elements);
+                LoggerHolder.Instance.Error(ex, "{LogName}: 以{DYWhere}创建删除对象失败",
+                                    LogName, dywhere);
                 throw;
             }
             try
@@ -62,7 +62,7 @@ namespace LibraryManagementSystem.Service
             }
             return rows;
         }
-        public static int Update(string[] columns, params T[] elements)
+        public static int Update(object dywhere, string setSql)
         {
             if (Sql.Instance.Ado.TransactionCurrentThread == null)
                 LoggerHolder.Instance.Warning("{LogName}: 未在事务中时更新对象",
@@ -71,14 +71,13 @@ namespace LibraryManagementSystem.Service
             int rows;
             try
             {
-                update = Sql.Instance.Update<T>()
-                .SetSource(new List<T>(elements))
-                .UpdateColumns(columns);
+                update = Sql.Instance.Update<T>(dywhere)
+                .SetRaw(setSql);
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Error(ex, "{LogName}: 为{Elements}的{Columns}列创建更新对象失败",
-                                    LogName, elements, columns);
+                LoggerHolder.Instance.Error(ex, "{LogName}: 以{DYWhere}创建{SetSql}更新对象失败",
+                                    LogName, dywhere, setSql);
                 throw;
             }
             try
@@ -149,18 +148,18 @@ namespace LibraryManagementSystem.Service
             }
             return elements;
         }
-        public static List<T> Query(params T[] elements)
+        public static List<T> Query(object dywhere)
         {
             FreeSql.ISelect<T> select;
             List<T> refreshedElements;
             try
             {
-                select = Sql.Instance.Select<T>(elements);
+                select = Sql.Instance.Select<T>(dywhere);
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Error(ex, "{LogName}: 为类型{T}创建查询对象失败",
-                                    LogName, typeof(T));
+                LoggerHolder.Instance.Error(ex, "{LogName}: 为类型{T}以{DYWhere}创建查询对象失败",
+                                    LogName, typeof(T), dywhere);
                 throw;
             }
             try
@@ -175,18 +174,18 @@ namespace LibraryManagementSystem.Service
             }
             return refreshedElements;
         }
-        public static void ForUpdate(params T[] elements)
+        public static void ForUpdate(object dywhere)
         {
             FreeSql.ISelect<T> forUpdate;
             try
             {
-                forUpdate = Sql.Instance.Select<T>(elements)
+                forUpdate = Sql.Instance.Select<T>(dywhere)
                     .ForUpdate();
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Error(ex, "{LogName}: 为类型{T}创建悲观锁对象失败",
-                                    LogName, typeof(T));
+                LoggerHolder.Instance.Error(ex, "{LogName}: 为类型{T}以{DYWhere}创建悲观锁对象失败",
+                                    LogName, typeof(T), dywhere);
                 throw;
             }
             try
