@@ -72,16 +72,16 @@ namespace LibraryManagementSystem.Config
 
         // 数据库配置
         public string DatabaseType { get; set; } = "Sqlite";
-        public string DataSource { get; set; } = "127.0.0.1";
-        public string Port { get; set; } = "3306";
-        public string User { get; set; } = "root";
-        public string Password { get; set; } = "root";
+        public string DatabaseDataSource { get; set; } = "127.0.0.1";
+        public string DatabasePort { get; set; } = "3306";
+        public string DatabaseUser { get; set; } = "root";
+        public string DatabasePassword { get; set; } = "root";
         public string Database { get; set; } = "test";
-        public string Charset { get; set; } = "utf8";
-        public string Security { get; set; } = "none";
-        public string Attachs { get; set; } = @".\data.db";
-        public bool Pooling { get; set; } = true;
-        public int MinPoolSize { get; set; } = 1;
+        public string DatabaseCharset { get; set; } = "utf8";
+        public string DatabaseSecurity { get; set; } = "none";
+        public string DatabaseAttachs { get; set; } = @".\data.db";
+        public bool DatabasePooling { get; set; } = true;
+        public int DatabaseMinPoolSize { get; set; } = 1;
         // 信誉系统配置
         /// <summary>
         /// 信誉超过(>=)Key,获得Value借书时长(天)
@@ -157,12 +157,12 @@ namespace LibraryManagementSystem.Config
             {
                 return (DatabaseType.ToLower()) switch
                 {
-                    "mysql" => String.Format(MySqlConnStr, DataSource, Port, User, Password, Database, Charset, Security, MinPoolSize),
-                    "postgresql" => String.Format(PostgreSQLConnStr, DataSource, Port, User, Password, Database, Pooling, MinPoolSize),
-                    "sqlserver" => String.Format(SqlServerConnStr, DataSource, Security, Database, Pooling, MinPoolSize),
-                    "oracle" => String.Format(OracleConnStr, User, Password, DataSource, Pooling, MinPoolSize),
-                    "sqlite" => String.Format(SqliteConnStr, DataSource, Attachs, Pooling, MinPoolSize),
-                    _ => String.Format(SqliteConnStr, DataSource, Attachs, Pooling, MinPoolSize),
+                    "mysql" => String.Format(MySqlConnStr, DatabaseDataSource, DatabasePort, DatabaseUser, DatabasePassword, Database, DatabaseCharset, DatabaseSecurity, DatabaseMinPoolSize),
+                    "postgresql" => String.Format(PostgreSQLConnStr, DatabaseDataSource, DatabasePort, DatabaseUser, DatabasePassword, Database, DatabasePooling, DatabaseMinPoolSize),
+                    "sqlserver" => String.Format(SqlServerConnStr, DatabaseDataSource, DatabaseSecurity, Database, DatabasePooling, DatabaseMinPoolSize),
+                    "oracle" => String.Format(OracleConnStr, DatabaseUser, DatabasePassword, DatabaseDataSource, DatabasePooling, DatabaseMinPoolSize),
+                    "sqlite" => String.Format(SqliteConnStr, DatabaseDataSource, DatabaseAttachs, DatabasePooling, DatabaseMinPoolSize),
+                    _ => String.Format(SqliteConnStr, DatabaseDataSource, DatabaseAttachs, DatabasePooling, DatabaseMinPoolSize),
                 };
             }
         }

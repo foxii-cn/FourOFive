@@ -1,11 +1,11 @@
 ﻿using FreeSql.DataAnnotations;
-using System;
 
 namespace LibraryManagementSystem.Entity
 {
+    [Table()]
     [Index("uk_NationalIdentificationNumber", "NationalIdentificationNumber", true)]
     [Index("uk_UserName", "UserName", true)]
-    public abstract class User : BasicEntity
+    public class User : BasicEntity
     {
         [Column(IsNullable = false)]
         public string UserName { get; set; }
@@ -17,5 +17,8 @@ namespace LibraryManagementSystem.Entity
         public string Name { get; set; }
         [Column(IsNullable = false)]
         public string NationalIdentificationNumber { get; set; }
+        [Column()]
+        public int CreditValue { get; set; }
+
     }
 }

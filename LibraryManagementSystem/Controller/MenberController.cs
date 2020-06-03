@@ -12,10 +12,10 @@ namespace LibraryManagementSystem.Controller
     {
         public static readonly string LogName = "MenberController";
 
-        public static Member Register(string userName, string password, string name, string nationalIdentificationNumber)
+        public static User Register(string userName, string password, string name, string nationalIdentificationNumber)
         {
             byte[] vs = EncryptTool.NewSalt;
-            Member member = new Member
+            User user = new User
             {
                 UserName = userName,
                 Salt = Convert.ToBase64String(vs),
@@ -27,26 +27,26 @@ namespace LibraryManagementSystem.Controller
             int affectedRows;
             try
             {
-                affectedRows = DatabaseService<Member>.Create(member);
+                affectedRows = DatabaseService<User>.Create(user);
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Warning("{LogName}: 用户{Member}注册失败({ExceptionMessage})",
-                                    LogName, member, ex.Message);
+                LoggerHolder.Instance.Warning("{LogName}: 用户{User}注册失败({ExceptionMessage})",
+                                    LogName, user, ex.Message);
                 throw;
             }
             if (affectedRows == 1)
-                return member;
+                return user;
             else
                 return null;
         }
         public static bool LogIn(string userName, string password)
         {
-            string memberConditionString = String.Format(@"UserName='{0}'", userName);
-            Member member;
+            string userConditionString = String.Format(@"UserName='{0}'", userName);
+            User user;
             try
             {
-                member = DatabaseService<Member>.QuerySql(memberConditionString).FirstOrDefault();
+                user = DatabaseService<User>.QuerySql(userConditionString).FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -54,7 +54,7 @@ namespace LibraryManagementSystem.Controller
                                     LogName, userName, ex.Message);
                 throw;
             }
-            if (member != null && EncryptTool.HashEncrypt(password, Convert.FromBase64String(member.Salt)) == member.Password)
+            if (user != null && EncryptTool.HashEncrypt(password, Convert.FromBase64String(user.Salt)) == user.Password)
                 return true;
             else
                 return false;

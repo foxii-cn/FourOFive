@@ -9,7 +9,7 @@ namespace LibraryManagementSystem.Entity
         [Column()]
         public Guid BookId { set; get; }
         [Column()]
-        public Guid MemberId { set; get; }
+        public Guid UserId { set; get; }
         [Column(IsNullable = false)]
         public DateTime? Deadline { set; get; }
         [Column()]
