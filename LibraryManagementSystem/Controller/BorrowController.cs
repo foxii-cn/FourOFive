@@ -16,23 +16,21 @@ namespace LibraryManagementSystem.Controller
         /// </summary>
         /// <param name="member">借书的会员</param>
         /// <param name="book">要借的书</param>
-        public static void BorrowBook(Member member, Book book)
+        public static void BorrowBook(string memberId, string bookId)
         {
-            Member mSnap = BasicEntity.Copy(member);
-            Book bSnap = BasicEntity.Copy(book);
-            if (mSnap == null || bSnap == null)
-                throw new NullReferenceException("借阅人或借阅目标对象为空");
+            if (memberId == null || bookId == null)
+                throw new NullReferenceException("借阅人或借阅目标ID为空");
             try
             {
                 Sql.Instance.Transaction(() =>
                 {
-                    DatabaseService<Book>.ForUpdate(bSnap);
-                    bSnap = DatabaseService<Book>.Query(bSnap).FirstOrDefault();
+                    DatabaseService<Book>.ForUpdate(bookId);
+                    Book bSnap = DatabaseService<Book>.Query(bookId).FirstOrDefault();
                     if (bSnap == null)
                         throw new Exception("借阅目标不合法");
                     if (bSnap.Margin <= 0)
                         throw new Exception("借阅目标数量不足");
-                    mSnap = DatabaseService<Member>.Query(mSnap).FirstOrDefault();
+                    Member mSnap = DatabaseService<Member>.Query(memberId).FirstOrDefault();
                     if (mSnap == null)
                         throw new Exception("借阅人不合法");
                     string leaseConditionString = String.Format(@"BookId='{0}' and MemberId='{1}' and GiveBack is NULL",
@@ -52,26 +50,24 @@ namespace LibraryManagementSystem.Controller
             catch (Exception ex)
             {
                 LoggerHolder.Instance.Warning("{LogName}: {MemberId}借书{BookId}失败({ExceptionMessage})",
-                                    LogName, member.Id, book.Id, ex.Message);
+                                    LogName, memberId, bookId, ex.Message);
                 throw;
             }
         }
-        public static void RevertBook(Member member, Book book)
+        public static void RevertBook(string memberId, string bookId)
         {
-            Member mSnap = BasicEntity.Copy(member);
-            Book bSnap = BasicEntity.Copy(book);
-            if (mSnap == null || bSnap == null)
-                throw new NullReferenceException("借阅人或借阅目标对象为空");
+            if (memberId == null || bookId == null)
+                throw new NullReferenceException("借阅人或借阅目标ID为空");
             try
             {
                 Sql.Instance.Transaction(() =>
                 {
-                    DatabaseService<Book>.ForUpdate(bSnap);
-                    DatabaseService<Member>.ForUpdate(mSnap);
-                    bSnap = DatabaseService<Book>.Query(bSnap).FirstOrDefault();
+                    DatabaseService<Book>.ForUpdate(bookId);
+                    DatabaseService<Member>.ForUpdate(memberId);
+                    Book bSnap = DatabaseService<Book>.Query(bookId).FirstOrDefault();
                     if (bSnap == null)
                         throw new Exception("借阅目标不合法");
-                    mSnap = DatabaseService<Member>.Query(mSnap).FirstOrDefault();
+                    Member mSnap = DatabaseService<Member>.Query(memberId).FirstOrDefault();
                     if (mSnap == null)
                         throw new Exception("借阅人不合法");
                     string leaseConditionString = String.Format(@"BookId='{0}' and MemberId='{1}' and GiveBack is NULL",
@@ -93,15 +89,15 @@ namespace LibraryManagementSystem.Controller
             catch (Exception ex)
             {
                 LoggerHolder.Instance.Warning("{LogName}: {MemberId}还书{BookId}失败({ExceptionMessage})",
-                                    LogName, member.Id, book.Id, ex.Message);
+                                    LogName, memberId, bookId, ex.Message);
                 throw;
             }
         }
-        public static List<LeaseLog> TardyLease(Member member = null)
+        public static List<LeaseLog> TardyLease(string memberId = null)
         {
             string leaseConditionString = @"GiveBack is NULL";
-            if (member != null && member.Id != null)
-                leaseConditionString = String.Format(@"{0} and MemberId='{1}'", leaseConditionString, member.Id);
+            if (memberId != null)
+                leaseConditionString = String.Format(@"{0} and MemberId='{1}'", leaseConditionString, memberId);
             List<LeaseLog> leaseLogs;
             try
             {

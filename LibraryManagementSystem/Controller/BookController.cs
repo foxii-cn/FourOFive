@@ -36,12 +36,12 @@ namespace LibraryManagementSystem.Controller
             else
                 return null;
         }
-        public static int OutStock(params Book[] books)
+        public static int OutStock(params string[] bookIds)
         {
             int affectedRows;
             try
             {
-                affectedRows = DatabaseService<Book>.Delete(books);
+                affectedRows = DatabaseService<Book>.Delete(bookIds);
             }
             catch (Exception ex)
             {
