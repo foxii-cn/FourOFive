@@ -57,7 +57,7 @@ namespace LibraryManagementSystem.Controller
             List<Book> books;
             try
             {
-                books=DatabaseService<Book>.Query(condition, pageIndex, pageSize, out count);
+                books=DatabaseService<Book>.QuerySql(condition, pageIndex, pageSize, out count);
             }
             catch (Exception ex)
             {

@@ -92,7 +92,7 @@ namespace LibraryManagementSystem.Service
             }
             return rows;
         }
-        public static List<T> Query(string condition, int pageIndex, int pageSize, out long count)
+        public static List<T> QuerySql(string condition, int pageIndex, int pageSize, out long count)
         {
             FreeSql.ISelect<T> select;
             List<T> elements;
@@ -121,7 +121,7 @@ namespace LibraryManagementSystem.Service
             }
             return elements;
         }
-        public static List<T> Query(string condition)
+        public static List<T> QuerySql(string condition)
         {
             FreeSql.ISelect<T> select;
             List<T> elements;
@@ -199,7 +199,7 @@ namespace LibraryManagementSystem.Service
                 throw;
             }
         }
-        public static void ForUpdate(string condition)
+        public static void ForUpdateSql(string condition)
         {
             FreeSql.ISelect<T> forUpdate;
             try

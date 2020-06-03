@@ -38,14 +38,14 @@ namespace LibraryManagementSystem.Controller
                         throw new Exception("借阅人不合法");
                     string leaseConditionString = String.Format(@"BookId='{0}' and MemberId='{1}' and GiveBack is NULL",
                         bSnap.Id, mSnap.Id);
-                    List<LeaseLog> leaseLogs = DatabaseService<LeaseLog>.Query(leaseConditionString);
+                    List<LeaseLog> leaseLogs = DatabaseService<LeaseLog>.QuerySql(leaseConditionString);
                     if (leaseLogs.Count > 0)
                         throw new Exception("已有未归还的同名同书借阅记录");
                     int accreditedDays = CreditService.GetAccreditedDays(mSnap.CreditValue);
                     if (accreditedDays == 0)
                         throw new Exception("借阅人信誉过低");
                     bSnap.Margin--;
-                    DatabaseService<Book>.Update(bSnap, String.Format("Margin={0}", bSnap.Margin));
+                    DatabaseService<Book>.Update(bSnap, String.Format(@"Margin={0}", bSnap.Margin));
                     LeaseLog leaseLog = new LeaseLog { BookId = bSnap.Id, MemberId = mSnap.Id, Deadline = DateTime.Today.AddDays(accreditedDays + 1) };
                     DatabaseService<LeaseLog>.Create(leaseLog);
                 });
@@ -77,8 +77,8 @@ namespace LibraryManagementSystem.Controller
                         throw new Exception("借阅人不合法");
                     string leaseConditionString = String.Format(@"BookId='{0}' and MemberId='{1}' and GiveBack is NULL",
                         bSnap.Id, mSnap.Id);
-                    DatabaseService<LeaseLog>.ForUpdate(leaseConditionString);
-                    List<LeaseLog> leaseLogs = DatabaseService<LeaseLog>.Query(leaseConditionString);
+                    DatabaseService<LeaseLog>.ForUpdateSql(leaseConditionString);
+                    List<LeaseLog> leaseLogs = DatabaseService<LeaseLog>.QuerySql(leaseConditionString);
                     if (leaseLogs.Count == 0)
                         throw new Exception("无未归还的借阅记录");
                     LeaseLog leaseLog = leaseLogs.OrderBy(l => l.CreateTime).FirstOrDefault();
@@ -86,9 +86,9 @@ namespace LibraryManagementSystem.Controller
                     bSnap.Margin++;
                     leaseLog.GiveBack = giveBack;
                     mSnap.CreditValue = CreditService.GetCreditValue(leaseLog.CreateTime, (DateTime)leaseLog.Deadline, giveBack, mSnap.CreditValue);
-                    DatabaseService<Book>.Update(bSnap, String.Format("Margin={0}", bSnap.Margin));
-                    DatabaseService<Member>.Update(mSnap, String.Format("CreditValue={0}", mSnap.CreditValue));
-                    DatabaseService<LeaseLog>.Update(leaseLog, String.Format("GiveBack='{0}'", leaseLog.GiveBack));
+                    DatabaseService<Book>.Update(bSnap, String.Format(@"Margin={0}", bSnap.Margin));
+                    DatabaseService<Member>.Update(mSnap, String.Format(@"CreditValue={0}", mSnap.CreditValue));
+                    DatabaseService<LeaseLog>.Update(leaseLog, String.Format(@"GiveBack='{0}'", leaseLog.GiveBack));
                 });
             }
             catch (Exception ex)
@@ -100,13 +100,13 @@ namespace LibraryManagementSystem.Controller
         }
         public static List<LeaseLog> TardyLease(Member member = null)
         {
-            string leaseConditionString = "GiveBack is NULL";
+            string leaseConditionString = @"GiveBack is NULL";
             if (member != null && member.Id != null)
-                leaseConditionString = String.Format("{0} and MemberId='{1}'", leaseConditionString, member.Id);
+                leaseConditionString = String.Format(@"{0} and MemberId='{1}'", leaseConditionString, member.Id);
             List<LeaseLog> leaseLogs;
             try
             {
-                leaseLogs = DatabaseService<LeaseLog>.Query(leaseConditionString);
+                leaseLogs = DatabaseService<LeaseLog>.QuerySql(leaseConditionString);
             }
             catch (Exception ex)
             {

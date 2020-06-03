@@ -5,6 +5,7 @@ using LibraryManagementSystem.Service;
 using LibraryManagementSystem.Tool;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace LibraryManagementSystem.Controller
@@ -20,7 +21,7 @@ namespace LibraryManagementSystem.Controller
             {
                 UserName = userName,
                 Salt = Convert.ToBase64String(vs),
-                Password = EncryptTool.HashEncrypt(password,vs),
+                Password = EncryptTool.HashEncrypt(password, vs),
                 Name = name,
                 NationalIdentificationNumber = nationalIdentificationNumber,
                 CreditValue = Configuration.Instance.InitialCreditValue
@@ -32,7 +33,7 @@ namespace LibraryManagementSystem.Controller
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Warning("{LogName}: 书{Member}入库失败({ExceptionMessage})",
+                LoggerHolder.Instance.Warning("{LogName}: 用户{Member}注册失败({ExceptionMessage})",
                                     LogName, member, ex.Message);
                 throw;
             }
@@ -43,7 +44,22 @@ namespace LibraryManagementSystem.Controller
         }
         public static bool LogIn(string userName, string password)
         {
-            return false;
+            string memberConditionString = String.Format(@"UserName='{0}'", userName);
+            Member member;
+            try
+            {
+                member = DatabaseService<Member>.QuerySql(memberConditionString).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                LoggerHolder.Instance.Warning("{LogName}: 用户{UserName}查询失败({ExceptionMessage})",
+                                    LogName, userName, ex.Message);
+                throw;
+            }
+            if (member != null && EncryptTool.HashEncrypt(password, Convert.FromBase64String(member.Salt)) == member.Password)
+                return true;
+            else
+                return false;
         }
     }
 }
