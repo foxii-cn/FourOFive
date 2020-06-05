@@ -1,10 +1,10 @@
 ﻿using FreeSql.DataAnnotations;
 using System;
 
-namespace LibraryManagementSystem.Entity
+namespace LibraryManagementSystem.Model
 {
     [Table()]
-    public class LeaseLog : BasicEntity
+    public class BorrowLog : DatabaseModel
     {
         [Column()]
         public Guid BookId { set; get; }

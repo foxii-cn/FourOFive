@@ -1,12 +1,12 @@
 ﻿using FreeSql.DataAnnotations;
-using LibraryManagementSystem.Tool;
+using LibraryManagementSystem.Utility;
 using System;
 using System.Linq;
 using System.Reflection;
 
-namespace LibraryManagementSystem.Entity
+namespace LibraryManagementSystem.Model
 {
-    public abstract class BasicEntity
+    public abstract class DatabaseModel
     {
         [Column(IsPrimary = true)]
         public Guid Id { get; set; }
@@ -18,14 +18,14 @@ namespace LibraryManagementSystem.Entity
         {
             try
             {
-                return JsonTool.SerializeObject(this);
+                return JsonUtility.SerializeObject(this);
             }
             catch (Exception)
             {
                 return base.ToString();
             }
         }
-        public static T Copy<T>(T element) where T : BasicEntity, new()
+        public static T Copy<T>(T element) where T : DatabaseModel, new()
         {
             if (element == null)
                 return element;

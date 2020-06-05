@@ -1,11 +1,11 @@
 ﻿using FreeSql.DataAnnotations;
 
-namespace LibraryManagementSystem.Entity
+namespace LibraryManagementSystem.Model
 {
     [Table()]
     [Index("uk_NationalIdentificationNumber", "NationalIdentificationNumber", true)]
     [Index("uk_UserName", "UserName", true)]
-    public class User : BasicEntity
+    public class User : DatabaseModel
     {
         [Column(IsNullable = false)]
         public string UserName { get; set; }

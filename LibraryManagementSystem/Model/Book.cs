@@ -1,9 +1,9 @@
 ﻿using FreeSql.DataAnnotations;
 
-namespace LibraryManagementSystem.Entity
+namespace LibraryManagementSystem.Model
 {
     [Table()]
-    public class Book : BasicEntity
+    public class Book : DatabaseModel
     {
         [Column(IsNullable = false)]
         public string Title { get; set; }

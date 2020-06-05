@@ -1,26 +1,38 @@
-﻿using LibraryManagementSystem.DAO;
-using LibraryManagementSystem.Entity;
-using LibraryManagementSystem.LogSys;
+﻿using LibraryManagementSystem.Model;
+using Serilog.Core;
 using System;
 using System.Collections.Generic;
 
-namespace LibraryManagementSystem.Service
+namespace LibraryManagementSystem.DAO
 {
 
-    public static class DatabaseService<T> where T : BasicEntity
+    public abstract class DatabaseDAO<T> where T : DatabaseModel
     {
-        public static readonly string LogName = "DatabaseService";
-        public static int Create(params T[] elements)
+        // 数据库对象
+        private readonly IFreeSql sql;
+        // 日志记录对象
+        private readonly Logger logger;
+        // 日志主体
+        private readonly string LogName;
+
+
+        public DatabaseDAO(IFreeSql sql, Logger logger)
+        {
+            LogName = GetType().Name;
+            this.sql = sql;
+            this.logger = logger;
+        }
+        public int Create(params T[] elements)
         {
             FreeSql.IInsert<T> insert;
             int rows;
             try
             {
-                insert = Sql.Instance.Insert(elements);
+                insert = sql.Insert(elements);
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Error(ex, "{LogName}: 为{Elements}创建插入对象失败",
+                logger.Error(ex, "{LogName}: 为{Elements}创建插入对象失败",
                                     LogName, elements);
                 throw;
             }
@@ -30,23 +42,23 @@ namespace LibraryManagementSystem.Service
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Error(ex, "{LogName}: 执行查询操作{InsertSql}失败",
+                logger.Error(ex, "{LogName}: 执行查询操作{InsertSql}失败",
                                     LogName, insert.ToSql());
                 throw;
             }
             return rows;
         }
-        public static int Delete(object dywhere)
+        public int Delete(object dywhere)
         {
             FreeSql.IDelete<T> delete;
             int rows;
             try
             {
-                delete = Sql.Instance.Delete<T>(dywhere);
+                delete = sql.Delete<T>(dywhere);
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Error(ex, "{LogName}: 以{DYWhere}创建删除对象失败",
+                logger.Error(ex, "{LogName}: 以{DYWhere}创建删除对象失败",
                                     LogName, dywhere);
                 throw;
             }
@@ -56,27 +68,27 @@ namespace LibraryManagementSystem.Service
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Error(ex, "{LogName}: 执行删除操作{DeleteSql}失败",
+                logger.Error(ex, "{LogName}: 执行删除操作{DeleteSql}失败",
                                     LogName, delete.ToSql());
                 throw;
             }
             return rows;
         }
-        public static int Update(object dywhere, string setSql)
+        public int Update(object dywhere, string setSql)
         {
-            if (Sql.Instance.Ado.TransactionCurrentThread == null)
-                LoggerHolder.Instance.Warning("{LogName}: 未在事务中时更新对象",
+            if (sql.Ado.TransactionCurrentThread == null)
+                logger.Warning("{LogName}: 未在事务中时更新对象",
                                     LogName);
             FreeSql.IUpdate<T> update;
             int rows;
             try
             {
-                update = Sql.Instance.Update<T>(dywhere)
+                update = sql.Update<T>(dywhere)
                 .SetRaw(setSql);
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Error(ex, "{LogName}: 以{DYWhere}创建{SetSql}更新对象失败",
+                logger.Error(ex, "{LogName}: 以{DYWhere}创建{SetSql}更新对象失败",
                                     LogName, dywhere, setSql);
                 throw;
             }
@@ -86,26 +98,26 @@ namespace LibraryManagementSystem.Service
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Error(ex, "{LogName}: 执行更新操作{UpdateSql}失败",
+                logger.Error(ex, "{LogName}: 执行更新操作{UpdateSql}失败",
                                     LogName, update.ToSql());
                 throw;
             }
             return rows;
         }
-        public static List<T> QuerySql(string condition, int pageIndex, int pageSize, out long count)
+        public List<T> QuerySql(string condition, int pageIndex, int pageSize, out long count)
         {
             FreeSql.ISelect<T> select;
             List<T> elements;
             try
             {
-                select = Sql.Instance.Select<T>()
+                select = sql.Select<T>()
                 .Where(condition)
                 .Count(out count)
                 .Page(pageIndex, pageSize);
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Error(ex, "{LogName}: 为类型{T}以条件{Condition}创建查询对象失败",
+                logger.Error(ex, "{LogName}: 为类型{T}以条件{Condition}创建查询对象失败",
                                     LogName, typeof(T), condition);
                 throw;
             }
@@ -115,24 +127,24 @@ namespace LibraryManagementSystem.Service
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Error(ex, "{LogName}: 执行查询操作{SelectSql}失败",
+                logger.Error(ex, "{LogName}: 执行查询操作{SelectSql}失败",
                                     LogName, select.ToSql());
                 throw;
             }
             return elements;
         }
-        public static List<T> QuerySql(string condition)
+        public List<T> QuerySql(string condition)
         {
             FreeSql.ISelect<T> select;
             List<T> elements;
             try
             {
-                select = Sql.Instance.Select<T>()
+                select = sql.Select<T>()
                 .Where(condition);
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Error(ex, "{LogName}: 为类型{T}以条件{Condition}创建查询对象失败",
+                logger.Error(ex, "{LogName}: 为类型{T}以条件{Condition}创建查询对象失败",
                                     LogName, typeof(T), condition);
                 throw;
             }
@@ -142,23 +154,23 @@ namespace LibraryManagementSystem.Service
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Error(ex, "{LogName}: 执行查询操作{SelectSql}失败",
+                logger.Error(ex, "{LogName}: 执行查询操作{SelectSql}失败",
                                     LogName, select.ToSql());
                 throw;
             }
             return elements;
         }
-        public static List<T> Query(object dywhere)
+        public List<T> Query(object dywhere)
         {
             FreeSql.ISelect<T> select;
             List<T> refreshedElements;
             try
             {
-                select = Sql.Instance.Select<T>(dywhere);
+                select = sql.Select<T>(dywhere);
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Error(ex, "{LogName}: 为类型{T}以{DYWhere}创建查询对象失败",
+                logger.Error(ex, "{LogName}: 为类型{T}以{DYWhere}创建查询对象失败",
                                     LogName, typeof(T), dywhere);
                 throw;
             }
@@ -168,23 +180,23 @@ namespace LibraryManagementSystem.Service
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Error(ex, "{LogName}: 执行查询操作{SelectSql}失败",
+                logger.Error(ex, "{LogName}: 执行查询操作{SelectSql}失败",
                                     LogName, select.ToSql());
                 throw;
             }
             return refreshedElements;
         }
-        public static void ForUpdate(object dywhere)
+        public void ForUpdate(object dywhere)
         {
             FreeSql.ISelect<T> forUpdate;
             try
             {
-                forUpdate = Sql.Instance.Select<T>(dywhere)
+                forUpdate = sql.Select<T>(dywhere)
                     .ForUpdate();
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Error(ex, "{LogName}: 为类型{T}以{DYWhere}创建悲观锁对象失败",
+                logger.Error(ex, "{LogName}: 为类型{T}以{DYWhere}创建悲观锁对象失败",
                                     LogName, typeof(T), dywhere);
                 throw;
             }
@@ -194,23 +206,23 @@ namespace LibraryManagementSystem.Service
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Error(ex, "{LogName}: 执行查询操作{ForUpdateSql}失败",
+                logger.Error(ex, "{LogName}: 执行查询操作{ForUpdateSql}失败",
                                     LogName, forUpdate.ToSql());
                 throw;
             }
         }
-        public static void ForUpdateSql(string condition)
+        public void ForUpdateSql(string condition)
         {
             FreeSql.ISelect<T> forUpdate;
             try
             {
-                forUpdate = Sql.Instance.Select<T>()
+                forUpdate = sql.Select<T>()
                 .Where(condition)
                 .ForUpdate();
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Error(ex, "{LogName}: 为类型{T}以条件{Condition}创建悲观锁对象失败",
+                logger.Error(ex, "{LogName}: 为类型{T}以条件{Condition}创建悲观锁对象失败",
                                     LogName, typeof(T), condition);
                 throw;
             }
@@ -220,10 +232,14 @@ namespace LibraryManagementSystem.Service
             }
             catch (Exception ex)
             {
-                LoggerHolder.Instance.Error(ex, "{LogName}: 执行查询操作{ForUpdateSql}失败",
+                logger.Error(ex, "{LogName}: 执行查询操作{ForUpdateSql}失败",
                                     LogName, forUpdate.ToSql());
                 throw;
             }
+        }
+        public void Transaction(Action handler)
+        {
+            sql.Transaction(handler);
         }
 
     }

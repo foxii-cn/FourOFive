@@ -1,5 +1,4 @@
-﻿using LibraryManagementSystem.Config;
-using System.Windows;
+﻿using System.Windows;
 
 namespace LibraryManagementSystem
 {
@@ -21,8 +20,6 @@ namespace LibraryManagementSystem
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            Configuration.Save();
-            System.Diagnostics.Trace.WriteLine(Configuration.Instance.PBKDF2Prf);
         }
     }
 }
