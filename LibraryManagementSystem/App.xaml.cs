@@ -7,5 +7,9 @@ namespace LibraryManagementSystem
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            InitializeComponent();
+        }
     }
 }
