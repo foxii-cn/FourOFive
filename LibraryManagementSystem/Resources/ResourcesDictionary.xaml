@@ -6,4 +6,8 @@
         <Setter Property="FontFamily" Value="{StaticResource FabricIcons}"/>
         <Setter Property="FontSize" Value="14"/>
     </Style>
+    <BitmapImage x:Key="LogoLarge" UriSource="pack://application:,,,/LibraryManagementSystem;component/Resources/Imgs/Logo_large.png" RenderOptions.BitmapScalingMode="NearestNeighbor" />
+    <BitmapImage x:Key="LogoMin" UriSource="pack://application:,,,/LibraryManagementSystem;component/Resources/Imgs/Logo_min.png" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+    <BitmapImage x:Key="IconBook" UriSource="pack://application:,,,/LibraryManagementSystem;component/Resources/Imgs/Icons/Book.png" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+    <BitmapImage x:Key="IconUserInfo" UriSource="pack://application:,,,/LibraryManagementSystem;component/Resources/Imgs/Icons/UserInfo.png" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
 </ResourceDictionary>

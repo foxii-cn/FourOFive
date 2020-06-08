@@ -19,6 +19,7 @@ namespace LibraryManagementSystem.Models
         public string NationalIdentificationNumber { get; set; }
         [Column()]
         public int CreditValue { get; set; }
-
+        [Column()]
+        public int Authority { get; set; }
     }
 }

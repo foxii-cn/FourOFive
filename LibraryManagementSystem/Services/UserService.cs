@@ -14,18 +14,21 @@ namespace LibraryManagementSystem.Services
         private readonly CreditService creditService;
         // 加密服务对象
         private readonly EncryptService encryptService;
+        // 权限服务对象
+        private readonly AuthorityService authorityService;
         // 日志记录对象
         private readonly Logger logger;
         // 日志主体
         private readonly string LogName;
 
 
-        public UserService(UserDAO userDAO, CreditService creditService, EncryptService encryptService, Logger logger)
+        public UserService(UserDAO userDAO, CreditService creditService, EncryptService encryptService, AuthorityService authorityService, Logger logger)
         {
             LogName = GetType().Name;
             this.userDAO = userDAO;
             this.creditService = creditService;
             this.encryptService = encryptService;
+            this.authorityService = authorityService;
             this.logger = logger;
         }
         public User Register(string userName, string password, string name, string nationalIdentificationNumber)
@@ -38,7 +41,8 @@ namespace LibraryManagementSystem.Services
                 Password = encryptService.HashEncrypt(password, vs),
                 Name = name,
                 NationalIdentificationNumber = nationalIdentificationNumber,
-                CreditValue = creditService.GetInitialCreditValue()
+                CreditValue = creditService.GetInitialCreditValue(),
+                Authority = authorityService.GetInitialUserAuthority()
             };
             int affectedRows;
             try

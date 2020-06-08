@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace LibraryManagementSystem.Models
 {
@@ -37,6 +38,15 @@ namespace LibraryManagementSystem.Models
         /// 会员初始信誉值
         /// </summary>
         public int InitialCreditValue { get; set; } = 30;
+
+        /// <summary>
+        /// 管理员权限值
+        /// </summary>
+        public int AdministratorAuthority { get; set; } =100;
+        /// <summary>
+        /// 会员初始权限值,当这个值设置的高于管理员权限值时,之后注册的都是管理员
+        /// </summary>
+        public int InitialUserAuthority { get; set; } = 5;
 
         // 密码加密配置
         /// <summary>

@@ -269,7 +269,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ControlHelpers\PasswordBoxHelper.cs" />
+    <Compile Include="Converters\UserAuthorityCanSeeConverter.cs" />
     <Compile Include="Events\AccountModificationEvent.cs" />
+    <Compile Include="Services\AuthorityService.cs" />
     <Compile Include="Services\BookService.cs" />
     <Compile Include="Services\BorrowService.cs" />
     <Compile Include="Services\CreditService.cs" />
@@ -305,6 +307,10 @@
     <Compile Include="DAO\LoggerDAO.cs" />
     <Compile Include="DAO\SqlDAO.cs" />
     <Compile Include="DAO\UserDAO.cs" />
+    <Page Include="Converters\ConvertersDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\ResourcesDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -360,10 +366,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Imgs\Icons\Overview.png" />
+    <Resource Include="Resources\Imgs\Icons\Book.png" />
+    <Resource Include="Resources\Imgs\Icons\UserInfo.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Converters\" />
+    <Resource Include="Resources\Imgs\Logo_large.png" />
+    <Resource Include="Resources\Imgs\Logo_min.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.113.1\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.113.1\build\net46\System.Data.SQLite.Core.targets')" />

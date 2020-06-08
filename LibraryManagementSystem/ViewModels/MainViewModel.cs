@@ -15,8 +15,6 @@ namespace LibraryManagementSystem.ViewModels
     public class MainViewModel : Conductor<object>, IHandle<AccountModificationEvent>
     {
         private readonly IEventAggregator _events;
-        private User _account;
-
         private readonly LoggerDAO _loggerDAO;
         private readonly ConfigDAO _configDAO;
         private readonly Logger _logger;
@@ -26,7 +24,6 @@ namespace LibraryManagementSystem.ViewModels
         private readonly CreditService _creditService;
         private readonly EncryptService _encryptService;
         private readonly UserService _userService;
-
         private readonly LogInViewModel _logInViewModel;
         private readonly RegisterViewModel _registerViewModel;
         private readonly BooksViewModel _booksViewModel;
@@ -50,45 +47,27 @@ namespace LibraryManagementSystem.ViewModels
             UserDAO userDAO = new UserDAO(sql, _logger);
             _creditService = new CreditService(_config, _logger);
             _encryptService = new EncryptService(_config, _logger);
+            AuthorityService = new AuthorityService(_config, _logger);
             _bookService = new BookService(bookDAO, _logger);
             _borrowService = new BorrowService(bookDAO, userDAO, borrowLogDAO, _creditService, _logger);
-            _userService = new UserService(userDAO, _creditService, _encryptService, _logger);
+            _userService = new UserService(userDAO, _creditService, _encryptService, AuthorityService, _logger);
 
             _logInViewModel = new LogInViewModel(_events, _userService, GrowlToken);
             _registerViewModel = new RegisterViewModel(_events, _userService, GrowlToken);
             _booksViewModel = new BooksViewModel(_events, _bookService, _borrowService, GrowlToken);
         }
         public string GrowlToken { get; }
-        public string UserName
-        {
-            get
-            {
-                return _account == null ? "Î´µÇÂ¼" : _account.UserName;
-            }
-        }
-        public Visibility CanSeeUser
-        {
-            get
-            {
-                return _account != null ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
-        public Visibility CanSeeTourist
-        {
-            get
-            {
-                return _account == null ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
+        public string UserName => Account == null ? "Î´µÇÂ¼" : Account.UserName;
+        public User Account { get; private set; }
+        public AuthorityService AuthorityService { get; }
 
         public void Handle(AccountModificationEvent message)
         {
             DeactivateItem(_registerViewModel, false);
             DeactivateItem(_logInViewModel, false);
-            _account = message.Account;
+            Account = message.Account;
             NotifyOfPropertyChange(() => UserName);
-            NotifyOfPropertyChange(() => CanSeeUser);
-            NotifyOfPropertyChange(() => CanSeeTourist);
+            NotifyOfPropertyChange(() => Account);
         }
         public void ShowLogin()
         {

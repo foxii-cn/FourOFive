@@ -9,7 +9,7 @@
                mc:Ignorable="d"
       d:DesignWidth="1000" d:DesignHeight="700">
     <hc:SimplePanel>
-        <Grid MinWidth="800" MinHeight="500" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="32">
+        <Grid MinWidth="800" MinHeight="500" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="16">
             <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource BorderRegion}" Background="{DynamicResource BorderBrush}" Effect="{StaticResource EffectShadow4}">
                 <Grid Background="{DynamicResource RegionBrush}">
                     <Grid.RowDefinitions>
@@ -26,8 +26,9 @@
                         </Grid.ColumnDefinitions>
                         <hc:SearchBar Grid.Column="0" hc:InfoElement.Placeholder="关键词" hc:InfoElement.Title="图书检索" MinWidth="600" 
                           Margin="20,5,20,5" Style="{StaticResource SearchBarExtend}" cal:Message.Attach="[Event SearchStarted] = [Action SearchStarted($eventArgs)]"/>
-                        <Button Grid.Column="1" Style="{StaticResource ButtonPrimary}" Width="60" Content="借阅" IsDefault="True" Margin="0,0,20,0"
-                                   IsEnabled="{Binding CanBorrow, Mode=OneWay}" cal:Message.Attach="[Event Click] = [Action Borrow]"/>
+                        <Button Grid.Column="1" Style="{StaticResource ButtonPrimary}" Width="60" Content="借阅" IsDefault="True" Margin="0,0,20,5"
+                                   IsEnabled="{Binding CanBorrow, Mode=OneWay}" cal:Message.Attach="[Event Click] = [Action Borrow]"
+                                VerticalAlignment="Bottom"/>
                     </Grid>
                     <DataGrid IsReadOnly="True" MinWidth="600" Margin="20,5,20,5" Grid.Row="1" HeadersVisibility="All" 
                               RowHeaderWidth="60" AutoGenerateColumns="False" ItemsSource="{Binding BookList}" cal:Message.Attach="[Event SelectionChanged] = [Action BooksSelectionChanged($eventArgs)]">

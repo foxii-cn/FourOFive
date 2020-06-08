@@ -10,6 +10,8 @@
                Background="{DynamicResource SecondaryRegionBrush}"
                ResizeMode="CanResizeWithGrip"
                WindowStartupLocation="CenterScreen"
+               Title="FourOFive - Efficient Library Management System"
+               Icon="{StaticResource LogoMin}"
                hc:ActiveGlowColor="Orange"
                d:DesignHeight="800"
                d:DesignWidth="1000">
@@ -20,48 +22,99 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <hc:SideMenu BorderThickness="1" Width="120" Margin="0" AutoSelect="False">
-                    <hc:SideMenuItem Header="{Binding Path=UserName, Mode=OneWay}">
-                        <hc:SideMenuItem.Icon>
-                            <Image Source="/LibraryManagementSystem;component/Resources/Imgs/Icons/Overview.png" Width="24" Height="24"/>
-                        </hc:SideMenuItem.Icon>
-                        <hc:SideMenuItem Header="登陆" Visibility="{Binding Path=CanSeeTourist, Mode=OneWay}" cal:Message.Attach="[Event Selected] = [Action ShowLogin]">
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" Width="120"  BorderThickness="1,1,1,0" BorderBrush="{DynamicResource BorderBrush}"  Background="{DynamicResource RegionBrush}">
+                        <Image Source="{StaticResource LogoLarge}"/>
+                    </Border>
+                    <hc:SideMenu Grid.Row="1" BorderThickness="1" Width="120" AutoSelect="False">
+                        <hc:SideMenuItem Header="{Binding Path=UserName, Mode=OneWay}">
                             <hc:SideMenuItem.Icon>
-                                <TextBlock Text="&#xEE58;" Style="{StaticResource TextBlockFabricIcons}"/>
+                                <Image Source="{StaticResource IconUserInfo}" Width="24" Height="24" UseLayoutRounding="True"/>
                             </hc:SideMenuItem.Icon>
+                            <hc:SideMenuItem Header="登陆" cal:Message.Attach="[Event Selected] = [Action ShowLogin]">
+                                <hc:SideMenuItem.Visibility>
+                                    <MultiBinding  Converter="{StaticResource UserAuthorityCanSeeConverter}" ConverterParameter="IsTourist" Mode="OneWay">
+                                        <Binding Path="Account"/>
+                                        <Binding Path="AuthorityService"/>
+                                    </MultiBinding>
+                                </hc:SideMenuItem.Visibility>
+                                <hc:SideMenuItem.Icon>
+                                    <TextBlock Text="&#xEE58;" Style="{StaticResource TextBlockFabricIcons}"/>
+                                </hc:SideMenuItem.Icon>
+                            </hc:SideMenuItem>
+                            <hc:SideMenuItem Header="注册" cal:Message.Attach="[Event Selected] = [Action ShowRegister]">
+                                <hc:SideMenuItem.Visibility>
+                                    <MultiBinding  Converter="{StaticResource UserAuthorityCanSeeConverter}" ConverterParameter="IsTourist" Mode="OneWay">
+                                        <Binding Path="Account"/>
+                                        <Binding Path="AuthorityService"/>
+                                    </MultiBinding>
+                                </hc:SideMenuItem.Visibility>
+                                <hc:SideMenuItem.Icon>
+                                    <TextBlock Text="&#xED58;" Style="{StaticResource TextBlockFabricIcons}"/>
+                                </hc:SideMenuItem.Icon>
+                            </hc:SideMenuItem>
+                            <hc:SideMenuItem Header="未还图书" >
+                                <hc:SideMenuItem.Visibility>
+                                    <MultiBinding  Converter="{StaticResource UserAuthorityCanSeeConverter}" ConverterParameter="IsNotTourist" Mode="OneWay">
+                                        <Binding Path="Account"/>
+                                        <Binding Path="AuthorityService"/>
+                                    </MultiBinding>
+                                </hc:SideMenuItem.Visibility>
+                                <hc:SideMenuItem.Icon>
+                                    <TextBlock Text="&#xEA41;" Style="{StaticResource TextBlockFabricIcons}"/>
+                                </hc:SideMenuItem.Icon>
+                            </hc:SideMenuItem>
+                            <hc:SideMenuItem Header="借阅记录">
+                                <hc:SideMenuItem.Visibility>
+                                    <MultiBinding  Converter="{StaticResource UserAuthorityCanSeeConverter}" ConverterParameter="IsNotTourist" Mode="OneWay">
+                                        <Binding Path="Account"/>
+                                        <Binding Path="AuthorityService"/>
+                                    </MultiBinding>
+                                </hc:SideMenuItem.Visibility>
+                                <hc:SideMenuItem.Icon>
+                                    <TextBlock Text="&#xEE6A;" Style="{StaticResource TextBlockFabricIcons}"/>
+                                </hc:SideMenuItem.Icon>
+                            </hc:SideMenuItem>
+                            <hc:SideMenuItem Header="账户信息">
+                                <hc:SideMenuItem.Visibility>
+                                    <MultiBinding  Converter="{StaticResource UserAuthorityCanSeeConverter}" ConverterParameter="IsNotTourist" Mode="OneWay">
+                                        <Binding Path="Account"/>
+                                        <Binding Path="AuthorityService"/>
+                                    </MultiBinding>
+                                </hc:SideMenuItem.Visibility>
+                                <hc:SideMenuItem.Icon>
+                                    <TextBlock Text="&#xF652;" Style="{StaticResource TextBlockFabricIcons}"/>
+                                </hc:SideMenuItem.Icon>
+                            </hc:SideMenuItem>
                         </hc:SideMenuItem>
-                        <hc:SideMenuItem Header="注册" Visibility="{Binding Path=CanSeeTourist, Mode=OneWay}" cal:Message.Attach="[Event Selected] = [Action ShowRegister]">
+                        <hc:SideMenuItem Header="图书">
+                            <hc:SideMenuItem.Visibility>
+                                <MultiBinding  Converter="{StaticResource UserAuthorityCanSeeConverter}" ConverterParameter="IsNotTourist" Mode="OneWay">
+                                    <Binding Path="Account"/>
+                                    <Binding Path="AuthorityService"/>
+                                </MultiBinding>
+                            </hc:SideMenuItem.Visibility>
                             <hc:SideMenuItem.Icon>
-                                <TextBlock Text="&#xED58;" Style="{StaticResource TextBlockFabricIcons}"/>
+                                <Image Source="{StaticResource IconBook}" Width="24" Height="24" UseLayoutRounding="True"/>
                             </hc:SideMenuItem.Icon>
+                            <hc:SideMenuItem Header="检索" cal:Message.Attach="[Event Selected] = [Action ShowBooks]">
+                                <hc:SideMenuItem.Visibility>
+                                    <MultiBinding  Converter="{StaticResource UserAuthorityCanSeeConverter}" ConverterParameter="IsNotTourist" Mode="OneWay">
+                                        <Binding Path="Account"/>
+                                        <Binding Path="AuthorityService"/>
+                                    </MultiBinding>
+                                </hc:SideMenuItem.Visibility>
+                                <hc:SideMenuItem.Icon>
+                                    <TextBlock Text="&#xF09A;" Style="{StaticResource TextBlockFabricIcons}"/>
+                                </hc:SideMenuItem.Icon>
+                            </hc:SideMenuItem>
                         </hc:SideMenuItem>
-                        <hc:SideMenuItem Header="未还图书" Visibility="{Binding Path=CanSeeUser, Mode=OneWay}">
-                            <hc:SideMenuItem.Icon>
-                                <TextBlock Text="&#xEA41;" Style="{StaticResource TextBlockFabricIcons}"/>
-                            </hc:SideMenuItem.Icon>
-                        </hc:SideMenuItem>
-                        <hc:SideMenuItem Header="借阅记录" Visibility="{Binding Path=CanSeeUser, Mode=OneWay}">
-                            <hc:SideMenuItem.Icon>
-                                <TextBlock Text="&#xEE6A;" Style="{StaticResource TextBlockFabricIcons}"/>
-                            </hc:SideMenuItem.Icon>
-                        </hc:SideMenuItem>
-                        <hc:SideMenuItem Header="账户信息" Visibility="{Binding Path=CanSeeUser, Mode=OneWay}">
-                            <hc:SideMenuItem.Icon>
-                                <TextBlock Text="&#xF652;" Style="{StaticResource TextBlockFabricIcons}"/>
-                            </hc:SideMenuItem.Icon>
-                        </hc:SideMenuItem>
-                    </hc:SideMenuItem>
-                    <hc:SideMenuItem Header="图书" Visibility="{Binding Path=CanSeeUser, Mode=OneWay}">
-                        <hc:SideMenuItem.Icon>
-                            <Image Source="/LibraryManagementSystem;component/Resources/Imgs/Icons/Overview.png" Width="24" Height="24"/>
-                        </hc:SideMenuItem.Icon>
-                        <hc:SideMenuItem Header="检索" Visibility="{Binding Path=CanSeeUser, Mode=OneWay}" cal:Message.Attach="[Event Selected] = [Action ShowBooks]">
-                            <hc:SideMenuItem.Icon>
-                                <TextBlock Text="&#xF09A;" Style="{StaticResource TextBlockFabricIcons}"/>
-                            </hc:SideMenuItem.Icon>
-                        </hc:SideMenuItem>
-                    </hc:SideMenuItem>
-                </hc:SideMenu>
+                    </hc:SideMenu>
+                </Grid>
                 <hc:SimplePanel Grid.Column="1">
                     <ContentControl x:Name="ActiveItem" />
                     <hc:ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalAlignment="Right" IsInertiaEnabled="True" IsPenetrating="True">
