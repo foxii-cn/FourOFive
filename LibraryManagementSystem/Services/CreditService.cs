@@ -39,13 +39,13 @@ namespace LibraryManagementSystem.Services
             }
             return rewardDays;
         }
-        public int GetCreditValue(DateTime borrowTime, DateTime deadlineTime, DateTime giveBackTime, int creditValue)
+        public int GetCreditChange(DateTime borrowTime, DateTime deadlineTime, DateTime giveBackTime, int creditValue)
         {
-            int creditValueChanged = 0;
+            int creditValueChange = 0;
             try
             {
                 if ((giveBackTime - borrowTime).Days < config.CreditBorrowLimit)
-                    return creditValue;
+                    return 0;
                 int differDays = (deadlineTime - giveBackTime).Days;
                 int[] rewardKeys = config.GiveBackReward.Keys.ToArray();
                 int[] punishmentKeys = config.GiveBackPunishment.Keys.ToArray();
@@ -59,14 +59,14 @@ namespace LibraryManagementSystem.Services
                     reward = config.GiveBackReward[rewardKeys[rewardIndex]];
                 if (punishmentIndex >= 0)
                     punishment = config.GiveBackPunishment[punishmentKeys[punishmentIndex]];
-                creditValueChanged = creditValue + reward - punishment;
+                creditValueChange =  reward - punishment;
             }
             catch (Exception ex)
             {
                 logger.Error(ex, "{LogName}: 计算信誉值变化出错",
                                     LogName);
             }
-            return creditValueChanged;
+            return creditValueChange;
         }
         public int GetInitialCreditValue()
         {

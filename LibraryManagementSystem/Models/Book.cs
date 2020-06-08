@@ -1,10 +1,13 @@
 ﻿using FreeSql.DataAnnotations;
+using System;
 
 namespace LibraryManagementSystem.Models
 {
     [Table()]
     public class Book : DatabaseModel
     {
+        [Column(IsPrimary = true)]
+        public Guid Id { get; set; }
         [Column(IsNullable = false)]
         public string Title { get; set; }
         [Column()]

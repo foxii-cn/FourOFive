@@ -80,5 +80,11 @@ namespace LibraryManagementSystem.ViewModels
                 _events.PublishOnUIThread(new AccountModificationEvent(account));
             }
         }
+        protected override void OnDeactivate(bool close)
+        {
+            base.OnDeactivate(close);
+            UserNameText = "";
+            PasswordText = "";
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace LibraryManagementSystem.ViewModels
         private readonly BorrowService _borrowService;
         private readonly string _growlToken;
         private readonly int _pageSize = 6;
-        private List<Book> _selectedBooks = new List<Book>();
+        private readonly List<Book> _selectedBooks = new List<Book>();
 
 
         private User _account;
@@ -64,7 +64,7 @@ namespace LibraryManagementSystem.ViewModels
                 return _pageIndex;
             }
         }
-        public bool CanBorrow => _selectedBooks != null && _selectedBooks.Count > 0 && !_selectedBooks.Any(book => book.Margin < 1);
+        public bool CanBorrow => _selectedBooks.Count > 0 && !_selectedBooks.Any(book => book.Margin < 1);
         public BooksViewModel(IEventAggregator events, BookService bookService, BorrowService borrowService, string growlToken)
         {
             _events = events;
@@ -73,9 +73,8 @@ namespace LibraryManagementSystem.ViewModels
             _borrowService = borrowService;
             _growlToken = growlToken;
         }
-        public void PageUpdated(FunctionEventArgs<int> info)
+        public void PageUpdated()
         {
-            Growl.Info(info.Info.ToString(), _growlToken);
             try
             {
                 BookList = _bookService.BookQuery(_queryCondition, PageIndex, _pageSize, out long count,_queryParms);
@@ -83,7 +82,7 @@ namespace LibraryManagementSystem.ViewModels
             }
             catch (Exception ex)
             {
-                BookList = new List<Book>();
+                BookList = null;
                 MaxPageCount = 1;
                 Growl.Error(ex.Message, _growlToken);
             }
@@ -93,7 +92,7 @@ namespace LibraryManagementSystem.ViewModels
             _queryCondition = @"Title LIKE @keyword OR Author LIKE @keyword OR PublishingHouse LIKE @keyword";
             _queryParms = new { keyword = String.Format("%{0}%", info.Info) };
             if (PageIndex == 1)
-                PageUpdated(new FunctionEventArgs<int>(1));
+                PageUpdated();
             else
                 PageIndex = 1;
         }
@@ -114,13 +113,23 @@ namespace LibraryManagementSystem.ViewModels
             foreach (Book book in _selectedBooks)
                 try
                 {
-                    int accreditedDays = _borrowService.BorrowBook(_account.Id.ToString(), book.Id.ToString());
+                    int accreditedDays = _borrowService.BorrowBook(_account.Id, book.Id);
                     Growl.Success(String.Format("成功借阅《{0}》，时长{1}天", book.Title, accreditedDays), _growlToken);
                 }
                 catch (Exception ex)
                 {
-                    Growl.Error(String.Format("借阅{0}失败：{1}", book.Title, ex.Message), _growlToken);
+                    Growl.Error(String.Format("借阅《{0}》失败：{1}", book.Title, ex.Message), _growlToken);
                 }
+        }
+        protected override void OnActivate()
+        {
+            base.OnActivate();
+            PageUpdated();
+        }
+        protected override void OnDeactivate(bool close)
+        {
+            base.OnDeactivate(close);
+            _selectedBooks.Clear();
         }
         public void Handle(AccountModificationEvent message)
         {

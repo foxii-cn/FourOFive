@@ -2,6 +2,7 @@
 using Serilog.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace LibraryManagementSystem.DAO
 {
@@ -185,6 +186,32 @@ namespace LibraryManagementSystem.DAO
                 throw;
             }
             return refreshedElements;
+        }
+        public List<T> QueryLambda<TNavigate>(Expression<Func<T,bool>>whereExp, Expression<Func<T, TNavigate>> includeExp=null)where TNavigate:DatabaseModel
+        {
+            FreeSql.ISelect<T> select;
+            List<T> selectedElements;
+            try
+            {
+                select = sql.Select<T>().Where(whereExp).Include(includeExp);
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "{LogName}: 为类型{T}以{Exp}创建查询对象失败",
+                                    LogName, typeof(T), whereExp);
+                throw;
+            }
+            try
+            {
+                selectedElements = select.ToList();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "{LogName}: 执行查询操作{SelectSql}失败",
+                                    LogName, select.ToSql());
+                throw;
+            }
+            return selectedElements;
         }
         public void ForUpdate(object dywhere)
         {

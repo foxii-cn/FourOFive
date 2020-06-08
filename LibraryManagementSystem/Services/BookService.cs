@@ -49,7 +49,7 @@ namespace LibraryManagementSystem.Services
             else
                 return null;
         }
-        public int OutStock(params string[] bookIds)
+        public int OutStock(params Guid[] bookIds)
         {
             int affectedRows;
             try

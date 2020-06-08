@@ -4,6 +4,7 @@ using Serilog.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace LibraryManagementSystem.Services
 {
@@ -31,10 +32,10 @@ namespace LibraryManagementSystem.Services
             this.logger = logger;
         }
 
-        public int BorrowBook(string userId, string bookId)
+        public int BorrowBook(Guid userId, Guid bookId)
         {
             int accreditedDays = 0;
-            if (userId == null || bookId == null)
+            if (userId == default || bookId == default)
                 throw new NullReferenceException("借阅人或借阅目标ID为空");
             try
             {
@@ -72,9 +73,10 @@ namespace LibraryManagementSystem.Services
             }
             return accreditedDays;
         }
-        public void RevertBook(string userId, string bookId)
+        public int RevertBook(Guid userId, Guid bookId)
         {
-            if (userId == null || bookId == null)
+            int creditChange=0;
+            if (userId == default || bookId == default)
                 throw new NullReferenceException("借阅人或借阅目标ID为空");
             try
             {
@@ -98,10 +100,14 @@ namespace LibraryManagementSystem.Services
                     DateTime giveBack = DateTime.Now;
                     bSnap.Margin++;
                     leaseLog.GiveBack = giveBack;
-                    uSnap.CreditValue = creditService.GetCreditValue(leaseLog.CreateTime, (DateTime)leaseLog.Deadline, giveBack, uSnap.CreditValue);
-                    bookDAO.Update(bSnap, @"Margin=@Margin", new { bSnap.Margin });
-                    userDAO.Update(uSnap, @"CreditValue=@CreditValue", new { uSnap.CreditValue });
-                    borrowLogDAO.Update(leaseLog, @"GiveBack=@GiveBack", new { leaseLog.GiveBack });
+                    creditChange=creditService.GetCreditChange(leaseLog.CreateTime, (DateTime)leaseLog.Deadline, giveBack, uSnap.CreditValue);
+                    uSnap.CreditValue += creditChange;
+                    if (bookDAO.Update(bSnap, @"Margin=@Margin", new { bSnap.Margin })<1) 
+                        throw new Exception("更新书本信息失败");
+                    if(userDAO.Update(uSnap, @"CreditValue=@CreditValue", new { uSnap.CreditValue })<1)
+                        throw new Exception("更新会员信息失败");
+                    if (borrowLogDAO.Update(leaseLog, @"GiveBack=@GiveBack", new { leaseLog.GiveBack })<1)
+                        throw new Exception("更新借阅记录失败");
                 });
             }
             catch (Exception ex)
@@ -110,20 +116,19 @@ namespace LibraryManagementSystem.Services
                                     LogName, userId, bookId, ex.Message);
                 throw;
             }
+            return creditChange;
         }
-        public List<BorrowLog> TardyLease(string userId = null)
+        public List<BorrowLog> TardyLease(Guid userId = default)
         {
-            string leaseConditionString = @"GiveBack is NULL";
-            object leaseParms = null;
-            if (userId != null)
-            {
-                leaseConditionString = @"GiveBack is NULL and UserId=@UserId";
-                leaseParms = new { UserId = userId };
-            }
+            Expression<Func<BorrowLog, bool>> condition;
+            if (userId != default)
+                condition = bl => bl.GiveBack == null && bl.UserId == userId;
+            else
+                condition = bl => bl.GiveBack == null;
             List<BorrowLog> leaseLogs;
             try
             {
-                leaseLogs = borrowLogDAO.QuerySql(leaseConditionString, leaseParms);
+                leaseLogs = borrowLogDAO.QueryLambda(condition,bl=>bl.Book);
             }
             catch (Exception ex)
             {

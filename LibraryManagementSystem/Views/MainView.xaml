@@ -57,7 +57,7 @@
                                     <TextBlock Text="&#xED58;" Style="{StaticResource TextBlockFabricIcons}"/>
                                 </hc:SideMenuItem.Icon>
                             </hc:SideMenuItem>
-                            <hc:SideMenuItem Header="未还图书" >
+                            <hc:SideMenuItem Header="未还图书"  cal:Message.Attach="[Event Selected] = [Action ShowToBeReturned]">
                                 <hc:SideMenuItem.Visibility>
                                     <MultiBinding  Converter="{StaticResource UserAuthorityCanSeeConverter}" ConverterParameter="IsNotTourist" Mode="OneWay">
                                         <Binding Path="Account"/>

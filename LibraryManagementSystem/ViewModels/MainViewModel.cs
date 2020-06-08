@@ -27,6 +27,7 @@ namespace LibraryManagementSystem.ViewModels
         private readonly LogInViewModel _logInViewModel;
         private readonly RegisterViewModel _registerViewModel;
         private readonly BooksViewModel _booksViewModel;
+        private readonly ToBeReturnedViewModel _toBeReturnedViewModel;
 
         [ImportingConstructor]
         public MainViewModel(IEventAggregator events)
@@ -55,6 +56,7 @@ namespace LibraryManagementSystem.ViewModels
             _logInViewModel = new LogInViewModel(_events, _userService, GrowlToken);
             _registerViewModel = new RegisterViewModel(_events, _userService, GrowlToken);
             _booksViewModel = new BooksViewModel(_events, _bookService, _borrowService, GrowlToken);
+            _toBeReturnedViewModel = new ToBeReturnedViewModel(_events, _borrowService, GrowlToken);
         }
         public string GrowlToken { get; }
         public string UserName => Account == null ? "Î´µÇÂ¼" : Account.UserName;
@@ -80,6 +82,10 @@ namespace LibraryManagementSystem.ViewModels
         public void ShowBooks()
         {
             ActivateItem(_booksViewModel);
+        }
+        public void ShowToBeReturned()
+        {
+            ActivateItem(_toBeReturnedViewModel);
         }
     }
 }

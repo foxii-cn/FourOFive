@@ -14,10 +14,8 @@
                 <Grid Background="{DynamicResource RegionBrush}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0" >
                         <Grid.ColumnDefinitions>
@@ -26,7 +24,7 @@
                         </Grid.ColumnDefinitions>
                         <hc:SearchBar Grid.Column="0" hc:InfoElement.Placeholder="关键词" hc:InfoElement.Title="图书检索" MinWidth="600" 
                           Margin="20,5,20,5" Style="{StaticResource SearchBarExtend}" cal:Message.Attach="[Event SearchStarted] = [Action SearchStarted($eventArgs)]"/>
-                        <Button Grid.Column="1" Style="{StaticResource ButtonPrimary}" Width="60" Content="借阅" IsDefault="True" Margin="0,0,20,5"
+                        <Button Grid.Column="1" Style="{StaticResource ButtonPrimary}" Width="60" Content="借阅" Margin="0,0,20,5"
                                    IsEnabled="{Binding CanBorrow, Mode=OneWay}" cal:Message.Attach="[Event Click] = [Action Borrow]"
                                 VerticalAlignment="Bottom"/>
                     </Grid>
@@ -47,9 +45,9 @@
                             <DataGridTextColumn Binding="{Binding Position}" Header="位置"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Grid Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                        <hc:Pagination MaxPageCount="{Binding MaxPageCount}" PageIndex="{Binding PageIndex, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsJumpEnabled="True"
-                            cal:Message.Attach="[Event PageUpdated] = [Action PageUpdated($eventArgs)]"/>
+                    <Grid Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                        <hc:Pagination Margin="20,5,20,15" MaxPageCount="{Binding MaxPageCount}" PageIndex="{Binding PageIndex, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsJumpEnabled="True"
+                            cal:Message.Attach="[Event PageUpdated] = [Action PageUpdated()]"/>
                     </Grid>
                 </Grid>
             </Border>

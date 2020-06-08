@@ -8,11 +8,9 @@ namespace LibraryManagementSystem.Models
 {
     public abstract class DatabaseModel
     {
-        [Column(IsPrimary = true)]
-        public Guid Id { get; set; }
-        [Column(ServerTime = DateTimeKind.Utc, CanUpdate = false)]
+        [Column(ServerTime = DateTimeKind.Local, CanUpdate = false)]
         public DateTime CreateTime { get; set; }
-        [Column(ServerTime = DateTimeKind.Utc)]
+        [Column(ServerTime = DateTimeKind.Local)]
         public DateTime UpdateTime { get; set; }
         public override string ToString()
         {

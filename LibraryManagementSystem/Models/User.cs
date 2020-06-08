@@ -1,4 +1,5 @@
 ﻿using FreeSql.DataAnnotations;
+using System;
 
 namespace LibraryManagementSystem.Models
 {
@@ -7,6 +8,8 @@ namespace LibraryManagementSystem.Models
     [Index("uk_UserName", "UserName", true)]
     public class User : DatabaseModel
     {
+        [Column(IsPrimary = true)]
+        public Guid Id { get; set; }
         [Column(IsNullable = false)]
         public string UserName { get; set; }
         [Column(IsNullable = false)]

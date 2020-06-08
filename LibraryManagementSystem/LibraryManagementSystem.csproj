@@ -283,6 +283,7 @@
     <Compile Include="ViewModels\RegisterViewModel.cs" />
     <Compile Include="ViewModels\LogInViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\ToBeReturnedViewModel.cs" />
     <Compile Include="Views\BooksView.xaml.cs">
       <DependentUpon>BooksView.xaml</DependentUpon>
     </Compile>
@@ -307,6 +308,9 @@
     <Compile Include="DAO\LoggerDAO.cs" />
     <Compile Include="DAO\SqlDAO.cs" />
     <Compile Include="DAO\UserDAO.cs" />
+    <Compile Include="Views\ToBeReturnedView.xaml.cs">
+      <DependentUpon>ToBeReturnedView.xaml</DependentUpon>
+    </Compile>
     <Page Include="Converters\ConvertersDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -330,6 +334,10 @@
     <Page Include="Views\MainView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ToBeReturnedView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
