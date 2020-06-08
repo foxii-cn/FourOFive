@@ -74,7 +74,7 @@ namespace LibraryManagementSystem.DAO
             }
             return rows;
         }
-        public int Update(object dywhere, string setSql)
+        public int Update(object dywhere, string setSql, object parms)
         {
             if (sql.Ado.TransactionCurrentThread == null)
                 logger.Warning("{LogName}: 未在事务中时更新对象",
@@ -84,7 +84,7 @@ namespace LibraryManagementSystem.DAO
             try
             {
                 update = sql.Update<T>(dywhere)
-                .SetRaw(setSql);
+                .SetRaw(setSql,parms);
             }
             catch (Exception ex)
             {
@@ -104,14 +104,14 @@ namespace LibraryManagementSystem.DAO
             }
             return rows;
         }
-        public List<T> QuerySql(string condition, int pageIndex, int pageSize, out long count)
+        public List<T> QuerySql(string condition, int pageIndex, int pageSize, out long count, object parms)
         {
             FreeSql.ISelect<T> select;
             List<T> elements;
             try
             {
                 select = sql.Select<T>()
-                .Where(condition)
+                .Where(condition, parms)
                 .Count(out count)
                 .Page(pageIndex, pageSize);
             }
@@ -133,14 +133,14 @@ namespace LibraryManagementSystem.DAO
             }
             return elements;
         }
-        public List<T> QuerySql(string condition)
+        public List<T> QuerySql(string condition, object parms)
         {
             FreeSql.ISelect<T> select;
             List<T> elements;
             try
             {
                 select = sql.Select<T>()
-                .Where(condition);
+                .Where(condition,parms);
             }
             catch (Exception ex)
             {
@@ -211,13 +211,13 @@ namespace LibraryManagementSystem.DAO
                 throw;
             }
         }
-        public void ForUpdateSql(string condition)
+        public void ForUpdateSql(string condition, object parms)
         {
             FreeSql.ISelect<T> forUpdate;
             try
             {
                 forUpdate = sql.Select<T>()
-                .Where(condition)
+                .Where(condition,parms)
                 .ForUpdate();
             }
             catch (Exception ex)

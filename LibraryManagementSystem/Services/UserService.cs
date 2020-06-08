@@ -58,11 +58,10 @@ namespace LibraryManagementSystem.Services
         }
         public User LogIn(string userName, string password)
         {
-            string userConditionString = string.Format(@"UserName='{0}'", userName);
             User user;
             try
             {
-                user = userDAO.QuerySql(userConditionString).FirstOrDefault();
+                user = userDAO.QuerySql(@"UserName=@UserName",new { UserName= userName }).FirstOrDefault();
             }
             catch (Exception ex)
             {

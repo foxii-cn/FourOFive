@@ -25,7 +25,8 @@ namespace LibraryManagementSystem.ViewModels
         private List<Book> _bookList;
         private int _maxPageCount = 1;
         private int _pageIndex = 1;
-        private string _condition;
+        private string _queryCondition;
+        private object _queryParms;
 
         public List<Book> BookList
         {
@@ -77,7 +78,7 @@ namespace LibraryManagementSystem.ViewModels
             Growl.Info(info.Info.ToString(), _growlToken);
             try
             {
-                BookList = _bookService.BookQuery(_condition, PageIndex, _pageSize, out long count);
+                BookList = _bookService.BookQuery(_queryCondition, PageIndex, _pageSize, out long count,_queryParms);
                 MaxPageCount = (int)(count / _pageSize) + 1;
             }
             catch (Exception ex)
@@ -89,7 +90,8 @@ namespace LibraryManagementSystem.ViewModels
         }
         public void SearchStarted(FunctionEventArgs<string> info)
         {
-            _condition = String.Format(@"Title LIKE '%{0}%' OR Author LIKE '%{0}%' OR PublishingHouse LIKE '%{0}%'", info.Info);
+            _queryCondition = @"Title LIKE @keyword OR Author LIKE @keyword OR PublishingHouse LIKE @keyword";
+            _queryParms = new { keyword = String.Format("%{0}%", info.Info) };
             if (PageIndex == 1)
                 PageUpdated(new FunctionEventArgs<int>(1));
             else

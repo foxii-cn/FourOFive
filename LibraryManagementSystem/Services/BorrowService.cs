@@ -49,16 +49,15 @@ namespace LibraryManagementSystem.Services
                     User uSnap = userDAO.Query(userId).FirstOrDefault();
                     if (uSnap == null)
                         throw new Exception("借阅人不合法");
-                    string leaseConditionString = string.Format(@"BookId='{0}' and UserId='{1}' and GiveBack is NULL",
-                        bSnap.Id, uSnap.Id);
-                    List<BorrowLog> leaseLogs = borrowLogDAO.QuerySql(leaseConditionString);
+                    List<BorrowLog> leaseLogs = borrowLogDAO.QuerySql(@"BookId=@BookId and UserId=@UserId and GiveBack is NULL",
+                       new { BookId = bSnap.Id, UserId = uSnap.Id });
                     if (leaseLogs.Count > 0)
                         throw new Exception("已有未归还的同名同书借阅记录");
                     accreditedDays = creditService.GetAccreditedDays(uSnap.CreditValue) + 1;
                     if (accreditedDays == 0)
                         throw new Exception("借阅人信誉过低");
                     bSnap.Margin--;
-                    if (bookDAO.Update(bSnap, string.Format(@"Margin={0}", bSnap.Margin)) == 0)
+                    if (bookDAO.Update(bSnap, @"Margin=@Margin", new { bSnap.Margin }) == 0)
                         throw new Exception("更新书本库存失败");
                     BorrowLog leaseLog = new BorrowLog { BookId = bSnap.Id, UserId = uSnap.Id, Deadline = DateTime.Today.AddDays(accreditedDays) };
                     if (borrowLogDAO.Create(leaseLog) == 0)
@@ -89,10 +88,10 @@ namespace LibraryManagementSystem.Services
                     User uSnap = userDAO.Query(userId).FirstOrDefault();
                     if (uSnap == null)
                         throw new Exception("借阅人不合法");
-                    string leaseConditionString = string.Format(@"BookId='{0}' and UserId='{1}' and GiveBack is NULL",
-                        bSnap.Id, uSnap.Id);
-                    borrowLogDAO.ForUpdateSql(leaseConditionString);
-                    List<BorrowLog> leaseLogs = borrowLogDAO.QuerySql(leaseConditionString);
+                    string leaseConditionString = @"BookId=@BookId and UserId=@UserId and GiveBack is NULL";
+                    object leaseParms = new { BookId = bSnap.Id, UserId = uSnap.Id };
+                    borrowLogDAO.ForUpdateSql(leaseConditionString, leaseParms);
+                    List<BorrowLog> leaseLogs = borrowLogDAO.QuerySql(leaseConditionString, leaseParms);
                     if (leaseLogs.Count == 0)
                         throw new Exception("无未归还的借阅记录");
                     BorrowLog leaseLog = leaseLogs.OrderBy(l => l.CreateTime).FirstOrDefault();
@@ -100,9 +99,9 @@ namespace LibraryManagementSystem.Services
                     bSnap.Margin++;
                     leaseLog.GiveBack = giveBack;
                     uSnap.CreditValue = creditService.GetCreditValue(leaseLog.CreateTime, (DateTime)leaseLog.Deadline, giveBack, uSnap.CreditValue);
-                    bookDAO.Update(bSnap, string.Format(@"Margin={0}", bSnap.Margin));
-                    userDAO.Update(uSnap, string.Format(@"CreditValue={0}", uSnap.CreditValue));
-                    borrowLogDAO.Update(leaseLog, string.Format(@"GiveBack='{0}'", leaseLog.GiveBack));
+                    bookDAO.Update(bSnap, @"Margin=@Margin", new { bSnap.Margin });
+                    userDAO.Update(uSnap, @"CreditValue=@CreditValue", new { uSnap.CreditValue });
+                    borrowLogDAO.Update(leaseLog, @"GiveBack=@GiveBack", new { leaseLog.GiveBack });
                 });
             }
             catch (Exception ex)
@@ -115,12 +114,16 @@ namespace LibraryManagementSystem.Services
         public List<BorrowLog> TardyLease(string userId = null)
         {
             string leaseConditionString = @"GiveBack is NULL";
+            object leaseParms = null;
             if (userId != null)
-                leaseConditionString = string.Format(@"{0} and UserId='{1}'", leaseConditionString, userId);
+            {
+                leaseConditionString = @"GiveBack is NULL and UserId=@UserId";
+                leaseParms = new { UserId = userId };
+            }
             List<BorrowLog> leaseLogs;
             try
             {
-                leaseLogs = borrowLogDAO.QuerySql(leaseConditionString);
+                leaseLogs = borrowLogDAO.QuerySql(leaseConditionString, leaseParms);
             }
             catch (Exception ex)
             {

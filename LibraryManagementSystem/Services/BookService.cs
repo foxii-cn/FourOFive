@@ -64,12 +64,12 @@ namespace LibraryManagementSystem.Services
             }
             return affectedRows;
         }
-        public List<Book> BookQuery(string condition, int pageIndex, int pageSize, out long count)
+        public List<Book> BookQuery(string condition, int pageIndex, int pageSize, out long count, object parms)
         {
             List<Book> books;
             try
             {
-                books = bookDAO.QuerySql(condition, pageIndex, pageSize, out count);
+                books = bookDAO.QuerySql(condition, pageIndex, pageSize, out count,parms);
             }
             catch (Exception ex)
             {
