@@ -1,6 +1,6 @@
 ﻿using FreeSql.DataAnnotations;
 
-namespace LibraryManagementSystem.Model
+namespace LibraryManagementSystem.Models
 {
     [Table()]
     public class Book : DatabaseModel

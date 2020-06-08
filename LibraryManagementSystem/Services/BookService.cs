@@ -1,10 +1,10 @@
 ﻿using LibraryManagementSystem.DAO;
-using LibraryManagementSystem.Model;
+using LibraryManagementSystem.Models;
 using Serilog.Core;
 using System;
 using System.Collections.Generic;
 
-namespace LibraryManagementSystem.Service
+namespace LibraryManagementSystem.Services
 {
     public class BookService
     {

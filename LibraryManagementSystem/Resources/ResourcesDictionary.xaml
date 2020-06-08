@@ -1,0 +1,9 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options">
+    <FontFamily x:Key="FabricIcons">pack://application:,,,/LibraryManagementSystem;component/Resources/fonts/fabric-icons.ttf#Fabric External MDL2 Assets</FontFamily>
+    <Style x:Key="TextBlockFabricIcons" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource FabricIcons}"/>
+        <Setter Property="FontSize" Value="14"/>
+    </Style>
+</ResourceDictionary>

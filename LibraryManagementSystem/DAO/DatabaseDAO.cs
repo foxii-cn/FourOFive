@@ -1,4 +1,4 @@
-﻿using LibraryManagementSystem.Model;
+﻿using LibraryManagementSystem.Models;
 using Serilog.Core;
 using System;
 using System.Collections.Generic;

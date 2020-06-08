@@ -1,10 +1,10 @@
 ﻿using FreeSql.DataAnnotations;
-using LibraryManagementSystem.Utility;
+using LibraryManagementSystem.Utilities;
 using System;
 using System.Linq;
 using System.Reflection;
 
-namespace LibraryManagementSystem.Model
+namespace LibraryManagementSystem.Models
 {
     public abstract class DatabaseModel
     {

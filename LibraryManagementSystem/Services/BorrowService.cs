@@ -1,11 +1,11 @@
 ﻿using LibraryManagementSystem.DAO;
-using LibraryManagementSystem.Model;
+using LibraryManagementSystem.Models;
 using Serilog.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LibraryManagementSystem.Service
+namespace LibraryManagementSystem.Services
 {
     public class BorrowService
     {
@@ -31,8 +31,9 @@ namespace LibraryManagementSystem.Service
             this.logger = logger;
         }
 
-        public void BorrowBook(string userId, string bookId)
+        public int BorrowBook(string userId, string bookId)
         {
+            int accreditedDays = 0;
             if (userId == null || bookId == null)
                 throw new NullReferenceException("借阅人或借阅目标ID为空");
             try
@@ -53,13 +54,15 @@ namespace LibraryManagementSystem.Service
                     List<BorrowLog> leaseLogs = borrowLogDAO.QuerySql(leaseConditionString);
                     if (leaseLogs.Count > 0)
                         throw new Exception("已有未归还的同名同书借阅记录");
-                    int accreditedDays = creditService.GetAccreditedDays(uSnap.CreditValue);
+                    accreditedDays = creditService.GetAccreditedDays(uSnap.CreditValue) + 1;
                     if (accreditedDays == 0)
                         throw new Exception("借阅人信誉过低");
                     bSnap.Margin--;
-                    bookDAO.Update(bSnap, string.Format(@"Margin={0}", bSnap.Margin));
-                    BorrowLog leaseLog = new BorrowLog { BookId = bSnap.Id, UserId = uSnap.Id, Deadline = DateTime.Today.AddDays(accreditedDays + 1) };
-                    borrowLogDAO.Create(leaseLog);
+                    if (bookDAO.Update(bSnap, string.Format(@"Margin={0}", bSnap.Margin)) == 0)
+                        throw new Exception("更新书本库存失败");
+                    BorrowLog leaseLog = new BorrowLog { BookId = bSnap.Id, UserId = uSnap.Id, Deadline = DateTime.Today.AddDays(accreditedDays) };
+                    if (borrowLogDAO.Create(leaseLog) == 0)
+                        throw new Exception("创建借阅记录失败");
                 });
             }
             catch (Exception ex)
@@ -68,6 +71,7 @@ namespace LibraryManagementSystem.Service
                                     LogName, userId, bookId, ex.Message);
                 throw;
             }
+            return accreditedDays;
         }
         public void RevertBook(string userId, string bookId)
         {

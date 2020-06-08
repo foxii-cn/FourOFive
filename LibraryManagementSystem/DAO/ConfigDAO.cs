@@ -1,5 +1,5 @@
-﻿using LibraryManagementSystem.Model;
-using LibraryManagementSystem.Utility;
+﻿using LibraryManagementSystem.Models;
+using LibraryManagementSystem.Utilities;
 using Serilog.Core;
 using System;
 using System.Text;
@@ -9,9 +9,9 @@ namespace LibraryManagementSystem.DAO
     public class ConfigDAO
     {
         // 配置文件位置
-        private readonly string path;// = @".\config.json";
+        private readonly string path;
         // 文件编码
-        private readonly Encoding encoding;// = Encoding.UTF8;
+        private readonly Encoding encoding;
         // 日志记录对象
         private readonly Logger logger;
         // 日志主体
@@ -38,6 +38,7 @@ namespace LibraryManagementSystem.DAO
                 logger.Warning(ex, "{LogName}: 以编码{Encoding}读取配置文件{Path}时出错",
                     LogName, encoding, path);
                 successful = false;
+                config = new Config();
             }
             return config;
         }

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace LibraryManagementSystem.Utility
+namespace LibraryManagementSystem.Utilities
 {
     public static class JsonUtility
     {

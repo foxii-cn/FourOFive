@@ -3,9 +3,9 @@
     /// <summary>
     /// MainDrawerView.xaml 的交互逻辑
     /// </summary>
-    public partial class DrawerView
+    public partial class LogInView
     {
-        public DrawerView()
+        public LogInView()
         {
             InitializeComponent();
         }

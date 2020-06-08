@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace LibraryManagementSystem.Utility
+namespace LibraryManagementSystem.Utilities
 {
     public static class FileUtility
     {

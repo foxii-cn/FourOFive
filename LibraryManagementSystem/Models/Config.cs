@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
 
-namespace LibraryManagementSystem.Model
+namespace LibraryManagementSystem.Models
 {
     public class Config
     {
         // 数据库配置
         public string DatabaseType { get; set; } = "Sqlite";
-        public string DatabaseDataSource { get; set; } = "127.0.0.1";
+        public string DatabaseDataSource { get; set; } = @".\data.db";
         public string DatabasePort { get; set; } = "3306";
         public string DatabaseUser { get; set; } = "root";
         public string DatabasePassword { get; set; } = "root";
         public string Database { get; set; } = "test";
         public string DatabaseCharset { get; set; } = "utf8";
         public string DatabaseSecurity { get; set; } = "none";
-        public string DatabaseAttachs { get; set; } = @".\data.db";
+        public string DatabaseAttachs { get; set; } = @"";
         public bool DatabasePooling { get; set; } = true;
         public int DatabaseMinPoolSize { get; set; } = 1;
         // 信誉系统配置

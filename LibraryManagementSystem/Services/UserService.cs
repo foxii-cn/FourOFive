@@ -1,12 +1,12 @@
 ﻿using LibraryManagementSystem.DAO;
-using LibraryManagementSystem.Model;
+using LibraryManagementSystem.Models;
 using Serilog.Core;
 using System;
 using System.Linq;
 
-namespace LibraryManagementSystem.Service
+namespace LibraryManagementSystem.Services
 {
-    public class MenberService
+    public class UserService
     {
         // DAO对象
         private readonly UserDAO userDAO;
@@ -20,7 +20,7 @@ namespace LibraryManagementSystem.Service
         private readonly string LogName;
 
 
-        public MenberService(UserDAO userDAO, CreditService creditService, EncryptService encryptService, Logger logger)
+        public UserService(UserDAO userDAO, CreditService creditService, EncryptService encryptService, Logger logger)
         {
             LogName = GetType().Name;
             this.userDAO = userDAO;
@@ -56,7 +56,7 @@ namespace LibraryManagementSystem.Service
             else
                 return null;
         }
-        public bool LogIn(string userName, string password)
+        public User LogIn(string userName, string password)
         {
             string userConditionString = string.Format(@"UserName='{0}'", userName);
             User user;
@@ -71,9 +71,9 @@ namespace LibraryManagementSystem.Service
                 throw;
             }
             if (user != null && encryptService.HashEncrypt(password, Convert.FromBase64String(user.Salt)) == user.Password)
-                return true;
+                return user;
             else
-                return false;
+                return null;
         }
     }
 }

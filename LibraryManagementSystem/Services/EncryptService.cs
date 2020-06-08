@@ -1,10 +1,10 @@
-﻿using LibraryManagementSystem.Model;
+﻿using LibraryManagementSystem.Models;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Serilog.Core;
 using System;
 using System.Security.Cryptography;
 
-namespace LibraryManagementSystem.Service
+namespace LibraryManagementSystem.Services
 {
     public class EncryptService
     {

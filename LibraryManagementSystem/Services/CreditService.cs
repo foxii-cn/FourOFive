@@ -1,9 +1,9 @@
-﻿using LibraryManagementSystem.Model;
+﻿using LibraryManagementSystem.Models;
 using Serilog.Core;
 using System;
 using System.Linq;
 
-namespace LibraryManagementSystem.Service
+namespace LibraryManagementSystem.Services
 {
     public class CreditService
     {

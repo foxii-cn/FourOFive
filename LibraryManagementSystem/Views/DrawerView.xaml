@@ -1,5 +1,0 @@
-﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             x:Class="LibraryManagementSystem.Views.DrawerView"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" >
-    <Button Content="{Binding IsOpen}"/>
-</UserControl>

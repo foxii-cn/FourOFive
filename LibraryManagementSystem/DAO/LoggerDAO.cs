@@ -5,8 +5,8 @@ namespace LibraryManagementSystem.DAO
 {
     public class LoggerDAO
     {
-        private readonly string logFilePath;// = @".\logs\log.txt";
-        private readonly long logFileSizeLimitBytes;// = 268435456;
+        private readonly string logFilePath;
+        private readonly long logFileSizeLimitBytes;
 
 
         public LoggerDAO(string logFilePath, long logFileSizeLimitBytes)

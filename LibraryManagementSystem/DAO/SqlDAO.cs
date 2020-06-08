@@ -1,5 +1,5 @@
 ﻿using FreeSql;
-using LibraryManagementSystem.Model;
+using LibraryManagementSystem.Models;
 using Serilog.Core;
 using System;
 

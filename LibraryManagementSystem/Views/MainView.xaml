@@ -1,27 +1,74 @@
-﻿<hc:Window  
-            x:Class="LibraryManagementSystem.Views.MainView"
+﻿<hc:GlowWindow x:Class="LibraryManagementSystem.Views.MainView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:cal="http://www.caliburnproject.org"
-    xmlns:lms="clr-namespace:LibraryManagementSystem.Views"
-            xmlns:hc="https://handyorg.github.io/handycontrol">
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+               mc:Ignorable="d"
+               Background="{DynamicResource SecondaryRegionBrush}"
+               ResizeMode="CanResizeWithGrip"
+               WindowStartupLocation="CenterScreen"
+               hc:ActiveGlowColor="Orange"
+               d:DesignHeight="800"
+               d:DesignWidth="1000">
     <hc:TransitioningContentControl>
-        <hc:SimplePanel Margin="22">
+        <hc:SimplePanel >
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="ShowDrawer" Margin="0" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="0" Content="Left"/>
-                <ContentControl x:Name="ActiveItem"></ContentControl>
+                <hc:SideMenu BorderThickness="1" Width="120" Margin="0" AutoSelect="False">
+                    <hc:SideMenuItem Header="{Binding Path=UserName, Mode=OneWay}">
+                        <hc:SideMenuItem.Icon>
+                            <Image Source="/LibraryManagementSystem;component/Resources/Imgs/Icons/Overview.png" Width="24" Height="24"/>
+                        </hc:SideMenuItem.Icon>
+                        <hc:SideMenuItem Header="登陆" Visibility="{Binding Path=CanSeeTourist, Mode=OneWay}" cal:Message.Attach="[Event Selected] = [Action ShowLogin]">
+                            <hc:SideMenuItem.Icon>
+                                <TextBlock Text="&#xEE58;" Style="{StaticResource TextBlockFabricIcons}"/>
+                            </hc:SideMenuItem.Icon>
+                        </hc:SideMenuItem>
+                        <hc:SideMenuItem Header="注册" Visibility="{Binding Path=CanSeeTourist, Mode=OneWay}" cal:Message.Attach="[Event Selected] = [Action ShowRegister]">
+                            <hc:SideMenuItem.Icon>
+                                <TextBlock Text="&#xED58;" Style="{StaticResource TextBlockFabricIcons}"/>
+                            </hc:SideMenuItem.Icon>
+                        </hc:SideMenuItem>
+                        <hc:SideMenuItem Header="未还图书" Visibility="{Binding Path=CanSeeUser, Mode=OneWay}">
+                            <hc:SideMenuItem.Icon>
+                                <TextBlock Text="&#xEA41;" Style="{StaticResource TextBlockFabricIcons}"/>
+                            </hc:SideMenuItem.Icon>
+                        </hc:SideMenuItem>
+                        <hc:SideMenuItem Header="借阅记录" Visibility="{Binding Path=CanSeeUser, Mode=OneWay}">
+                            <hc:SideMenuItem.Icon>
+                                <TextBlock Text="&#xEE6A;" Style="{StaticResource TextBlockFabricIcons}"/>
+                            </hc:SideMenuItem.Icon>
+                        </hc:SideMenuItem>
+                        <hc:SideMenuItem Header="账户信息" Visibility="{Binding Path=CanSeeUser, Mode=OneWay}">
+                            <hc:SideMenuItem.Icon>
+                                <TextBlock Text="&#xF652;" Style="{StaticResource TextBlockFabricIcons}"/>
+                            </hc:SideMenuItem.Icon>
+                        </hc:SideMenuItem>
+                    </hc:SideMenuItem>
+                    <hc:SideMenuItem Header="图书" Visibility="{Binding Path=CanSeeUser, Mode=OneWay}">
+                        <hc:SideMenuItem.Icon>
+                            <Image Source="/LibraryManagementSystem;component/Resources/Imgs/Icons/Overview.png" Width="24" Height="24"/>
+                        </hc:SideMenuItem.Icon>
+                        <hc:SideMenuItem Header="检索" Visibility="{Binding Path=CanSeeUser, Mode=OneWay}" cal:Message.Attach="[Event Selected] = [Action ShowBooks]">
+                            <hc:SideMenuItem.Icon>
+                                <TextBlock Text="&#xF09A;" Style="{StaticResource TextBlockFabricIcons}"/>
+                            </hc:SideMenuItem.Icon>
+                        </hc:SideMenuItem>
+                    </hc:SideMenuItem>
+                </hc:SideMenu>
+                <hc:SimplePanel Grid.Column="1">
+                    <ContentControl x:Name="ActiveItem" />
+                    <hc:ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalAlignment="Right" IsInertiaEnabled="True" IsPenetrating="True">
+                        <StackPanel hc:Growl.Token="{Binding Path=GrowlToken,Mode=OneTime}" VerticalAlignment="Top" Margin="0,10,10,10"/>
+                    </hc:ScrollViewer>
+                </hc:SimplePanel>
             </Grid>
         </hc:SimplePanel>
     </hc:TransitioningContentControl>
-</hc:Window>
+</hc:GlowWindow>

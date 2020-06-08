@@ -1,6 +1,6 @@
 ﻿using FreeSql.DataAnnotations;
 
-namespace LibraryManagementSystem.Model
+namespace LibraryManagementSystem.Models
 {
     [Table()]
     [Index("uk_NationalIdentificationNumber", "NationalIdentificationNumber", true)]
