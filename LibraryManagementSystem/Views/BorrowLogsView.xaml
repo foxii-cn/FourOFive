@@ -22,8 +22,8 @@
                             <DataGridTextColumn Width="95"  IsReadOnly="True" Binding="{Binding BookId}" Header="识别码"/>
                             <DataGridTextColumn Width="200" Binding="{Binding Book.Title}" Header="书名"/>
                             <DataGridTextColumn Binding="{Binding Book.Author}" Header="作者"/>
-                            <DataGridTextColumn Binding="{Binding GiveBack}" Header="归还时间"/>
-                            <DataGridTextColumn Binding="{Binding Deadline}" Header="还书期限"/>
+                            <DataGridTextColumn Binding="{Binding GiveBack, StringFormat={}{0:yyyy年M月dd日 HH:mm}}" Header="归还时间"/>
+                            <DataGridTextColumn Binding="{Binding Deadline, StringFormat={}{0:yyyy年M月dd日 HH:mm}}" Header="还书期限"/>
                             <DataGridTextColumn Binding="{Binding CreditValueHistory}" Header="信誉历史"/>
                         </DataGrid.Columns>
                     </DataGrid>

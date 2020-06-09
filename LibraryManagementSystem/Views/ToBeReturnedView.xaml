@@ -27,7 +27,7 @@
                             <DataGridTextColumn Width="95"  IsReadOnly="True" Binding="{Binding BookId}" Header="识别码"/>
                             <DataGridTextColumn Width="200" Binding="{Binding Book.Title}" Header="书名"/>
                             <DataGridTextColumn Binding="{Binding Book.Author}" Header="作者"/>
-                            <DataGridTextColumn Binding="{Binding Deadline}" Header="还书期限"/>
+                            <DataGridTextColumn Binding="{Binding Deadline, StringFormat={}{0:yyyy年M月dd日 HH:mm}}" Header="还书期限"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     <Grid Grid.Row="1" >

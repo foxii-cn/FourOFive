@@ -65,20 +65,15 @@ namespace LibraryManagementSystem.ViewModels
             {
                 account = _userService.LogIn(UserNameText, PasswordText);
                 if (account == null)
-                {
-                    Growl.Error("用户名或密码不正确！", _growlToken);
-                }
+                    throw new Exception("用户名或密码不正确！");
             }
             catch (Exception ex)
             {
-                Growl.Error(ex.Message, _growlToken);
+                Growl.Error(String.Format("登陆失败：{0}", ex.Message), _growlToken);
             }
-            if (account != null)
-            {
-                Growl.Success("登陆成功！", _growlToken);
-                UserNameText = PasswordText = "";
-                _events.PublishOnUIThread(new AccountModificationEvent(account));
-            }
+            Growl.Success("登陆成功！", _growlToken);
+            UserNameText = PasswordText = null;
+            _events.PublishOnUIThread(new AccountModificationEvent(account));
         }
         protected override void OnDeactivate(bool close)
         {
