@@ -7,7 +7,6 @@ using LibraryManagementSystem.Services;
 using Serilog.Core;
 using System.ComponentModel.Composition;
 using System.Text;
-using System.Windows;
 
 namespace LibraryManagementSystem.ViewModels
 {
@@ -28,6 +27,7 @@ namespace LibraryManagementSystem.ViewModels
         private readonly RegisterViewModel _registerViewModel;
         private readonly BooksViewModel _booksViewModel;
         private readonly ToBeReturnedViewModel _toBeReturnedViewModel;
+        private readonly BorrowLogsViewModel _borrowLogsViewModel;
 
         [ImportingConstructor]
         public MainViewModel(IEventAggregator events)
@@ -57,6 +57,7 @@ namespace LibraryManagementSystem.ViewModels
             _registerViewModel = new RegisterViewModel(_events, _userService, GrowlToken);
             _booksViewModel = new BooksViewModel(_events, _bookService, _borrowService, GrowlToken);
             _toBeReturnedViewModel = new ToBeReturnedViewModel(_events, _borrowService, GrowlToken);
+            _borrowLogsViewModel=new BorrowLogsViewModel(_events, _borrowService, GrowlToken);
         }
         public string GrowlToken { get; }
         public string UserName => Account == null ? "Î´µÇÂ¼" : Account.UserName;
@@ -86,6 +87,10 @@ namespace LibraryManagementSystem.ViewModels
         public void ShowToBeReturned()
         {
             ActivateItem(_toBeReturnedViewModel);
+        }
+        public void ShowBorrowLogs()
+        {
+            ActivateItem(_borrowLogsViewModel);
         }
     }
 }

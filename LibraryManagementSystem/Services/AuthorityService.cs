@@ -1,10 +1,6 @@
 ﻿using LibraryManagementSystem.Models;
 using Serilog.Core;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LibraryManagementSystem.Services
 {
@@ -24,9 +20,9 @@ namespace LibraryManagementSystem.Services
             this.config = config;
             this.logger = logger;
         }
-        public bool IsAdministrator(Guid guid,string userName,int authority)
+        public bool IsAdministrator(Guid guid, string userName, int authority)
         {
-            if (guid!=null&&!String.IsNullOrEmpty(userName)&&authority >= config.AdministratorAuthority)
+            if (guid != null && !String.IsNullOrEmpty(userName) && authority >= config.AdministratorAuthority)
             {
                 logger.Information("{LogName}: 用户{UserName}({Guid})通过了管理员认证",
                                     LogName, userName, guid);

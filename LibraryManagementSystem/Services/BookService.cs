@@ -69,7 +69,7 @@ namespace LibraryManagementSystem.Services
             List<Book> books;
             try
             {
-                books = bookDAO.QuerySql(condition, pageIndex, pageSize, out count,parms);
+                books = bookDAO.QuerySql(condition, pageIndex, pageSize, out count, parms);
             }
             catch (Exception ex)
             {

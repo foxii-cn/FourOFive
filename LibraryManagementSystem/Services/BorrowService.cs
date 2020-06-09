@@ -75,7 +75,7 @@ namespace LibraryManagementSystem.Services
         }
         public int RevertBook(Guid userId, Guid bookId)
         {
-            int creditChange=0;
+            int creditChange = 0;
             if (userId == default || bookId == default)
                 throw new NullReferenceException("借阅人或借阅目标ID为空");
             try
@@ -100,13 +100,13 @@ namespace LibraryManagementSystem.Services
                     DateTime giveBack = DateTime.Now;
                     bSnap.Margin++;
                     leaseLog.GiveBack = giveBack;
-                    creditChange=creditService.GetCreditChange(leaseLog.CreateTime, (DateTime)leaseLog.Deadline, giveBack, uSnap.CreditValue);
+                    creditChange = creditService.GetCreditChange(leaseLog.CreateTime, (DateTime)leaseLog.Deadline, giveBack, uSnap.CreditValue);
                     uSnap.CreditValue += creditChange;
-                    if (bookDAO.Update(bSnap, @"Margin=@Margin", new { bSnap.Margin })<1) 
+                    if (bookDAO.Update(bSnap, @"Margin=@Margin", new { bSnap.Margin }) < 1)
                         throw new Exception("更新书本信息失败");
-                    if(userDAO.Update(uSnap, @"CreditValue=@CreditValue", new { uSnap.CreditValue })<1)
+                    if (userDAO.Update(uSnap, @"CreditValue=@CreditValue", new { uSnap.CreditValue }) < 1)
                         throw new Exception("更新会员信息失败");
-                    if (borrowLogDAO.Update(leaseLog, @"GiveBack=@GiveBack", new { leaseLog.GiveBack })<1)
+                    if (borrowLogDAO.Update(leaseLog, @"GiveBack=@GiveBack,CreditValueHistory=@CreditValue", new { leaseLog.GiveBack, uSnap.CreditValue }) < 1)
                         throw new Exception("更新借阅记录失败");
                 });
             }
@@ -128,7 +128,7 @@ namespace LibraryManagementSystem.Services
             List<BorrowLog> leaseLogs;
             try
             {
-                leaseLogs = borrowLogDAO.QueryLambda(condition,bl=>bl.Book);
+                leaseLogs = borrowLogDAO.QueryLambda(condition, bl => bl.Book);
             }
             catch (Exception ex)
             {
@@ -137,6 +137,25 @@ namespace LibraryManagementSystem.Services
                 throw;
             }
             return leaseLogs;
+        }
+        public List<BorrowLog> BorrowLogQuery(int pageIndex, int pageSize, out long count, Guid userId = default)
+        {
+            List<BorrowLog> borrowLogs;
+            Expression<Func<BorrowLog, bool>> condition;
+            if (userId == default)
+                condition = bl => true;
+            else condition = bl => bl.UserId == userId;
+            try
+            {
+                borrowLogs = borrowLogDAO.QueryLambda(condition, pageIndex, pageSize, out count, bl => bl.Book);
+            }
+            catch (Exception ex)
+            {
+                logger.Warning("{LogName}: 借阅记录查询失败({ExceptionMessage})",
+                                    LogName, ex.Message);
+                throw;
+            }
+            return borrowLogs;
         }
     }
 }

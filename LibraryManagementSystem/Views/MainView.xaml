@@ -79,7 +79,7 @@
                                     <TextBlock Text="&#xEA41;" Style="{StaticResource TextBlockFabricIcons}"/>
                                 </hc:SideMenuItem.Icon>
                             </hc:SideMenuItem>
-                            <hc:SideMenuItem Header="借阅记录">
+                            <hc:SideMenuItem Header="借阅记录" cal:Message.Attach="[Event Selected] = [Action ShowBorrowLogs]">
                                 <hc:SideMenuItem.Visibility>
                                     <MultiBinding  Converter="{StaticResource UserAuthorityCanSeeConverter}" ConverterParameter="IsNotTourist" Mode="OneWay">
                                         <Binding Path="Account"/>

@@ -5,9 +5,6 @@ using LibraryManagementSystem.Models;
 using LibraryManagementSystem.Services;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace LibraryManagementSystem.ViewModels
@@ -46,14 +43,14 @@ namespace LibraryManagementSystem.ViewModels
             try
             {
                 BorrowLogList = _borrowService.TardyLease(_account.Id);
+                if (BorrowLogList.Count == 0)
+                    Growl.Info("无待还的书本记录", _growlToken);
             }
             catch (Exception ex)
             {
                 BorrowLogList = null;
                 Growl.Error(ex.Message, _growlToken);
             }
-            if (BorrowLogList.Count == 0)
-                Growl.Info("无待还的书本记录", _growlToken);
         }
         public void BorrowLogsSelectionChanged(SelectionChangedEventArgs e)
         {
@@ -74,7 +71,7 @@ namespace LibraryManagementSystem.ViewModels
                 {
                     int creditChange = _borrowService.RevertBook(_account.Id, borrowLog.BookId);
                     Growl.Success(String.Format("成功归还《{0}》，信誉{1}{2}点", borrowLog.Book.Title,
-                        creditChange>=0?"增加" :"减少",creditChange), _growlToken);
+                        creditChange >= 0 ? "增加" : "减少", creditChange), _growlToken);
                 }
                 catch (Exception ex)
                 {

@@ -59,7 +59,7 @@ namespace LibraryManagementSystem.Services
                     reward = config.GiveBackReward[rewardKeys[rewardIndex]];
                 if (punishmentIndex >= 0)
                     punishment = config.GiveBackPunishment[punishmentKeys[punishmentIndex]];
-                creditValueChange =  reward - punishment;
+                creditValueChange = reward - punishment;
             }
             catch (Exception ex)
             {

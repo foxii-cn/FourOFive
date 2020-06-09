@@ -1,11 +1,11 @@
 ﻿namespace LibraryManagementSystem.Views
 {
     /// <summary>
-    /// ToBeReturnedView.xaml 的交互逻辑
+    /// BorrowLogsView.xaml 的交互逻辑
     /// </summary>
-    public partial class ToBeReturnedView
+    public partial class BorrowLogsView
     {
-        public ToBeReturnedView()
+        public BorrowLogsView()
         {
             InitializeComponent();
         }

@@ -1,12 +1,8 @@
 ﻿using LibraryManagementSystem.Models;
 using LibraryManagementSystem.Services;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
@@ -16,7 +12,7 @@ namespace LibraryManagementSystem.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if(values==null||values.Count()<2)
+            if (values == null || values.Count() < 2)
                 throw new NotImplementedException();
             User account = values[0] as User;
             string para = parameter as string;

@@ -17,7 +17,7 @@ namespace LibraryManagementSystem.ViewModels
         private readonly BookService _bookService;
         private readonly BorrowService _borrowService;
         private readonly string _growlToken;
-        private readonly int _pageSize = 6;
+        private readonly int _pageSize = 7;
         private readonly List<Book> _selectedBooks = new List<Book>();
 
 
@@ -77,8 +77,10 @@ namespace LibraryManagementSystem.ViewModels
         {
             try
             {
-                BookList = _bookService.BookQuery(_queryCondition, PageIndex, _pageSize, out long count,_queryParms);
+                BookList = _bookService.BookQuery(_queryCondition, PageIndex, _pageSize, out long count, _queryParms);
                 MaxPageCount = (int)(count / _pageSize) + 1;
+                if (BookList.Count == 0)
+                    Growl.Info("图书库为空", _growlToken);
             }
             catch (Exception ex)
             {

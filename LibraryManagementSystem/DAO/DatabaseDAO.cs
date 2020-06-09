@@ -85,7 +85,7 @@ namespace LibraryManagementSystem.DAO
             try
             {
                 update = sql.Update<T>(dywhere)
-                .SetRaw(setSql,parms);
+                .SetRaw(setSql, parms);
             }
             catch (Exception ex)
             {
@@ -141,7 +141,7 @@ namespace LibraryManagementSystem.DAO
             try
             {
                 select = sql.Select<T>()
-                .Where(condition,parms);
+                .Where(condition, parms);
             }
             catch (Exception ex)
             {
@@ -187,13 +187,45 @@ namespace LibraryManagementSystem.DAO
             }
             return refreshedElements;
         }
-        public List<T> QueryLambda<TNavigate>(Expression<Func<T,bool>>whereExp, Expression<Func<T, TNavigate>> includeExp=null)where TNavigate:DatabaseModel
+        public List<T> QueryLambda<TNavigate>(Expression<Func<T, bool>> whereExp, Expression<Func<T, TNavigate>> includeExp = null) where TNavigate : DatabaseModel
         {
             FreeSql.ISelect<T> select;
             List<T> selectedElements;
             try
             {
-                select = sql.Select<T>().Where(whereExp).Include(includeExp);
+                select = sql.Select<T>()
+                    .Where(whereExp)
+                    .Include(includeExp);
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "{LogName}: 为类型{T}以{Exp}创建查询对象失败",
+                                    LogName, typeof(T), whereExp);
+                throw;
+            }
+            try
+            {
+                selectedElements = select.ToList();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "{LogName}: 执行查询操作{SelectSql}失败",
+                                    LogName, select.ToSql());
+                throw;
+            }
+            return selectedElements;
+        }
+            public List<T> QueryLambda<TNavigate>(Expression<Func<T, bool>> whereExp, int pageIndex, int pageSize, out long count, Expression<Func<T, TNavigate>> includeExp = null) where TNavigate : DatabaseModel
+        {
+            FreeSql.ISelect<T> select;
+            List<T> selectedElements;
+            try
+            {
+                select = sql.Select<T>()
+                    .Where(whereExp)
+                    .Include(includeExp)
+                    .Count(out count)
+                    .Page(pageIndex,pageSize);
             }
             catch (Exception ex)
             {
@@ -244,7 +276,7 @@ namespace LibraryManagementSystem.DAO
             try
             {
                 forUpdate = sql.Select<T>()
-                .Where(condition,parms)
+                .Where(condition, parms)
                 .ForUpdate();
             }
             catch (Exception ex)

@@ -65,7 +65,7 @@ namespace LibraryManagementSystem.Services
             User user;
             try
             {
-                user = userDAO.QuerySql(@"UserName=@UserName",new { UserName= userName }).FirstOrDefault();
+                user = userDAO.QuerySql(@"UserName=@UserName", new { UserName = userName }).FirstOrDefault();
             }
             catch (Exception ex)
             {
