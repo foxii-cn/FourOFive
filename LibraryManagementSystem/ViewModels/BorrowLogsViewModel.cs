@@ -5,7 +5,6 @@ using LibraryManagementSystem.Models;
 using LibraryManagementSystem.Services;
 using System;
 using System.Collections.Generic;
-using System.Windows.Controls;
 namespace LibraryManagementSystem.ViewModels
 {
     public class BorrowLogsViewModel : Screen, IHandle<AccountModificationEvent>
@@ -66,7 +65,7 @@ namespace LibraryManagementSystem.ViewModels
         {
             try
             {
-                BorrowLogList = _borrowService.BorrowLogQuery( PageIndex, _pageSize, out long count, _account.Id);
+                BorrowLogList = _borrowService.BorrowLogQuery(PageIndex, _pageSize, out long count, _account.Id);
                 MaxPageCount = (int)(count / _pageSize) + 1;
                 if (BorrowLogList.Count == 0)
                     Growl.Info("无借阅记录", _growlToken);

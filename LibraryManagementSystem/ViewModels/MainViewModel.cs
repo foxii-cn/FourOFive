@@ -4,9 +4,13 @@ using LibraryManagementSystem.DAO;
 using LibraryManagementSystem.Events;
 using LibraryManagementSystem.Models;
 using LibraryManagementSystem.Services;
+using LibraryManagementSystem.Views;
 using Serilog.Core;
 using System.ComponentModel.Composition;
+using System.Diagnostics;
 using System.Text;
+using System.Windows;
+using System.Windows.Navigation;
 
 namespace LibraryManagementSystem.ViewModels
 {
@@ -57,7 +61,7 @@ namespace LibraryManagementSystem.ViewModels
             _registerViewModel = new RegisterViewModel(_events, _userService, GrowlToken);
             _booksViewModel = new BooksViewModel(_events, _bookService, _borrowService, GrowlToken);
             _toBeReturnedViewModel = new ToBeReturnedViewModel(_events, _borrowService, GrowlToken);
-            _borrowLogsViewModel=new BorrowLogsViewModel(_events, _borrowService, GrowlToken);
+            _borrowLogsViewModel = new BorrowLogsViewModel(_events, _borrowService, GrowlToken);
         }
         public string GrowlToken { get; }
         public string UserName => Account == null ? "Î´µÇÂ¼" : Account.UserName;
@@ -71,6 +75,19 @@ namespace LibraryManagementSystem.ViewModels
             Account = message.Account;
             NotifyOfPropertyChange(() => UserName);
             NotifyOfPropertyChange(() => Account);
+        }
+        public void OnClosing()
+        {
+            _configDAO.Save(_config);
+            _loggerDAO.Close(_logger);
+        }
+        public void HyperlinkRequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(e.Uri.AbsoluteUri);
+        }
+        public void ShowAbout()
+        {
+            new AboutWindow { Owner = Application.Current.MainWindow, DataContext = this }.ShowDialog();
         }
         public void ShowLogin()
         {

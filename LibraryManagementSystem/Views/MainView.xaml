@@ -13,18 +13,27 @@
                Title="FourOFive - Efficient Library Management System"
                Icon="{StaticResource LogoMin}"
                hc:ActiveGlowColor="Orange"
+               cal:Message.Attach="[Event Closing] = [Action OnClosing]"
                d:DesignHeight="800"
                d:DesignWidth="1000">
     <hc:GlowWindow.NonClientAreaContent>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="1" Foreground="{DynamicResource PrimaryTextBrush}" Style="{StaticResource ButtonBaseStyle}">
-                <TextBlock Text="&#xE897;" Style="{StaticResource TextBlockFabricIcons}"/>
-            </Button>
-        </Grid>
+        <Menu HorizontalAlignment="Right" Background="Transparent" VerticalAlignment="Stretch">
+            <MenuItem Height="29">
+                <MenuItem.Header>
+                    <TextBlock Text="&#xECF4;" Style="{StaticResource TextBlockFabricIcons}"/>
+                </MenuItem.Header>
+                <MenuItem Header="关于" Width="100"  cal:Message.Attach="[Event Click] = [Action ShowAbout()]">
+                    <MenuItem.Icon>
+                        <TextBlock Text="&#xE9D5;" Style="{StaticResource TextBlockFabricIcons}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="帮助" Width="100" Command="hc:ControlCommands.OpenLink" CommandParameter="https://github.com/xlfqiji/LibraryManagementSystem/wiki">
+                    <MenuItem.Icon>
+                        <TextBlock Text="&#xF807;" Style="{StaticResource TextBlockFabricIcons}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
     </hc:GlowWindow.NonClientAreaContent>
 <hc:TransitioningContentControl>
         <hc:SimplePanel >

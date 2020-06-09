@@ -1,0 +1,42 @@
+﻿<hc:GlowWindow x:Class="LibraryManagementSystem.Views.AboutWindow"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+           xmlns:hc="https://handyorg.github.io/handycontrol"
+           xmlns:cal="http://www.caliburnproject.org"
+           mc:Ignorable="d"
+           Title="关于"
+           ShowTitle="True"
+           BorderThickness="1"
+           BorderBrush="#262e2f"
+           ResizeMode="NoResize"
+           ShowInTaskbar="False"
+           WindowStartupLocation="CenterOwner"
+               hc:ActiveGlowColor="Orange"
+           Width="340"
+           Height="245">
+    <hc:SimplePanel>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top">
+            <Label Margin="20,16,20,20"  Foreground="{StaticResource PrimaryBrush}" VerticalAlignment="Top" HorizontalAlignment="Center">
+                <Image Source="{StaticResource LogoLong}"/>
+            </Label>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Image Grid.Column="0" Grid.Row="0"  Source="{StaticResource IconGitHub}" Margin="0" Width="32" HorizontalAlignment="Center" />
+                <Image Grid.Column="1" Grid.Row="0"  Source="{StaticResource IconQQ}" Margin="0" Width="32" HorizontalAlignment="Center" />
+                <hc:Shield Grid.Column="0" Grid.Row="1" Subject="GitHub" Status="Library..." Color="#1182c3" Margin="10" HorizontalAlignment="Center"
+                           Command="hc:ControlCommands.OpenLink" CommandParameter="https://github.com/xlfqiji/LibraryManagementSystem"/>
+                <hc:Shield Grid.Column="1" Grid.Row="1" Subject="QQ" Status="1368540819" Color="#ff69b4" Margin="10" HorizontalAlignment="Center"
+                           Command="hc:ControlCommands.OpenLink" CommandParameter="http://wpa.qq.com/msgrd?v=3&amp;uin=1368540819&amp;site=qq&amp;menu=yes"/>
+            </Grid>
+        </StackPanel>
+    </hc:SimplePanel>
+</hc:GlowWindow>

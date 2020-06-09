@@ -107,15 +107,15 @@ namespace LibraryManagementSystem.ViewModels
             User account = null;
             try
             {
+                if (!PasswordText.Equals(PasswordRepeatText))
+                    throw new Exception("两次密码不一致！");
                 account = _userService.Register(UserNameText, PasswordText, NameText, NationalIdentificationNumberText);
                 if (account == null)
-                {
-                    Growl.Error("未知错误，注册失败！", _growlToken);
-                }
+                    throw new Exception("未知错误！");
             }
             catch (Exception ex)
             {
-                Growl.Error(ex.Message, _growlToken);
+                Growl.Error(string.Format("注册失败：{0}", ex.Message), _growlToken);
             }
             if (account != null)
             {

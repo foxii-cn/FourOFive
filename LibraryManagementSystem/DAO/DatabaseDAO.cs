@@ -215,7 +215,7 @@ namespace LibraryManagementSystem.DAO
             }
             return selectedElements;
         }
-            public List<T> QueryLambda<TNavigate>(Expression<Func<T, bool>> whereExp, int pageIndex, int pageSize, out long count, Expression<Func<T, TNavigate>> includeExp = null) where TNavigate : DatabaseModel
+        public List<T> QueryLambda<TNavigate>(Expression<Func<T, bool>> whereExp, int pageIndex, int pageSize, out long count, Expression<Func<T, TNavigate>> includeExp = null) where TNavigate : DatabaseModel
         {
             FreeSql.ISelect<T> select;
             List<T> selectedElements;
@@ -225,7 +225,7 @@ namespace LibraryManagementSystem.DAO
                     .Where(whereExp)
                     .Include(includeExp)
                     .Count(out count)
-                    .Page(pageIndex,pageSize);
+                    .Page(pageIndex, pageSize);
             }
             catch (Exception ex)
             {
