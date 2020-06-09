@@ -1,4 +1,7 @@
-# LibraryManagementSystem
-软件工程课程设计
+# FourOFive
 
-**欢迎于洋同学**
+![图片爆炸了](https://github.com/xlfqiji/FourOFive/blob/master/LibraryManagementSystem/Resources/Imgs/Logo_large.png)
+
+图书馆管理系统
+
+**建设中**
