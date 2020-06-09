@@ -32,8 +32,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="auto"/>
                         </Grid.ColumnDefinitions>
-                        <hc:Pagination Grid.Column="0" Margin="20,20,0,20" MaxPageCount="{Binding MaxPageCount}" PageIndex="{Binding PageIndex, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsJumpEnabled="True"
-                            cal:Message.Attach="[Event PageUpdated] = [Action PageUpdated()]"/>
+                        <hc:Pagination Grid.Column="0" Margin="20,20,0,20" MaxPageCount="{Binding MaxPageCount}" PageIndex="{Binding PageIndex, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsJumpEnabled="True"/>
                         <Button Grid.Column="1"  Style="{StaticResource ButtonPrimary}" Width="120" Content="查询" IsDefault="True" Margin="20,20,20,20"
                                    cal:Message.Attach="[Event Click] = [Action Query]" />
                     </Grid>

@@ -4,7 +4,6 @@ using LibraryManagementSystem.Events;
 using LibraryManagementSystem.Models;
 using LibraryManagementSystem.Services;
 using System;
-using System.Collections.Generic;
 
 namespace LibraryManagementSystem.ViewModels
 {
@@ -22,8 +21,8 @@ namespace LibraryManagementSystem.ViewModels
         public string Name => _account?.Name;
         public string NationalIdentificationNumber => _account?.NationalIdentificationNumber;
         public int? CreditValue => _account?.CreditValue;
-        public int AccreditedDays => _account==null?0: _creditService.GetAccreditedDays(_account.CreditValue);
-        public string AuthorityLevel => _account == null ? null: _authorityService.IsAdministrator(_account.Id, _account.UserName, _account.Authority) ? "管理员" : "普通会员";
+        public int AccreditedDays => _account == null ? 0 : _creditService.GetAccreditedDays(_account.CreditValue);
+        public string AuthorityLevel => _account == null ? null : _authorityService.IsAdministrator(_account.Id, _account.UserName, _account.Authority) ? "管理员" : "普通会员";
 
         public UserInfoViewModel(IEventAggregator events, UserService userService, CreditService creditService, AuthorityService authorityService, string growlToken)
         {
@@ -38,7 +37,7 @@ namespace LibraryManagementSystem.ViewModels
         {
             try
             {
-                _account=_userService.Query(_account.Id);
+                _account = _userService.Query(_account.Id);
                 if (_account == null)
                     throw new Exception("无此用户！");
                 NotifyOfPropertyChange(() => UserName);
@@ -47,7 +46,7 @@ namespace LibraryManagementSystem.ViewModels
                 NotifyOfPropertyChange(() => CreditValue);
                 NotifyOfPropertyChange(() => AccreditedDays);
                 NotifyOfPropertyChange(() => AuthorityLevel);
-                Growl.Info("账户信息刷新成功！", _growlToken);
+                Growl.Success("账户信息刷新成功！", _growlToken);
             }
             catch (Exception ex)
             {

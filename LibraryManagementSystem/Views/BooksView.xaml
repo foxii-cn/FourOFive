@@ -46,8 +46,7 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <Grid Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                        <hc:Pagination Margin="20,5,20,15" MaxPageCount="{Binding MaxPageCount}" PageIndex="{Binding PageIndex, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsJumpEnabled="True"
-                            cal:Message.Attach="[Event PageUpdated] = [Action PageUpdated()]"/>
+                        <hc:Pagination Margin="20,5,20,15" MaxPageCount="{Binding MaxPageCount}" PageIndex="{Binding PageIndex, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsJumpEnabled="True"/>
                     </Grid>
                 </Grid>
             </Border>

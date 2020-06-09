@@ -1,11 +1,9 @@
-﻿using System.Windows.Controls;
-
-namespace LibraryManagementSystem.Views
+﻿namespace LibraryManagementSystem.Views
 {
     /// <summary>
     /// UserInfoView.xaml 的交互逻辑
     /// </summary>
-    public partial class UserInfoView 
+    public partial class UserInfoView
     {
         public UserInfoView()
         {

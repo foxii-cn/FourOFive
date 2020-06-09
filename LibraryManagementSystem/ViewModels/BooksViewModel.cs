@@ -23,6 +23,7 @@ namespace LibraryManagementSystem.ViewModels
 
         private User _account;
         private List<Book> _bookList;
+        private long _booksCount;
         private int _maxPageCount = 1;
         private int _pageIndex = 1;
         private string _queryCondition;
@@ -58,6 +59,7 @@ namespace LibraryManagementSystem.ViewModels
             {
                 _pageIndex = value;
                 NotifyOfPropertyChange(() => PageIndex);
+                PageUpdated();
             }
             get
             {
@@ -79,13 +81,15 @@ namespace LibraryManagementSystem.ViewModels
             {
                 BookList = _bookService.BookQuery(_queryCondition, PageIndex, _pageSize, out long count, _queryParms);
                 MaxPageCount = (int)(count / _pageSize) + 1;
-                if (BookList.Count == 0)
-                    Growl.Info("图书库为空", _growlToken);
+                _booksCount = count;
+                if (count == 0)
+                    Growl.Info("图书库为空！", _growlToken);
             }
             catch (Exception ex)
             {
                 BookList = null;
                 MaxPageCount = 1;
+                _booksCount = 0;
                 Growl.Error(ex.Message, _growlToken);
             }
         }
@@ -93,10 +97,9 @@ namespace LibraryManagementSystem.ViewModels
         {
             _queryCondition = @"Title LIKE @keyword OR Author LIKE @keyword OR PublishingHouse LIKE @keyword";
             _queryParms = new { keyword = String.Format("%{0}%", info.Info) };
-            if (PageIndex == 1)
-                PageUpdated();
-            else
-                PageIndex = 1;
+            PageIndex = 1;
+            if (_booksCount != 0)
+                Growl.Info(string.Format("查询到{0}本相关书籍！", _booksCount), _growlToken);
         }
         public void BooksSelectionChanged(SelectionChangedEventArgs e)
         {
@@ -126,7 +129,7 @@ namespace LibraryManagementSystem.ViewModels
         protected override void OnActivate()
         {
             base.OnActivate();
-            PageUpdated();
+            SearchStarted(new FunctionEventArgs<string>(""));
         }
         protected override void OnDeactivate(bool close)
         {

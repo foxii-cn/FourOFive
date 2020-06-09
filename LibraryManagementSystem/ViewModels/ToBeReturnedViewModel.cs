@@ -44,7 +44,8 @@ namespace LibraryManagementSystem.ViewModels
             {
                 BorrowLogList = _borrowService.TardyLease(_account.Id);
                 if (BorrowLogList.Count == 0)
-                    Growl.Info("无待还的书本记录", _growlToken);
+                    Growl.Success("无待还的书本记录！", _growlToken);
+                else Growl.Info(string.Format("查询到{0}条未归还记录！", BorrowLogList.Count), _growlToken);
             }
             catch (Exception ex)
             {

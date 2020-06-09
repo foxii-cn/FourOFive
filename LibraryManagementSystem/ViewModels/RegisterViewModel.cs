@@ -104,22 +104,21 @@ namespace LibraryManagementSystem.ViewModels
         }
         public void Register()
         {
-            User account = null;
             try
             {
                 if (!PasswordText.Equals(PasswordRepeatText))
                     throw new Exception("两次密码不一致！");
-                account = _userService.Register(UserNameText, PasswordText, NameText, NationalIdentificationNumberText);
+                User account = _userService.Register(UserNameText, PasswordText, NameText, NationalIdentificationNumberText);
                 if (account == null)
                     throw new Exception("未知错误！");
+                Growl.Success("注册成功！", _growlToken);
+                UserNameText = PasswordText = PasswordRepeatText = NameText = NationalIdentificationNumberText = null;
+                _events.PublishOnUIThread(new AccountStateChangedEvent(account));
             }
             catch (Exception ex)
             {
                 Growl.Error(string.Format("注册失败：{0}", ex.Message), _growlToken);
             }
-            Growl.Success("注册成功！", _growlToken);
-            UserNameText = PasswordText = PasswordRepeatText = NameText = NationalIdentificationNumberText = null;
-            _events.PublishOnUIThread(new AccountStateChangedEvent(account));
         }
         protected override void OnDeactivate(bool close)
         {

@@ -14,8 +14,10 @@
                Icon="{StaticResource LogoMin}"
                hc:ActiveGlowColor="Orange"
                cal:Message.Attach="[Event Closing] = [Action OnClosing]"
-               d:DesignHeight="800"
-               d:DesignWidth="1000">
+               Height="640"
+               Width="1200"
+               d:DesignHeight="600"
+               d:DesignWidth="800">
     <hc:GlowWindow.NonClientAreaContent>
         <Menu HorizontalAlignment="Right" Background="Transparent" VerticalAlignment="Stretch">
             <MenuItem Height="29">

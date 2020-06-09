@@ -5,6 +5,7 @@ using LibraryManagementSystem.Models;
 using LibraryManagementSystem.Services;
 using System;
 using System.Collections.Generic;
+
 namespace LibraryManagementSystem.ViewModels
 {
     public class BorrowLogsViewModel : Screen, IHandle<AccountStateChangedEvent>
@@ -16,6 +17,7 @@ namespace LibraryManagementSystem.ViewModels
 
         private User _account;
         private List<BorrowLog> _borrowLogList;
+        private long _booksCount;
         private int _maxPageCount = 1;
         private int _pageIndex = 1;
         public List<BorrowLog> BorrowLogList
@@ -48,6 +50,7 @@ namespace LibraryManagementSystem.ViewModels
             {
                 _pageIndex = value;
                 NotifyOfPropertyChange(() => PageIndex);
+                PageUpdated();
             }
             get
             {
@@ -67,19 +70,23 @@ namespace LibraryManagementSystem.ViewModels
             {
                 BorrowLogList = _borrowService.BorrowLogQuery(PageIndex, _pageSize, out long count, _account.Id);
                 MaxPageCount = (int)(count / _pageSize) + 1;
-                if (BorrowLogList.Count == 0)
+                _booksCount = count;
+                if (count == 0)
                     Growl.Info("无借阅记录", _growlToken);
             }
             catch (Exception ex)
             {
                 BorrowLogList = null;
                 MaxPageCount = 1;
+                _booksCount = 0;
                 Growl.Error(ex.Message, _growlToken);
             }
         }
         public void Query()
         {
-            PageUpdated();
+            PageIndex = 1;
+            if (_booksCount != 0)
+                Growl.Info(string.Format("查询到{0}条借阅记录！", _booksCount), _growlToken); ;
         }
         protected override void OnActivate()
         {
