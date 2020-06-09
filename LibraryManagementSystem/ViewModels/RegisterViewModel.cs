@@ -126,12 +126,12 @@ namespace LibraryManagementSystem.ViewModels
         }
         protected override void OnDeactivate(bool close)
         {
+            UserNameText = null;
+            PasswordText = null;
+            PasswordRepeatText = null;
+            NameText = null;
+            NationalIdentificationNumberText = null;
             base.OnDeactivate(close);
-            UserNameText = "";
-            PasswordText = "";
-            PasswordRepeatText = "";
-            NameText = "";
-            NationalIdentificationNumberText = "";
         }
     }
 }

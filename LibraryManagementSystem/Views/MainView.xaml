@@ -15,7 +15,18 @@
                hc:ActiveGlowColor="Orange"
                d:DesignHeight="800"
                d:DesignWidth="1000">
-    <hc:TransitioningContentControl>
+    <hc:GlowWindow.NonClientAreaContent>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="1" Foreground="{DynamicResource PrimaryTextBrush}" Style="{StaticResource ButtonBaseStyle}">
+                <TextBlock Text="&#xE897;" Style="{StaticResource TextBlockFabricIcons}"/>
+            </Button>
+        </Grid>
+    </hc:GlowWindow.NonClientAreaContent>
+<hc:TransitioningContentControl>
         <hc:SimplePanel >
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -115,7 +126,7 @@
                         </hc:SideMenuItem>
                     </hc:SideMenu>
                 </Grid>
-                <hc:SimplePanel Grid.Column="1">
+                <hc:SimplePanel Grid.Column="1" Background="{StaticResource CloudDrawingBrush}">
                     <ContentControl x:Name="ActiveItem" />
                     <hc:ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalAlignment="Right" IsInertiaEnabled="True" IsPenetrating="True">
                         <StackPanel hc:Growl.Token="{Binding Path=GrowlToken,Mode=OneTime}" VerticalAlignment="Top" Margin="0,10,10,10"/>
