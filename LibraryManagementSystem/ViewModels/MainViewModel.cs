@@ -8,6 +8,7 @@ using LibraryManagementSystem.Views;
 using Serilog.Core;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Navigation;
@@ -15,7 +16,7 @@ using System.Windows.Navigation;
 namespace LibraryManagementSystem.ViewModels
 {
     [Export(typeof(MainViewModel))]
-    public class MainViewModel : Conductor<object>, IHandle<AccountModificationEvent>
+    public class MainViewModel : Conductor<object>, IHandle<AccountStateChangedEvent>
     {
         private readonly IEventAggregator _events;
         private readonly LoggerDAO _loggerDAO;
@@ -32,6 +33,8 @@ namespace LibraryManagementSystem.ViewModels
         private readonly BooksViewModel _booksViewModel;
         private readonly ToBeReturnedViewModel _toBeReturnedViewModel;
         private readonly BorrowLogsViewModel _borrowLogsViewModel;
+        private readonly UserInfoViewModel _userInfoViewModel;
+
 
         [ImportingConstructor]
         public MainViewModel(IEventAggregator events)
@@ -62,16 +65,22 @@ namespace LibraryManagementSystem.ViewModels
             _booksViewModel = new BooksViewModel(_events, _bookService, _borrowService, GrowlToken);
             _toBeReturnedViewModel = new ToBeReturnedViewModel(_events, _borrowService, GrowlToken);
             _borrowLogsViewModel = new BorrowLogsViewModel(_events, _borrowService, GrowlToken);
+            _userInfoViewModel = new UserInfoViewModel(_events, _userService, _creditService, AuthorityService, GrowlToken);
         }
         public string GrowlToken { get; }
-        public string UserName => Account == null ? "Î´µÇÂ¼" : Account.UserName;
+        public string UserName => Account == null ? "ÇëµÇÂ¼£¡" : Account.UserName;
         public User Account { get; private set; }
         public AuthorityService AuthorityService { get; }
 
-        public void Handle(AccountModificationEvent message)
+        public void Handle(AccountStateChangedEvent message)
         {
-            DeactivateItem(_registerViewModel, false);
-            DeactivateItem(_logInViewModel, false);
+            if (message.Account != null)
+            {
+                DeactivateItem(_registerViewModel, false);
+                DeactivateItem(_logInViewModel, false);
+            }
+            else
+                DeactivateItem(_userInfoViewModel, false);
             Account = message.Account;
             NotifyOfPropertyChange(() => UserName);
             NotifyOfPropertyChange(() => Account);
@@ -108,6 +117,10 @@ namespace LibraryManagementSystem.ViewModels
         public void ShowBorrowLogs()
         {
             ActivateItem(_borrowLogsViewModel);
+        }
+        public void ShowUserInfo()
+        {
+            ActivateItem(_userInfoViewModel);
         }
     }
 }

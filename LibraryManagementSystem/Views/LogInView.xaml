@@ -10,7 +10,7 @@
       d:DesignWidth="800" d:DesignHeight="600">
     <hc:SimplePanel>
         <Grid MinWidth="400" MinHeight="300" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="16">
-            <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource BorderRegion}" Background="{DynamicResource BorderBrush}" Effect="{StaticResource EffectShadow4}">
+            <Border Style="{StaticResource BorderRegion}" Background="{DynamicResource BorderBrush}" Effect="{StaticResource EffectShadow4}">
                 <Grid  Background="{DynamicResource RegionBrush}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>

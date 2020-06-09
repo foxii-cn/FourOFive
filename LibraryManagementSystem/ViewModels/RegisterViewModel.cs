@@ -119,7 +119,7 @@ namespace LibraryManagementSystem.ViewModels
             }
             Growl.Success("注册成功！", _growlToken);
             UserNameText = PasswordText = PasswordRepeatText = NameText = NationalIdentificationNumberText = null;
-            _events.PublishOnUIThread(new AccountModificationEvent(account));
+            _events.PublishOnUIThread(new AccountStateChangedEvent(account));
         }
         protected override void OnDeactivate(bool close)
         {

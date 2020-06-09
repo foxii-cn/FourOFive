@@ -78,5 +78,20 @@ namespace LibraryManagementSystem.Services
             else
                 return null;
         }
+        public User Query(Guid userId)
+        {
+            User user;
+            try
+            {
+                user = userDAO.Query(userId).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                logger.Warning("{LogName}: 用户{UserId}查询失败({ExceptionMessage})",
+                                    LogName, userId, ex.Message);
+                throw;
+            }
+            return user;
+        }
     }
 }

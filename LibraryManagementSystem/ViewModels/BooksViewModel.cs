@@ -11,7 +11,7 @@ using System.Windows.Controls;
 
 namespace LibraryManagementSystem.ViewModels
 {
-    public class BooksViewModel : Screen, IHandle<AccountModificationEvent>
+    public class BooksViewModel : Screen, IHandle<AccountStateChangedEvent>
     {
         private readonly IEventAggregator _events;
         private readonly BookService _bookService;
@@ -133,7 +133,7 @@ namespace LibraryManagementSystem.ViewModels
             base.OnDeactivate(close);
             _selectedBooks.Clear();
         }
-        public void Handle(AccountModificationEvent message)
+        public void Handle(AccountStateChangedEvent message)
         {
             _account = message.Account;
         }

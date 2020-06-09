@@ -9,7 +9,7 @@ using System.Windows.Controls;
 
 namespace LibraryManagementSystem.ViewModels
 {
-    public class ToBeReturnedViewModel : Screen, IHandle<AccountModificationEvent>
+    public class ToBeReturnedViewModel : Screen, IHandle<AccountStateChangedEvent>
     {
         private readonly IEventAggregator _events;
         private readonly BorrowService _borrowService;
@@ -89,7 +89,7 @@ namespace LibraryManagementSystem.ViewModels
             base.OnDeactivate(close);
             _selectedBorrowLogs.Clear();
         }
-        public void Handle(AccountModificationEvent message)
+        public void Handle(AccountStateChangedEvent message)
         {
             _account = message.Account;
         }

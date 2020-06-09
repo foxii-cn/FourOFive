@@ -273,7 +273,7 @@
     </ApplicationDefinition>
     <Compile Include="ControlHelpers\PasswordBoxHelper.cs" />
     <Compile Include="Converters\UserAuthorityCanSeeConverter.cs" />
-    <Compile Include="Events\AccountModificationEvent.cs" />
+    <Compile Include="Events\AccountStateChangedEvent.cs" />
     <Compile Include="Services\AuthorityService.cs" />
     <Compile Include="Services\BookService.cs" />
     <Compile Include="Services\BorrowService.cs" />
@@ -288,6 +288,7 @@
     <Compile Include="ViewModels\LogInViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ToBeReturnedViewModel.cs" />
+    <Compile Include="ViewModels\UserInfoViewModel.cs" />
     <Compile Include="Views\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
@@ -320,6 +321,9 @@
     <Compile Include="DAO\UserDAO.cs" />
     <Compile Include="Views\ToBeReturnedView.xaml.cs">
       <DependentUpon>ToBeReturnedView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserInfoView.xaml.cs">
+      <DependentUpon>UserInfoView.xaml</DependentUpon>
     </Compile>
     <Page Include="Converters\ConvertersDictionary.xaml">
       <SubType>Designer</SubType>
@@ -354,6 +358,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ToBeReturnedView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserInfoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

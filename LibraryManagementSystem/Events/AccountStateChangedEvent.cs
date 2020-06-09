@@ -2,10 +2,10 @@
 
 namespace LibraryManagementSystem.Events
 {
-    public class AccountModificationEvent
+    public class AccountStateChangedEvent
     {
-        public User Account { get; private set; }
-        public AccountModificationEvent(User account)
+        public User Account { get; }
+        public AccountStateChangedEvent(User account)
         {
             Account = account;
         }

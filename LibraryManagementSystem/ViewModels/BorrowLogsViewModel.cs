@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 namespace LibraryManagementSystem.ViewModels
 {
-    public class BorrowLogsViewModel : Screen, IHandle<AccountModificationEvent>
+    public class BorrowLogsViewModel : Screen, IHandle<AccountStateChangedEvent>
     {
         private readonly IEventAggregator _events;
         private readonly BorrowService _borrowService;
@@ -86,7 +86,7 @@ namespace LibraryManagementSystem.ViewModels
             base.OnActivate();
             Query();
         }
-        public void Handle(AccountModificationEvent message)
+        public void Handle(AccountStateChangedEvent message)
         {
             _account = message.Account;
         }

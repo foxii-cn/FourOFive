@@ -73,7 +73,7 @@ namespace LibraryManagementSystem.ViewModels
             }
             Growl.Success("登陆成功！", _growlToken);
             UserNameText = PasswordText = null;
-            _events.PublishOnUIThread(new AccountModificationEvent(account));
+            _events.PublishOnUIThread(new AccountStateChangedEvent(account));
         }
         protected override void OnDeactivate(bool close)
         {

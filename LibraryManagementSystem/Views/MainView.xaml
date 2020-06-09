@@ -99,7 +99,7 @@
                                     <TextBlock Text="&#xEE6A;" Style="{StaticResource TextBlockFabricIcons}"/>
                                 </hc:SideMenuItem.Icon>
                             </hc:SideMenuItem>
-                            <hc:SideMenuItem Header="账户信息">
+                            <hc:SideMenuItem Header="账户信息" cal:Message.Attach="[Event Selected] = [Action ShowUserInfo]">
                                 <hc:SideMenuItem.Visibility>
                                     <MultiBinding  Converter="{StaticResource UserAuthorityCanSeeConverter}" ConverterParameter="IsNotTourist" Mode="OneWay">
                                         <Binding Path="Account"/>
