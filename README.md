@@ -1,6 +1,6 @@
 # FourOFive
 
-![Logo](.\DisplayResources\Logo.png)
+![Logo](DisplayResources/Logo.png)
 
 FourOFive 是界面友好的图书馆管理系统 & 软件工程 & 数据库课程设计
 
@@ -82,7 +82,7 @@ SQLServer 2005+
 
 此时打开日志文件你将会看到一条报错:
 
-以编码System.Text.UTF8Encoding读取配置文件.\config.json时出错
+以编码System.Text.UTF8Encoding读取配置文件config.json时出错
 
 这是正常现象
 
@@ -94,26 +94,26 @@ SQLServer 2005+
 
 ### 登陆
 
-![登陆](.\DisplayResources\Imagines\登陆.png)
+![登陆](DisplayResources/Imagines/登陆.png)
 
 ### 图书检索&借阅
 
-![图书检索_1](.\DisplayResources\Imagines\图书检索_1.png)
+![图书检索_1](DisplayResources/Imagines/图书检索_1.png)
 
-![图书检索_2](.\DisplayResources\Imagines\图书检索_2.png)
+![图书检索_2](DisplayResources/Imagines/图书检索_2.png)
 
-![批量借阅](.\DisplayResources\Imagines\批量借阅.png)
+![批量借阅](DisplayResources/Imagines/批量借阅.png)
 
-![借阅反馈](.\DisplayResources\Imagines\借阅反馈.png)
+![借阅反馈](DisplayResources/Imagines/借阅反馈.png)
 
 ### 图书归还
 
-![未归还查询](.\DisplayResources\Imagines\未归还查询.png)
+![未归还查询](DisplayResources/Imagines/未归还查询.png)
 
-![批量归还](.\DisplayResources\Imagines\批量归还.png)
+![批量归还](DisplayResources/Imagines/批量归还.png)
 
-![归还反馈](.\DisplayResources\Imagines\归还反馈.png)
+![归还反馈](DisplayResources/Imagines/归还反馈.png)
 
 ### 借阅记录
 
-![借阅记录](.\DisplayResources\Imagines\借阅记录.png)
+![借阅记录](DisplayResources/Imagines/借阅记录.png)
