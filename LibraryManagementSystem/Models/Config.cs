@@ -5,6 +5,7 @@ namespace LibraryManagementSystem.Models
     public class Config
     {
         // 数据库配置
+
         public string DatabaseType { get; set; } = "Sqlite";
         public string DatabaseDataSource { get; set; } = @".\data.db";
         public string DatabasePort { get; set; } = "3306";
@@ -16,7 +17,13 @@ namespace LibraryManagementSystem.Models
         public string DatabaseAttachs { get; set; } = @"";
         public bool DatabasePooling { get; set; } = true;
         public int DatabaseMinPoolSize { get; set; } = 1;
+        /// <summary>
+        /// 自动同步数据库表结构，数据库出错时可以尝试开启此项，没事别开影响性能
+        /// </summary>
+        public bool DatabaseAutoSyncStructure { get; set; } = true;
+
         // 信誉系统配置
+
         /// <summary>
         /// 信誉超过(>=)Key,获得Value借书时长(天)
         /// </summary>
@@ -38,6 +45,8 @@ namespace LibraryManagementSystem.Models
         /// </summary>
         public int InitialCreditValue { get; set; } = 30;
 
+        // 权限系统配置
+
         /// <summary>
         /// 管理员权限值
         /// </summary>
@@ -48,6 +57,7 @@ namespace LibraryManagementSystem.Models
         public int InitialUserAuthority { get; set; } = 5;
 
         // 密码加密配置
+
         /// <summary>
         /// 盐长度(Byte)
         /// </summary>

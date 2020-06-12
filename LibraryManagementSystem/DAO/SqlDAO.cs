@@ -73,7 +73,7 @@ namespace LibraryManagementSystem.DAO
             {
                 sql = new FreeSqlBuilder()
                 .UseConnectionString(SqlDataType, SqlConnectionString)
-                .UseAutoSyncStructure(true) //自动同步实体结构到数据库,生产环境中删除
+                .UseAutoSyncStructure(config.DatabaseAutoSyncStructure)
                 .Build();
             }
             catch (Exception ex)

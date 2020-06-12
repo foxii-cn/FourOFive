@@ -2,9 +2,9 @@
 
 namespace LibraryManagementSystem.DAO
 {
-    public class BorrowLogDAO : DatabaseDAO<BorrowLog>
+    public class ISBNInfoDAO : DatabaseDAO<ISBNInfo>
     {
-        public BorrowLogDAO(IFreeSql sql) : base(sql)
+        public ISBNInfoDAO(IFreeSql sql) : base(sql)
         {
         }
     }

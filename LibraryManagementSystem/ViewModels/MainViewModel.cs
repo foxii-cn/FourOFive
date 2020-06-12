@@ -19,9 +19,9 @@ namespace LibraryManagementSystem.ViewModels
     {
         private readonly IEventAggregator _events;
         private readonly LoggerDAO _loggerDAO;
-        private readonly ConfigDAO _configDAO;
         private readonly Logger _logger;
-        private readonly Config _config;
+        private readonly ConfigDAO _configDAO;
+        private readonly ConfigService _configService;
         private readonly BookService _bookService;
         private readonly BorrowService _borrowService;
         private readonly CreditService _creditService;
@@ -42,19 +42,21 @@ namespace LibraryManagementSystem.ViewModels
             _events = events;
             _events.Subscribe(this);
 
+            // 初始化日志对象
             _loggerDAO = new LoggerDAO(@".\logs\log.txt", 268435456);
             _logger = _loggerDAO.GetLogger();
-            _configDAO = new ConfigDAO(@".\config.json", Encoding.UTF8, _logger);
-            _config = _configDAO.LoadConfig(out bool cfgSuc);
-            if (!cfgSuc)
-                _configDAO.Save(_config);
-            IFreeSql sql = new SqlDAO(_config, _logger).GetSql();
-            BookDAO bookDAO = new BookDAO(sql, _logger);
-            BorrowLogDAO borrowLogDAO = new BorrowLogDAO(sql, _logger);
-            UserDAO userDAO = new UserDAO(sql, _logger);
-            _creditService = new CreditService(_config, _logger);
-            _encryptService = new EncryptService(_config, _logger);
-            AuthorityService = new AuthorityService(_config, _logger);
+            // 初始化配置服务
+            _configDAO = new ConfigDAO(@".\config.json", Encoding.UTF8);
+            _configService = new ConfigService(_configDAO, _logger);
+            _configService.Initialization();
+            // 初始化数据库交互类
+            IFreeSql sql = new SqlDAO(_configService.GetConfig(), _logger).GetSql();
+            BookDAO bookDAO = new BookDAO(sql);
+            BorrowLogDAO borrowLogDAO = new BorrowLogDAO(sql);
+            UserDAO userDAO = new UserDAO(sql);
+            _creditService = new CreditService(_configService.GetConfig(), _logger);
+            _encryptService = new EncryptService(_configService.GetConfig(), _logger);
+            AuthorityService = new AuthorityService(_configService.GetConfig(), _logger);
             _bookService = new BookService(bookDAO, _logger);
             _borrowService = new BorrowService(bookDAO, userDAO, borrowLogDAO, _creditService, _logger);
             _userService = new UserService(userDAO, _creditService, _encryptService, AuthorityService, _logger);
@@ -86,7 +88,7 @@ namespace LibraryManagementSystem.ViewModels
         }
         public void OnClosing()
         {
-            _configDAO.Save(_config);
+            _configService.Close();
             _loggerDAO.Close(_logger);
         }
         public void HyperlinkRequestNavigate(object sender, RequestNavigateEventArgs e)

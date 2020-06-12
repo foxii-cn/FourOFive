@@ -273,10 +273,14 @@
     </ApplicationDefinition>
     <Compile Include="ControlHelpers\PasswordBoxHelper.cs" />
     <Compile Include="Converters\UserAuthorityCanSeeConverter.cs" />
+    <Compile Include="DAO\ISBNInfoDAO.cs" />
     <Compile Include="Events\AccountStateChangedEvent.cs" />
+    <Compile Include="Models\ExtensionMethods\ModelsExtensionMethods.cs" />
+    <Compile Include="Models\ISBNInfo.cs" />
     <Compile Include="Services\AuthorityService.cs" />
     <Compile Include="Services\BookService.cs" />
     <Compile Include="Services\BorrowService.cs" />
+    <Compile Include="Services\ConfigService.cs" />
     <Compile Include="Services\CreditService.cs" />
     <Compile Include="Services\EncryptService.cs" />
     <Compile Include="Services\UserService.cs" />
