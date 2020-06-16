@@ -7,10 +7,12 @@ namespace LibraryManagementSystem.Models
     public class BorrowLog : DatabaseModel
     {
         [Column(IsPrimary = true)]
+        public Guid Id { get; set; }
+        [Column()]
         public Guid BookId { set; get; }
         [Column()]
         public virtual Book Book { set; get; }
-        [Column(IsPrimary = true)]
+        [Column()]
         public Guid UserId { set; get; }
         [Column()]
         public virtual User User { set; get; }

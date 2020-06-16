@@ -7,6 +7,9 @@ using LibraryManagementSystem.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace LibraryManagementSystem.ViewModels
@@ -28,6 +31,7 @@ namespace LibraryManagementSystem.ViewModels
         private int _pageIndex = 1;
         private string _queryCondition;
         private object _queryParms;
+        private bool _isQuerying = false;
 
         public List<Book> BookList
         {
@@ -59,14 +63,32 @@ namespace LibraryManagementSystem.ViewModels
             {
                 _pageIndex = value;
                 NotifyOfPropertyChange(() => PageIndex);
-                PageUpdated();
+                PageUpdatedAsync();
             }
             get
             {
                 return _pageIndex;
             }
         }
-        public bool CanBorrow => _selectedBooks.Count > 0 && !_selectedBooks.Any(book => book.Margin < 1);
+        public bool IsQuerying
+        {
+            set
+            {
+                _isQuerying = value;
+                NotifyOfPropertyChange(() => QueryingStateText);
+                NotifyOfPropertyChange(() => QueryingLoadingLineVisibility);
+                NotifyOfPropertyChange(() => CanSearch);
+                NotifyOfPropertyChange(() => CanBorrow);
+            }
+            get
+            {
+                return _isQuerying;
+            }
+        }
+        public string QueryingStateText => IsQuerying ? "正在检索数据库..." : _booksCount > 0 ? $"已为您查找到{_booksCount}本符合条件的书！" : "没有符合条件的图书记录！";
+        public Visibility QueryingLoadingLineVisibility => IsQuerying ? Visibility.Visible : Visibility.Collapsed;
+        public bool CanSearch => !IsQuerying;
+        public bool CanBorrow => _selectedBooks.Count > 0 && !_selectedBooks.Any(book => book.Margin < 1) && !IsQuerying;
         public BooksViewModel(IEventAggregator events, BookService bookService, BorrowService borrowService, string growlToken)
         {
             _events = events;
@@ -75,31 +97,45 @@ namespace LibraryManagementSystem.ViewModels
             _borrowService = borrowService;
             _growlToken = growlToken;
         }
-        public void PageUpdated()
+        public async void PageUpdatedAsync()
         {
-            try
-            {
-                BookList = _bookService.BookQuery(_queryCondition, PageIndex, _pageSize, out long count, _queryParms);
-                MaxPageCount = (int)(count / _pageSize) + 1;
-                _booksCount = count;
-                if (count == 0)
-                    Growl.Info("图书库为空！", _growlToken);
-            }
-            catch (Exception ex)
-            {
-                BookList = null;
-                MaxPageCount = 1;
-                _booksCount = 0;
-                Growl.Error(ex.Message, _growlToken);
-            }
+            IsQuerying = true;
+            string threadID = "";
+            List<Book> outBookList = null;
+            int outMaxPageCount = 0;
+            long outCount = 0;
+            string errMessage = null;
+            await Task.Run(() =>
+              {
+                  try
+                  {
+                      threadID = Thread.CurrentThread.ManagedThreadId.ToString();
+                      outBookList = _bookService.BookQuery(_queryCondition, PageIndex, _pageSize, out long count, _queryParms);
+                      outMaxPageCount = (int)(count / _pageSize);
+                      if (count % _pageSize > 0)
+                          outMaxPageCount++;
+                      outCount = count;
+                  }
+                  catch (Exception ex)
+                  {
+                      outBookList = null;
+                      outMaxPageCount = 1;
+                      outCount = 0;
+                      errMessage = ex.Message;
+                  }
+              });
+            if (!string.IsNullOrEmpty(errMessage))
+                Growl.Error(errMessage, _growlToken);
+            BookList = outBookList;
+            MaxPageCount = outMaxPageCount;
+            _booksCount = outCount;
+            IsQuerying = false;
         }
         public void SearchStarted(FunctionEventArgs<string> info)
         {
             _queryCondition = @"Title LIKE @keyword OR Author LIKE @keyword OR PublishingHouse LIKE @keyword";
             _queryParms = new { keyword = String.Format("%{0}%", info.Info) };
-            PageIndex = 1;
-            if (_booksCount != 0)
-                Growl.Info(string.Format("查询到{0}本相关书籍！", _booksCount), _growlToken);
+            PageIndex = PageIndex;
         }
         public void BooksSelectionChanged(SelectionChangedEventArgs e)
         {
@@ -113,23 +149,34 @@ namespace LibraryManagementSystem.ViewModels
             }
             NotifyOfPropertyChange(() => CanBorrow);
         }
-        public void Borrow()
+        public async Task BorrowAsync()
         {
-            foreach (Book book in _selectedBooks)
-                try
-                {
-                    int accreditedDays = _borrowService.BorrowBook(_account.Id, book.Id);
-                    Growl.Success(String.Format("成功借阅《{0}》，时长{1}天", book.Title, accreditedDays), _growlToken);
-                }
-                catch (Exception ex)
-                {
-                    Growl.Error(String.Format("借阅《{0}》失败：{1}", book.Title, ex.Message), _growlToken);
-                }
+            List<Book> toBorrow = new List<Book>(_selectedBooks);
+            PageIndex = PageIndex;
+            List<string> successfulInfos = new List<string>(toBorrow.Count);
+            List<string> failedInfos = new List<string>(toBorrow.Count);
+            await Task.Run(() =>
+            {
+                foreach (Book book in toBorrow)
+                    try
+                    {
+                        int accreditedDays = _borrowService.BorrowBook(_account.Id, book.Id);
+                        successfulInfos.Add($"《{book.Title}》:{accreditedDays}天");
+                    }
+                    catch (Exception ex)
+                    {
+                        failedInfos.Add($"《{book.Title}》：{ex.Message}");
+                    }
+            });
+            if (successfulInfos.Count > 0)
+                Growl.Success($"成功借阅:\n{string.Join("\n", successfulInfos)}", _growlToken);
+            if (failedInfos.Count > 0)
+                Growl.Error($"借阅失败:\n{string.Join("\n", failedInfos)}", _growlToken);
         }
         protected override void OnActivate()
         {
             base.OnActivate();
-            SearchStarted(new FunctionEventArgs<string>(""));
+            PageIndex = PageIndex;
         }
         protected override void OnDeactivate(bool close)
         {

@@ -74,5 +74,17 @@ namespace LibraryManagementSystem.Models
         /// PBKDF2加密算法生成长度(Byte)
         /// </summary>
         public int PBKDF2SizeRequested { get; set; } = 32;
+
+        // ISBN API配置
+
+        public string ISBNApiUrl { get; set; } = "https://book.feelyou.top/isbn/{isbn}";
+        public int GetInterval { get; set; } = 200;
+        public string ISBNJsonPath { get; set; } = "isbn";
+        public string TitleJsonPath { get; set; } = "title";
+        public string AuthorJsonPath { get; set; } = "book_info.作者";
+        public string PublishingHouseJsonPath { get; set; } = "book_info.出版社";
+        public string LabelsJsonPath { get; set; } = "labels";
+        public string CoverUrlJsonPath { get; set; } = "cover_url";
+        public string AbstractJsonPath { get; set; } = "abstract";
     }
 }

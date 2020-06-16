@@ -17,5 +17,7 @@ namespace LibraryManagementSystem.Models
         public string Labels { get; set; }
         [Column()]
         public string CoverUrl { get; set; }
+        [Column()]
+        public string Abstract { get; set; }
     }
 }

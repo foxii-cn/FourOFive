@@ -14,6 +14,7 @@
                 <Grid Background="{DynamicResource RegionBrush}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
@@ -22,13 +23,21 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="auto"/>
                         </Grid.ColumnDefinitions>
-                        <hc:SearchBar Grid.Column="0" hc:InfoElement.Placeholder="关键词" hc:InfoElement.Title="图书检索" MinWidth="600" 
+                        <hc:SearchBar Grid.Column="0" hc:InfoElement.Placeholder="关键词" hc:InfoElement.Title="图书检索" MinWidth="600" IsEnabled="{Binding CanSearch}"
                           Margin="20,5,20,5" Style="{StaticResource SearchBarExtend}" cal:Message.Attach="[Event SearchStarted] = [Action SearchStarted($eventArgs)]"/>
                         <Button Grid.Column="1" Style="{StaticResource ButtonPrimary}" Width="60" Content="借阅" Margin="0,0,20,5"
-                                   IsEnabled="{Binding CanBorrow, Mode=OneWay}" cal:Message.Attach="[Event Click] = [Action Borrow]"
+                                   IsEnabled="{Binding CanBorrow, Mode=OneWay}" cal:Message.Attach="[Event Click] = [Action BorrowAsync]"
                                 VerticalAlignment="Bottom"/>
                     </Grid>
-                    <DataGrid IsReadOnly="True" MinWidth="600" Margin="20,5,20,5" Grid.Row="1" HeadersVisibility="All" 
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock  Grid.Column="0" Margin="29,5,5,5" Text="{Binding QueryingStateText, Mode=OneWay}"/>
+                        <hc:LoadingLine Grid.Column="1" Margin="5,5,20,5" Visibility="{Binding QueryingLoadingLineVisibility, Mode=OneWay}"/>
+                    </Grid>
+                    <DataGrid IsReadOnly="True" MinWidth="600" Margin="20,5,20,5" Grid.Row="2" HeadersVisibility="All" 
                               RowHeaderWidth="60" AutoGenerateColumns="False" ItemsSource="{Binding BookList}" cal:Message.Attach="[Event SelectionChanged] = [Action BooksSelectionChanged($eventArgs)]">
                         <DataGrid.RowHeaderTemplate>
                             <DataTemplate>
@@ -45,8 +54,8 @@
                             <DataGridTextColumn Binding="{Binding Position}" Header="位置"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Grid Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                        <hc:Pagination Margin="20,5,20,15" MaxPageCount="{Binding MaxPageCount}" PageIndex="{Binding PageIndex, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsJumpEnabled="True"/>
+                    <Grid Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                        <hc:Pagination Margin="20,5,20,15" MaxPageCount="{Binding MaxPageCount}" PageIndex="{Binding PageIndex, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsJumpEnabled="True" IsEnabled="{Binding CanSearch}"/>
                     </Grid>
                 </Grid>
             </Border>

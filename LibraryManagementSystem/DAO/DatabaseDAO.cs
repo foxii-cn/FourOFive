@@ -15,6 +15,7 @@ namespace LibraryManagementSystem.DAO
         {
             this.sql = sql;
         }
+
         public int Create(params T[] elements)
         {
             return sql.Insert(elements)

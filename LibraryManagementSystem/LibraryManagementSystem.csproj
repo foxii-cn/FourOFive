@@ -108,13 +108,11 @@
       <HintPath>..\packages\K4os.Hash.xxHash.1.0.6\lib\net46\K4os.Hash.xxHash.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Microsoft.AspNetCore.Cryptography.Internal, Version=3.1.4.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNetCore.Cryptography.Internal.3.1.4\lib\netstandard2.0\Microsoft.AspNetCore.Cryptography.Internal.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+    <Reference Include="Microsoft.AspNetCore.Cryptography.Internal, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Cryptography.Internal.3.1.5\lib\netstandard2.0\Microsoft.AspNetCore.Cryptography.Internal.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation, Version=3.1.4.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNetCore.Cryptography.KeyDerivation.3.1.4\lib\netstandard2.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+    <Reference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Cryptography.KeyDerivation.3.1.5\lib\netstandard2.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.1\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -209,6 +207,9 @@
       <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
+    <Reference Include="System.Reactive, Version=4.4.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.4.4.1\lib\net46\System.Reactive.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.7.1\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
@@ -230,6 +231,7 @@
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
+    <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Caliburn.Micro.3.2.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -274,17 +276,21 @@
     <Compile Include="ControlHelpers\PasswordBoxHelper.cs" />
     <Compile Include="Converters\UserAuthorityCanSeeConverter.cs" />
     <Compile Include="DAO\ISBNInfoDAO.cs" />
+    <Compile Include="DAO\ISBNInfoHTTPDAO.cs" />
     <Compile Include="Events\AccountStateChangedEvent.cs" />
     <Compile Include="Models\ExtensionMethods\ModelsExtensionMethods.cs" />
     <Compile Include="Models\ISBNInfo.cs" />
+    <Compile Include="Models\ValueModels\ISBNInfoAPIResult.cs" />
     <Compile Include="Services\AuthorityService.cs" />
     <Compile Include="Services\BookService.cs" />
     <Compile Include="Services\BorrowService.cs" />
     <Compile Include="Services\ConfigService.cs" />
     <Compile Include="Services\CreditService.cs" />
     <Compile Include="Services\EncryptService.cs" />
+    <Compile Include="Services\ISBNInfoService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Utilities\FileUtility.cs" />
+    <Compile Include="Utilities\HTTPUtility.cs" />
     <Compile Include="Utilities\JsonUtility.cs" />
     <Compile Include="ViewModels\BooksViewModel.cs" />
     <Compile Include="ViewModels\BorrowLogsViewModel.cs" />

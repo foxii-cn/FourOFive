@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace LibraryManagementSystem.Utilities
 {
@@ -16,5 +18,12 @@ namespace LibraryManagementSystem.Utilities
         {
             JsonConvert.PopulateObject(value, element);
         }
+    }
+    public class JsonTokenReader
+    {
+        private readonly JObject jObject;
+        public JsonTokenReader(string json) => jObject = JObject.Parse(json);
+        public object SelectToken(string path) => jObject.SelectToken(path);
+        public object[] SelectTokenToArray(string path) => jObject.SelectToken(path)?.ToArray();
     }
 }
