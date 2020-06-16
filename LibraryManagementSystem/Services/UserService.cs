@@ -9,7 +9,7 @@ namespace LibraryManagementSystem.Services
     public class UserService
     {
         // DAO对象
-        private readonly UserDAO userDAO;
+        private readonly DatabaseModelDAO<User> userDAO;
         // 信誉服务对象
         private readonly CreditService creditService;
         // 加密服务对象
@@ -22,7 +22,7 @@ namespace LibraryManagementSystem.Services
         private readonly string LogName;
 
 
-        public UserService(UserDAO userDAO, CreditService creditService, EncryptService encryptService, AuthorityService authorityService, Logger logger)
+        public UserService(DatabaseModelDAO<User> userDAO, CreditService creditService, EncryptService encryptService, AuthorityService authorityService, Logger logger)
         {
             LogName = GetType().Name;
             this.userDAO = userDAO;

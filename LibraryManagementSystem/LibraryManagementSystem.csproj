@@ -275,7 +275,6 @@
     </ApplicationDefinition>
     <Compile Include="ControlHelpers\PasswordBoxHelper.cs" />
     <Compile Include="Converters\UserAuthorityCanSeeConverter.cs" />
-    <Compile Include="DAO\ISBNInfoDAO.cs" />
     <Compile Include="DAO\ISBNInfoHTTPDAO.cs" />
     <Compile Include="Events\AccountStateChangedEvent.cs" />
     <Compile Include="Models\ExtensionMethods\ModelsExtensionMethods.cs" />
@@ -322,13 +321,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Bootstrapper.cs" />
-    <Compile Include="DAO\BookDAO.cs" />
-    <Compile Include="DAO\BorrowLogDAO.cs" />
     <Compile Include="DAO\ConfigDAO.cs" />
-    <Compile Include="DAO\DatabaseDAO.cs" />
+    <Compile Include="DAO\DatabaseModelDAO.cs" />
     <Compile Include="DAO\LoggerDAO.cs" />
     <Compile Include="DAO\SqlDAO.cs" />
-    <Compile Include="DAO\UserDAO.cs" />
     <Compile Include="Views\ToBeReturnedView.xaml.cs">
       <DependentUpon>ToBeReturnedView.xaml</DependentUpon>
     </Compile>

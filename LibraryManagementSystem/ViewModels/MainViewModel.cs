@@ -51,9 +51,9 @@ namespace LibraryManagementSystem.ViewModels
             _configService.Initialization();
             // 初始化数据库交互类
             IFreeSql sql = new SqlDAO(_configService.GetConfig(), _logger).GetSql();
-            BookDAO bookDAO = new BookDAO(sql);
-            BorrowLogDAO borrowLogDAO = new BorrowLogDAO(sql);
-            UserDAO userDAO = new UserDAO(sql);
+            DatabaseModelDAO<Book> bookDAO = new DatabaseModelDAO<Book>(sql);
+            DatabaseModelDAO<BorrowLog> borrowLogDAO = new DatabaseModelDAO<BorrowLog>(sql);
+            DatabaseModelDAO<User> userDAO = new DatabaseModelDAO<User>(sql);
             _creditService = new CreditService(_configService.GetConfig(), _logger);
             _encryptService = new EncryptService(_configService.GetConfig(), _logger);
             AuthorityService = new AuthorityService(_configService.GetConfig(), _logger);

@@ -11,9 +11,9 @@ namespace LibraryManagementSystem.Services
     public class BorrowService
     {
         // DAO对象
-        private readonly BookDAO bookDAO;
-        private readonly UserDAO userDAO;
-        private readonly BorrowLogDAO borrowLogDAO;
+        private readonly DatabaseModelDAO<Book> bookDAO;
+        private readonly DatabaseModelDAO<User> userDAO;
+        private readonly DatabaseModelDAO<BorrowLog> borrowLogDAO;
         // 信誉服务对象
         private readonly CreditService creditService;
         // 日志记录对象
@@ -22,7 +22,7 @@ namespace LibraryManagementSystem.Services
         private readonly string LogName;
 
 
-        public BorrowService(BookDAO bookDAO, UserDAO userDAO, BorrowLogDAO borrowLogDAO, CreditService creditService, Logger logger)
+        public BorrowService(DatabaseModelDAO<Book> bookDAO, DatabaseModelDAO<User> userDAO, DatabaseModelDAO<BorrowLog> borrowLogDAO, CreditService creditService, Logger logger)
         {
             LogName = GetType().Name;
             this.bookDAO = bookDAO;

@@ -5,17 +5,16 @@ using System.Linq.Expressions;
 
 namespace LibraryManagementSystem.DAO
 {
-    public abstract class DatabaseDAO<T> where T : DatabaseModel
+    public class DatabaseModelDAO<T> where T : DatabaseModel
     {
         // 数据库对象
         private readonly IFreeSql sql;
 
 
-        public DatabaseDAO(IFreeSql sql)
+        public DatabaseModelDAO(IFreeSql sql)
         {
             this.sql = sql;
         }
-
         public int Create(params T[] elements)
         {
             return sql.Insert(elements)

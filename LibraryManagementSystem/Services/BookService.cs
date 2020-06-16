@@ -9,14 +9,14 @@ namespace LibraryManagementSystem.Services
     public class BookService
     {
         // DAO对象
-        private readonly BookDAO bookDAO;
+        private readonly DatabaseModelDAO<Book> bookDAO;
         // 日志记录对象
         private readonly Logger logger;
         // 日志主体
         private readonly string LogName;
 
 
-        public BookService(BookDAO bookDAO, Logger logger)
+        public BookService(DatabaseModelDAO<Book> bookDAO, Logger logger)
         {
             LogName = GetType().Name;
             this.bookDAO = bookDAO;
