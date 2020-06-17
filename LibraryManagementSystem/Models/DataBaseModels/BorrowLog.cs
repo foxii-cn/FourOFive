@@ -1,7 +1,7 @@
 ﻿using FreeSql.DataAnnotations;
 using System;
 
-namespace LibraryManagementSystem.Models
+namespace LibraryManagementSystem.Models.DataBaseModels
 {
     [Table()]
     public class BorrowLog : DatabaseModel

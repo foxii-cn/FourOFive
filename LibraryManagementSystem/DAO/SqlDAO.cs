@@ -1,5 +1,6 @@
 ﻿using FreeSql;
 using LibraryManagementSystem.Models;
+using Serilog;
 using Serilog.Core;
 using System;
 
@@ -74,7 +75,12 @@ namespace LibraryManagementSystem.DAO
                 sql = new FreeSqlBuilder()
                 .UseConnectionString(SqlDataType, SqlConnectionString)
                 .UseAutoSyncStructure(config.DatabaseAutoSyncStructure)
+                .UseGenerateCommandParameterWithLambda(true)
                 .Build();
+                sql.Aop.CurdAfter += (s, e) =>
+                {
+                    logger.Information(e.Sql);
+                };
             }
             catch (Exception ex)
             {

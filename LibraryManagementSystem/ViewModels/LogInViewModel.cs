@@ -1,7 +1,7 @@
 ﻿using Caliburn.Micro;
 using HandyControl.Controls;
 using LibraryManagementSystem.Events;
-using LibraryManagementSystem.Models;
+using LibraryManagementSystem.Models.DataBaseModels;
 using LibraryManagementSystem.Services;
 using System;
 using System.ComponentModel.Composition;

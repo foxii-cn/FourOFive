@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace LibraryManagementSystem.ControlHelpers
+namespace LibraryManagementSystem.Views.ControlHelpers
 {
     /// <summary>  
     /// 为PasswordBox控件的Password增加绑定功能  
@@ -48,7 +48,7 @@ namespace LibraryManagementSystem.ControlHelpers
         {
             PasswordBox passwordBox = sender as PasswordBox;
             passwordBox.PasswordChanged -= PasswordChanged;
-            if (!(bool)GetIsUpdating(passwordBox))
+            if (!GetIsUpdating(passwordBox))
             {
                 passwordBox.Password = (string)e.NewValue;
             }

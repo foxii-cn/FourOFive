@@ -2,7 +2,7 @@
 using Caliburn.Micro;
 using LibraryManagementSystem.DAO;
 using LibraryManagementSystem.Events;
-using LibraryManagementSystem.Models;
+using LibraryManagementSystem.Models.DataBaseModels;
 using LibraryManagementSystem.Services;
 using LibraryManagementSystem.Views;
 using Serilog.Core;

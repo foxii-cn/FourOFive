@@ -1,5 +1,5 @@
 ﻿using LibraryManagementSystem.DAO;
-using LibraryManagementSystem.Models;
+using LibraryManagementSystem.Models.DataBaseModels;
 using Serilog.Core;
 
 namespace LibraryManagementSystem.Services

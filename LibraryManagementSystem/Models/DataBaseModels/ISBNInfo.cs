@@ -1,6 +1,6 @@
 ﻿using FreeSql.DataAnnotations;
 
-namespace LibraryManagementSystem.Models
+namespace LibraryManagementSystem.Models.DataBaseModels
 {
     [Table()]
     public class ISBNInfo : DatabaseModel

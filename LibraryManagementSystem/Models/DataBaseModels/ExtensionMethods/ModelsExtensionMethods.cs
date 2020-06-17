@@ -1,9 +1,10 @@
 ﻿using FreeSql.DataAnnotations;
+using LibraryManagementSystem.Models.DataBaseModels;
 using System;
 using System.Linq;
 using System.Reflection;
 
-namespace LibraryManagementSystem.Models.ExtensionMethods
+namespace LibraryManagementSystem.Models.DataBaseModels.ExtensionMethods
 {
     public static class ModelsExtensionMethods
     {

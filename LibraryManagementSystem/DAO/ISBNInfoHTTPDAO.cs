@@ -1,4 +1,5 @@
 ﻿using LibraryManagementSystem.Models;
+using LibraryManagementSystem.Models.DataBaseModels;
 using LibraryManagementSystem.Models.ValueModels;
 using LibraryManagementSystem.Utilities;
 using System;
@@ -14,20 +15,15 @@ namespace LibraryManagementSystem.DAO
         private readonly Config config;
 
 
-        public ISBNInfoHTTPDAO(Config config)
-        {
-            this.config = config;
-        }
-        public IObservable<ISBNInfoAPIResult> GetISBNInfoByAPI(IObservable<string> isbnStream)
-        {
-            return isbnStream
-                  .Select(isbn =>
+        public ISBNInfoHTTPDAO(Config config) => this.config = config;
+        public IObservable<ISBNInfoHTTPQuery> GetISBNInfoByAPI(IObservable<ISBNInfoHTTPQuery> isbnStream) => isbnStream
+                  .Select(isbnQuery =>
                   {
-                      string apiUrl = config.ISBNApiUrl.Replace("{isbn}", isbn);
+                      string apiUrl = config.ISBNApiUrl.Replace("{isbn}", isbnQuery.ISBN);
                       return Observable
-                      .Empty<string>(ThreadPoolScheduler.Instance)
+                      .Empty(ThreadPoolScheduler.Instance, new { ISBN = "", ApiUrl = "" })
                       .Delay(TimeSpan.FromMilliseconds(config.GetInterval))
-                      .StartWith(apiUrl);
+                      .StartWith(new { isbnQuery.ISBN, ApiUrl = apiUrl });
                   })
                   .Concat()
                   .Select(apiUrl =>
@@ -37,7 +33,7 @@ namespace LibraryManagementSystem.DAO
                            Exception exception = null;
                            try
                            {
-                               string bookInfoJSON = await HTTPUtility.ReadAsStringAsync(apiUrl);
+                               string bookInfoJSON = await HTTPUtility.ReadAsStringAsync(apiUrl.ApiUrl);
                                JsonTokenReader reader = new JsonTokenReader(bookInfoJSON);
                                object[] labels = reader.SelectTokenToArray(config.LabelsJsonPath);
                                isbnInfo = new ISBNInfo
@@ -55,10 +51,9 @@ namespace LibraryManagementSystem.DAO
                            {
                                exception = ex;
                            }
-                           return new ISBNInfoAPIResult() { ISBNInfo = isbnInfo, Exception = exception };
+                           return new ISBNInfoHTTPQuery() { ISBN = apiUrl.ISBN, ISBNInfo = isbnInfo, Exception = exception };
                        })
                   )
                   .Merge();
-        }
     }
 }

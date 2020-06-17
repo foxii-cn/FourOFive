@@ -2,7 +2,7 @@
 using LibraryManagementSystem.Utilities;
 using System;
 
-namespace LibraryManagementSystem.Models
+namespace LibraryManagementSystem.Models.DataBaseModels
 {
     public abstract class DatabaseModel
     {

@@ -1,4 +1,4 @@
-﻿using LibraryManagementSystem.Models;
+﻿using LibraryManagementSystem.Models.DataBaseModels;
 
 namespace LibraryManagementSystem.Events
 {

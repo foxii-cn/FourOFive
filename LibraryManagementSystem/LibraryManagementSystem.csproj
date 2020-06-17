@@ -273,13 +273,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ControlHelpers\PasswordBoxHelper.cs" />
+    <Compile Include="Views\ControlHelpers\PasswordBoxHelper.cs" />
     <Compile Include="Converters\UserAuthorityCanSeeConverter.cs" />
     <Compile Include="DAO\ISBNInfoHTTPDAO.cs" />
     <Compile Include="Events\AccountStateChangedEvent.cs" />
-    <Compile Include="Models\ExtensionMethods\ModelsExtensionMethods.cs" />
-    <Compile Include="Models\ISBNInfo.cs" />
-    <Compile Include="Models\ValueModels\ISBNInfoAPIResult.cs" />
+    <Compile Include="Models\DataBaseModels\ExtensionMethods\ModelsExtensionMethods.cs" />
+    <Compile Include="Models\DataBaseModels\ISBNInfo.cs" />
+    <Compile Include="Models\ValueModels\DatabaseModelCreate.cs" />
+    <Compile Include="Models\ValueModels\DatabaseModelDelete.cs" />
+    <Compile Include="Models\ValueModels\DatabaseModelQuery.cs" />
+    <Compile Include="Models\ValueModels\DatabaseModelUpdate.cs" />
+    <Compile Include="Models\ValueModels\ISBNInfoHTTPQuery.cs" />
     <Compile Include="Services\AuthorityService.cs" />
     <Compile Include="Services\BookService.cs" />
     <Compile Include="Services\BorrowService.cs" />
@@ -373,11 +377,11 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Book.cs" />
-    <Compile Include="Models\BorrowLog.cs" />
+    <Compile Include="Models\DataBaseModels\Book.cs" />
+    <Compile Include="Models\DataBaseModels\BorrowLog.cs" />
     <Compile Include="Models\Config.cs" />
-    <Compile Include="Models\DatabaseModel.cs" />
-    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\DataBaseModels\DatabaseModel.cs" />
+    <Compile Include="Models\DataBaseModels\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
