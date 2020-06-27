@@ -1,5 +1,6 @@
 ﻿using FourOFive.Managers;
 using FourOFive.Models.DataBaseModels;
+using FourOFive.Models.DataPackages;
 using FourOFive.Services;
 using FourOFive.ViewModels.Windows;
 using ReactiveUI;
@@ -48,6 +49,7 @@ namespace FourOFive.ViewModels
                 LoginCommand.Subscribe(u =>
                 {
                     ParentViewModel.Account = u;
+                    ParentViewModel.GUINotify.Handle(new GUINotifyingInfo { Message = $"欢迎回来~{u.UserName}!", Type = NotifyingType.Success }).Subscribe();
                     LoggedIn.Handle(Unit.Default).Subscribe();
                 });
                 LoginCommand.ThrownExceptions.Subscribe(ex => logger.Error(ex, "登录出错"));

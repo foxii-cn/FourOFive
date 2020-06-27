@@ -1,4 +1,5 @@
-﻿using FourOFive.Utilities;
+﻿using FourOFive.Models.DataPackages;
+using FourOFive.Utilities;
 using FourOFive.ViewModels.Windows;
 using HandyControl.Controls;
 using HandyControl.Data;
@@ -6,6 +7,7 @@ using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
@@ -64,6 +66,44 @@ namespace FourOFive.Views.Windows
                 {
                     sideMenuItems.Add(smi.Name, smi);
                 }
+
+                Growl.Register(GrowlStackPanel.Name, GrowlStackPanel);
+                ViewModel.GUINotify.RegisterHandler(interactioni =>
+                {
+                    GUINotifyingInfo info = interactioni.Input;
+                    interactioni.SetOutput(Unit.Default);
+                    GrowlInfo growlInfo = new GrowlInfo
+                    {
+                        Message = info.Message,
+                        WaitTime = (int)info.Duration.TotalSeconds,
+                        Token = GrowlStackPanel.Name,
+                        StaysOpen = false
+                    };
+                    switch (info.Type)
+                    {
+                        case NotifyingType.Success:
+                            growlInfo.WaitTime = growlInfo.WaitTime == 0 ? 4 : growlInfo.WaitTime;
+                            Growl.Success(growlInfo);
+                            break;
+                        default:
+                        case NotifyingType.Info:
+                            growlInfo.WaitTime = growlInfo.WaitTime == 0 ? 4 : growlInfo.WaitTime;
+                            Growl.Info(growlInfo);
+                            break;
+                        case NotifyingType.Warning:
+                            growlInfo.WaitTime = growlInfo.WaitTime == 0 ? 6 : growlInfo.WaitTime;
+                            Growl.Warning(growlInfo);
+                            break;
+                        case NotifyingType.Error:
+                            growlInfo.WaitTime = growlInfo.WaitTime == 0 ? 8 : growlInfo.WaitTime;
+                            Growl.Error(growlInfo);
+                            break;
+                        case NotifyingType.Fatal:
+                            growlInfo.WaitTime = growlInfo.WaitTime == 0 ? 10 : growlInfo.WaitTime;
+                            Growl.Fatal(growlInfo);
+                            break;
+                    }
+                });
             });
         }
 

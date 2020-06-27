@@ -129,9 +129,9 @@
                     IsPenetrating="True"
                     VerticalScrollBarVisibility="Hidden">
                     <StackPanel
+                        x:Name="GrowlStackPanel"
                         Margin="0,10,10,10"
-                        VerticalAlignment="Top"
-                        hc:Growl.Token="{Binding Path=GrowlToken, Mode=OneTime}" />
+                        VerticalAlignment="Top" />
                 </hc:ScrollViewer>
             </hc:SimplePanel>
         </Grid>

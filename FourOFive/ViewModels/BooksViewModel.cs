@@ -27,7 +27,7 @@ namespace FourOFive.ViewModels
         private int pageIndex = 1;
         public int PageIndex { get => pageIndex; set => this.RaiseAndSetIfChanged(ref pageIndex, value); }
 
-        private int pageSize = 6;
+        private int pageSize = 7;
         public int PageSize { get => pageSize; set => this.RaiseAndSetIfChanged(ref pageSize, value); }
 
         private int pageAmount = 1;

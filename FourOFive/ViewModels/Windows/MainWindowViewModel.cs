@@ -1,6 +1,8 @@
 ﻿using FourOFive.Models.DataBaseModels;
+using FourOFive.Models.DataPackages;
 using FourOFive.Utilities;
 using ReactiveUI;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
@@ -15,6 +17,8 @@ namespace FourOFive.ViewModels.Windows
 
         private ObservableAsPropertyHelper<AuthorityLevel> accountAuthorityLevel;
         public AuthorityLevel AccountAuthorityLevel => accountAuthorityLevel.Value;
+
+        public Interaction<GUINotifyingInfo, Unit> GUINotify { get; }
         public ViewModelActivator Activator { get; }
 
         public MainWindowViewModel(IAuthorityUtility authorityUtility)
@@ -22,6 +26,7 @@ namespace FourOFive.ViewModels.Windows
 
             this.authorityUtility = authorityUtility;
 
+            GUINotify = new Interaction<GUINotifyingInfo, Unit>();
             Activator = new ViewModelActivator();
             this.WhenActivated(disposableRegistration =>
             {
