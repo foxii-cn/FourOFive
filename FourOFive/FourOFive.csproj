@@ -1,0 +1,59 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>Resources\Imgs\Logo_min.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\fonts\fabric-icons.ttf" />
+    <None Remove="Resources\Imgs\Backgrounds\cloud.png" />
+    <None Remove="Resources\Imgs\Backgrounds\Cover.png" />
+    <None Remove="Resources\Imgs\Icons\Book.png" />
+    <None Remove="Resources\Imgs\Icons\GitHub.png" />
+    <None Remove="Resources\Imgs\Icons\QQ.png" />
+    <None Remove="Resources\Imgs\Icons\UserInfo.png" />
+    <None Remove="Resources\Imgs\Logo_large.png" />
+    <None Remove="Resources\Imgs\Logo_long.png" />
+    <None Remove="Resources\Imgs\Logo_min.ico" />
+    <None Remove="Resources\Imgs\Logo_min.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FreeSql.Provider.MsAccess" Version="1.5.0" />
+    <PackageReference Include="FreeSql.Provider.MySql" Version="1.5.0" />
+    <PackageReference Include="FreeSql.Provider.Oracle" Version="1.5.0" />
+    <PackageReference Include="FreeSql.Provider.PostgreSQL" Version="1.5.0" />
+    <PackageReference Include="FreeSql.Provider.Sqlite" Version="1.5.0" />
+    <PackageReference Include="FreeSql.Provider.SqlServer" Version="1.5.0" />
+    <PackageReference Include="FreeSql.Repository" Version="1.5.0" />
+    <PackageReference Include="HandyControl" Version="2.5.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="3.1.5" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="ReactiveUI" Version="11.4.17" />
+    <PackageReference Include="ReactiveUI.Events.WPF" Version="11.4.17" />
+    <PackageReference Include="ReactiveUI.WPF" Version="11.4.17" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.4.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+    <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
+    <PackageReference Include="YamlDotNet" Version="8.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\fonts\fabric-icons.ttf" />
+    <Resource Include="Resources\Imgs\Backgrounds\cloud.png" />
+    <Resource Include="Resources\Imgs\Backgrounds\Cover.png" />
+    <Resource Include="Resources\Imgs\Icons\Book.png" />
+    <Resource Include="Resources\Imgs\Icons\GitHub.png" />
+    <Resource Include="Resources\Imgs\Icons\QQ.png" />
+    <Resource Include="Resources\Imgs\Icons\UserInfo.png" />
+    <Resource Include="Resources\Imgs\Logo_large.png" />
+    <Resource Include="Resources\Imgs\Logo_long.png" />
+    <Resource Include="Resources\Imgs\Logo_min.ico" />
+    <Resource Include="Resources\Imgs\Logo_min.png" />
+  </ItemGroup>
+
+</Project>

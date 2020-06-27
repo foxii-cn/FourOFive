@@ -1,0 +1,56 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options">
+    <FontFamily x:Key="FabricIcons">pack://application:,,,/FourOFive;component/Resources/fonts/fabric-icons.ttf#Fabric External MDL2 Assets</FontFamily>
+    <Style x:Key="TextBlockFabricIcons" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource FabricIcons}" />
+        <Setter Property="FontSize" Value="15" />
+    </Style>
+    <DrawingBrush
+        x:Key="CloudDrawingBrush"
+        o:Freeze="True"
+        Opacity=".1"
+        RenderOptions.CacheInvalidationThresholdMaximum="2.0"
+        RenderOptions.CacheInvalidationThresholdMinimum="0.5"
+        RenderOptions.CachingHint="Cache"
+        Stretch="Uniform"
+        TileMode="Tile"
+        Viewport="0,0,314,157"
+        ViewportUnits="Absolute">
+        <DrawingBrush.Drawing>
+            <ImageDrawing
+                o:Freeze="True"
+                ImageSource="pack://application:,,,/FourOFive;component/Resources/Imgs/Backgrounds/cloud.png"
+                Rect="0,0,314,157" />
+        </DrawingBrush.Drawing>
+    </DrawingBrush>
+    <BitmapImage
+        x:Key="LogoLarge"
+        RenderOptions.BitmapScalingMode="NearestNeighbor"
+        UriSource="pack://application:,,,/FourOFive;component/Resources/Imgs/Logo_large.png" />
+    <BitmapImage
+        x:Key="LogoLong"
+        RenderOptions.BitmapScalingMode="NearestNeighbor"
+        UriSource="pack://application:,,,/FourOFive;component/Resources/Imgs/Logo_long.png" />
+    <BitmapImage
+        x:Key="LogoMin"
+        RenderOptions.BitmapScalingMode="NearestNeighbor"
+        UriSource="pack://application:,,,/FourOFive;component/Resources/Imgs/Logo_min.png" />
+    <BitmapImage
+        x:Key="IconBook"
+        RenderOptions.BitmapScalingMode="NearestNeighbor"
+        UriSource="pack://application:,,,/FourOFive;component/Resources/Imgs/Icons/Book.png" />
+    <BitmapImage
+        x:Key="IconUserInfo"
+        RenderOptions.BitmapScalingMode="NearestNeighbor"
+        UriSource="pack://application:,,,/FourOFive;component/Resources/Imgs/Icons/UserInfo.png" />
+    <BitmapImage
+        x:Key="IconGitHub"
+        RenderOptions.BitmapScalingMode="NearestNeighbor"
+        UriSource="pack://application:,,,/FourOFive;component/Resources/Imgs/Icons/GitHub.png" />
+    <BitmapImage
+        x:Key="IconQQ"
+        RenderOptions.BitmapScalingMode="NearestNeighbor"
+        UriSource="pack://application:,,,/FourOFive;component/Resources/Imgs/Icons/QQ.png" />
+</ResourceDictionary>

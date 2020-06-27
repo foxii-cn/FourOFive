@@ -1,0 +1,73 @@
+﻿<hc:GlowWindow
+    x:Class="FourOFive.Views.Windows.AboutWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="关于"
+    Width="340"
+    Height="245"
+    BorderBrush="#262e2f"
+    BorderThickness="1"
+    ResizeMode="NoResize"
+    ShowInTaskbar="False"
+    ShowTitle="True"
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
+    <hc:SimplePanel>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top">
+            <Label
+                Margin="20,16,20,20"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Foreground="{StaticResource PrimaryBrush}">
+                <Image Source="{StaticResource LogoLong}" />
+            </Label>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <Image
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Width="32"
+                    Margin="0"
+                    HorizontalAlignment="Center"
+                    Source="{StaticResource IconGitHub}" />
+                <Image
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Width="32"
+                    Margin="0"
+                    HorizontalAlignment="Center"
+                    Source="{StaticResource IconQQ}" />
+                <hc:Shield
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Margin="10"
+                    HorizontalAlignment="Center"
+                    Command="hc:ControlCommands.OpenLink"
+                    CommandParameter="https://github.com/xlfqiji/FourOFive"
+                    Status="Library..."
+                    Subject="GitHub"
+                    Color="#1182c3" />
+                <hc:Shield
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="10"
+                    HorizontalAlignment="Center"
+                    Command="hc:ControlCommands.OpenLink"
+                    CommandParameter="http://wpa.qq.com/msgrd?v=3&amp;uin=1368540819&amp;site=qq&amp;menu=yes"
+                    Status="1368540819"
+                    Subject="QQ"
+                    Color="#ff69b4" />
+            </Grid>
+        </StackPanel>
+    </hc:SimplePanel>
+</hc:GlowWindow>
