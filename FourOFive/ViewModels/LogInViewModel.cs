@@ -43,8 +43,7 @@ namespace FourOFive.ViewModels
                 LoginCommand = ReactiveCommand.CreateFromTask(LoginAsync,
                 this.WhenAnyValue(vm => vm.UserName,
                 vm => vm.Password,
-                (n, p) => !string.IsNullOrWhiteSpace(n) && !string.IsNullOrWhiteSpace(p)),
-                RxApp.MainThreadScheduler)
+                (n, p) => !string.IsNullOrWhiteSpace(n) && !string.IsNullOrWhiteSpace(p)))
                 .DisposeWith(disposableRegistration);
                 LoginCommand.Subscribe(u =>
                 {
@@ -52,7 +51,11 @@ namespace FourOFive.ViewModels
                     ParentViewModel.GUINotify.Handle(new GUINotifyingDataPackage { Message = $"欢迎回来~{u.UserName}!", Type = NotifyingType.Success }).Subscribe();
                     LoggedIn.Handle(Unit.Default).Subscribe();
                 });
-                LoginCommand.ThrownExceptions.Subscribe(ex => logger.Error(ex, "登录出错"));
+                LoginCommand.ThrownExceptions.Subscribe(ex =>
+                {
+                    logger.Error(ex, "登录出错");
+                    ParentViewModel.GUINotify.Handle(new GUINotifyingDataPackage { Message = $"登录出错: {ex.Message}!", Type = NotifyingType.Error }).Subscribe();
+                });
                 isLoginning = LoginCommand.IsExecuting.ToProperty(this, vm => vm.IsLoginning);
             });
         }

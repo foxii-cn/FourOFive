@@ -44,6 +44,8 @@ namespace FourOFive
                 .AddScoped<BooksView>()
                 .AddScoped<BorrowLogsViewModel>()
                 .AddScoped<BorrowLogsView>()
+                .AddScoped<RegisterViewModel>()
+                .AddScoped<RegisterView>()
                 ;
 
             serviceProvider = serviceCollection.BuildServiceProvider();
@@ -59,6 +61,7 @@ namespace FourOFive
             mainWindow.RegisterChildrenView(mainWindow.AccountInfoSideMenu.Name, serviceProvider.GetService<UserInfoView>());
             mainWindow.RegisterChildrenView(mainWindow.BooksQuerySideMenu.Name, serviceProvider.GetService<BooksView>());
             mainWindow.RegisterChildrenView(mainWindow.BorrowLogSideMenu.Name, serviceProvider.GetService<BorrowLogsView>());
+            mainWindow.RegisterChildrenView(mainWindow.RegisterSideMenu.Name, serviceProvider.GetService<RegisterView>());
             mainWindow.Show();
         }
         protected override void OnStartup(StartupEventArgs e)
