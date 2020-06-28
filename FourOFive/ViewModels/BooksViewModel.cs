@@ -51,14 +51,20 @@ namespace FourOFive.ViewModels
         public SourceCache<ChosenBookDataPackage, Guid> SelectedToBorrowBooksSource { get; private set; }
 
         // 待借书栏, 注意这个元素会被异步线程操作
-        private SourceCache<ChosenBookDataPackage, Guid> ToBorrowBooksSource { get; }
+        public SourceCache<ChosenBookDataPackage, Guid> ToBorrowBooksSource { get; }
         private ReadOnlyObservableCollection<ChosenBookDataPackage> toBorrowBooks;
         public ReadOnlyObservableCollection<ChosenBookDataPackage> ToBorrowBooks => toBorrowBooks;
 
+        /// <summary>
+        /// 元组(查询结果, 总页数, 总书本数)
+        /// </summary>
         public ReactiveCommand<Unit, (List<Book>, int, long)> SearchCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> AddToBorrowCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> DeleteFromBorrowCommand { get; private set; }
 
+        /// <summary>
+        /// 元组(书名, 借阅天数, 错误信息)
+        /// </summary>
         public ReactiveCommand<Unit, List<(string, int, string)>> BorrowCommand { get; private set; }
         private ObservableAsPropertyHelper<bool> isBorrowing;
         public bool IsBorrowing => isBorrowing.Value;
@@ -89,7 +95,7 @@ namespace FourOFive.ViewModels
                 Publisher.Connect();
                 SearchCommand.ThrownExceptions.Subscribe(ex => logger.Error(ex, "查询出错"));
                 isSearching = SearchCommand.IsExecuting
-                .ToProperty(this, vm => vm.IsSearching);
+                .ToProperty(this, vm => vm.IsSearching, scheduler: RxApp.MainThreadScheduler);
 
                 this.WhenAnyValue(vm => vm.SearchTerms)
                 .Throttle(TimeSpan.FromMilliseconds(500))
@@ -160,6 +166,10 @@ namespace FourOFive.ViewModels
                 .DisposeWith(disposableRegistration);
             });
         }
+        /// <summary>
+        /// 异步查询书本信息
+        /// </summary>
+        /// <returns>元组(查询结果, 总页数, 总书本数)</returns>
         public async Task<(List<Book>, int, long)> SearchAsync()
         {
             int pageSize = PageSize;
@@ -187,16 +197,16 @@ namespace FourOFive.ViewModels
 
         public async Task<List<(string, int, string)>> BorrowBookAsync()
         {
-            Guid account = ParentViewModel.Account.Id;
+            User account = new User { Id = ParentViewModel.Account.Id };
             List<(string, int, string)> borrowResults = new List<(string, int, string)>(ToBorrowBooks.Count);
             DateTime now = DateTime.Now;
             await Task.Run(async () =>
             {
-                foreach (ChosenBookDataPackage cbdp in ToBorrowBooks)
+                foreach (ChosenBookDataPackage cbdp in ToBorrowBooks) // 在此期间GUI要防止对待借书籍的改动
                 {
                     try
                     {
-                        BorrowLog leaseLog = await borrowService.BorrowBookAsync(new User { Id = account }, new Book { Id = cbdp.Id });
+                        BorrowLog leaseLog = await borrowService.BorrowBookAsync(account, new Book { Id = cbdp.Id });
                         borrowResults.Add((cbdp.Title, (int)(leaseLog.Deadline - now).TotalDays, null));
                     }
                     catch (Exception ex)

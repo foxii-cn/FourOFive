@@ -101,6 +101,7 @@ namespace FourOFive.Services
                     throw new Exception("无符合条件的借阅记录");
                 }
 
+                leaseLog.GiveBack = DateTime.Now;
                 int creditChange = credit.GetCreditChange(leaseLog);
                 if (await database.UpdateAsync<Book, int>(b => b.Margin + 1, b => b.Id == leaseLog.Book.Id, transaction: transaction.GetTransaction()) == 0)
                 {
@@ -117,7 +118,7 @@ namespace FourOFive.Services
                     throw new Exception("更新借阅记录失败");
                 }
 
-                leaseLog = (await database.SelectAsync<BorrowLog, BorrowLog>(bl => bl.Id == leaseLog.Id, transaction: transaction.GetTransaction())).FirstOrDefault();
+                leaseLog = (await database.SelectAsync<BorrowLog, BorrowLog>(bl => bl.Id == leaseLog.Id&&bl.Book.Id== bl.Book.Id, transaction: transaction.GetTransaction())).FirstOrDefault();
                 if (leaseLog == null)
                 {
                     throw new Exception("更新借阅记录失败");

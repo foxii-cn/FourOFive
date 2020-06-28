@@ -37,7 +37,7 @@
                         <TextBlock x:Name="SearchStateTextBlock" Grid.Column="1" FontSize="16" VerticalAlignment="Center" Margin="20,0,20,0" />
                         <hc:LoadingLine x:Name="SearchStateLoadingLine" Grid.Column="2"/>
                         <TextBlock x:Name="FilterStateTextBlock" Grid.Column="3" Margin="20,0,5,0" VerticalAlignment="Center" FontSize="16"/>
-                        <ToggleButton x:Name="FilterStateToggleButton" Grid.Column="4" IsChecked="True" Margin="5,0,20,0" Style="{StaticResource ToggleButtonSwitch}" />
+                        <ToggleButton x:Name="FilterStateToggleButton" Grid.Column="4" Margin="5,0,20,0" Style="{StaticResource ToggleButtonSwitch}" />
                         <Button x:Name="SearchButton" Grid.Column="5" Style="{StaticResource ButtonPrimary}" Width="120" Content="查询" IsDefault="True" Margin="20,0,0,0"/>
                     </Grid>
                 </Border>
