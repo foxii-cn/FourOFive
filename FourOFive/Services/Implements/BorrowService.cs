@@ -25,6 +25,11 @@ namespace FourOFive.Services
         public async Task<BorrowLog> BorrowBookAsync(User userId, Book bookId)
         {
             BorrowLog leaseLog = null;
+            Book bCheck = (await database.SelectAsync<Book, Book>(b => b.Id == bookId.Id)).FirstOrDefault();
+            User uCheck = (await database.SelectAsync<User, User>(u => u.Id == userId.Id)).FirstOrDefault();
+            _= (await database.SelectAsync<BorrowLog, BorrowLog>(null, pageIndex: 1, pageSize: 1)).FirstOrDefault();
+            if(bCheck == null||uCheck==null)
+                throw new Exception("借阅人或目标不合法");
             using IDatabaseTransactionManager transaction = database.StartTransaction();
             try
             {
@@ -81,11 +86,16 @@ namespace FourOFive.Services
         public async Task<BorrowLog> RevertBookAsync(User userId, Book bookId)
         {
             BorrowLog leaseLog = null;
+            BorrowLog leaseLogCheck = (await database.SelectAsync<BorrowLog, BorrowLog>(bl => bl.User.Id == userId.Id && bl.Book.Id == bookId.Id && bl.GiveBack == null)).FirstOrDefault();
+            if (leaseLogCheck == null)
+            {
+                throw new Exception("无符合条件的借阅记录");
+            }
             using IDatabaseTransactionManager transaction = database.StartTransaction();
             try
             {
-                await database.ForUpdateAsync<BorrowLog, BorrowLog>(bl => bl.User.Id == userId.Id && bl.Book.Id == bookId.Id, transaction: transaction.GetTransaction());
-                leaseLog = (await database.SelectAsync<BorrowLog, BorrowLog>(bl => bl.User.Id == userId.Id && bl.Book.Id == bookId.Id && bl.GiveBack == null, transaction: transaction.GetTransaction())).FirstOrDefault();
+                await database.ForUpdateAsync<BorrowLog, BorrowLog>(bl => bl.Id== leaseLogCheck .Id&& bl.User.Id == bl.User.Id && bl.Book.Id == bl.Book.Id, transaction: transaction.GetTransaction());
+                leaseLog = (await database.SelectAsync<BorrowLog, BorrowLog>(bl => bl.Id == leaseLogCheck.Id && bl.User.Id == bl.User.Id && bl.Book.Id == bl.Book.Id, transaction: transaction.GetTransaction())).FirstOrDefault();
                 if (leaseLog == null)
                 {
                     throw new Exception("无符合条件的借阅记录");

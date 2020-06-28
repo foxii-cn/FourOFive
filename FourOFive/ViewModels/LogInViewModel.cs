@@ -49,7 +49,7 @@ namespace FourOFive.ViewModels
                 LoginCommand.Subscribe(u =>
                 {
                     ParentViewModel.Account = u;
-                    ParentViewModel.GUINotify.Handle(new GUINotifyingInfo { Message = $"欢迎回来~{u.UserName}!", Type = NotifyingType.Success }).Subscribe();
+                    ParentViewModel.GUINotify.Handle(new GUINotifyingDataPackage { Message = $"欢迎回来~{u.UserName}!", Type = NotifyingType.Success }).Subscribe();
                     LoggedIn.Handle(Unit.Default).Subscribe();
                 });
                 LoginCommand.ThrownExceptions.Subscribe(ex => logger.Error(ex, "登录出错"));

@@ -70,14 +70,15 @@ namespace FourOFive.Views.Windows
                 Growl.Register(GrowlStackPanel.Name, GrowlStackPanel);
                 ViewModel.GUINotify.RegisterHandler(interactioni =>
                 {
-                    GUINotifyingInfo info = interactioni.Input;
+                    GUINotifyingDataPackage info = interactioni.Input;
                     interactioni.SetOutput(Unit.Default);
                     GrowlInfo growlInfo = new GrowlInfo
                     {
                         Message = info.Message,
                         WaitTime = (int)info.Duration.TotalSeconds,
                         Token = GrowlStackPanel.Name,
-                        StaysOpen = false
+                        StaysOpen = false,
+                        IsCustom = true
                     };
                     switch (info.Type)
                     {

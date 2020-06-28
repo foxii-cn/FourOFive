@@ -118,16 +118,20 @@
                             <RowDefinition Height="*" />
                             <RowDefinition Height="auto" />
                         </Grid.RowDefinitions>
-                        <ListView x:Name="ChosenListView" Grid.Row="0">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn
-                                        Width="200"
-                                        DisplayMemberBinding="{Binding Title}"
-                                        Header="书名" />
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
+                        <DataGrid
+                            x:Name="ChosenToBorrowDataGrid"
+                            Grid.Row="0"
+                            AutoGenerateColumns="False"
+                            HeadersVisibility="Column"
+                            IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn
+                                    Width="200"
+                                    Binding="{Binding Title}"
+                                    CanUserResize="False"
+                                    Header="待借书本" />
+                            </DataGrid.Columns>
+                        </DataGrid>
                         <Button
                             x:Name="AddToBorrowButton"
                             Grid.Row="1"

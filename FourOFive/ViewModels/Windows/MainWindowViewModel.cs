@@ -18,7 +18,7 @@ namespace FourOFive.ViewModels.Windows
         private ObservableAsPropertyHelper<AuthorityLevel> accountAuthorityLevel;
         public AuthorityLevel AccountAuthorityLevel => accountAuthorityLevel.Value;
 
-        public Interaction<GUINotifyingInfo, Unit> GUINotify { get; }
+        public Interaction<GUINotifyingDataPackage, Unit> GUINotify { get; }
         public ViewModelActivator Activator { get; }
 
         public MainWindowViewModel(IAuthorityUtility authorityUtility)
@@ -26,7 +26,7 @@ namespace FourOFive.ViewModels.Windows
 
             this.authorityUtility = authorityUtility;
 
-            GUINotify = new Interaction<GUINotifyingInfo, Unit>();
+            GUINotify = new Interaction<GUINotifyingDataPackage, Unit>();
             Activator = new ViewModelActivator();
             this.WhenActivated(disposableRegistration =>
             {
