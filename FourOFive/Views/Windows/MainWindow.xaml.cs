@@ -20,7 +20,7 @@ namespace FourOFive.Views.Windows
         private readonly Dictionary<string, IChildrenView<MainWindow>> childrenViews = new Dictionary<string, IChildrenView<MainWindow>>();
         private readonly Dictionary<string, SideMenuItem> sideMenuItems = new Dictionary<string, SideMenuItem>();
         private string activatedKey;
-        private readonly string  growlToken;
+        private readonly string growlToken;
         public MainWindow(MainWindowViewModel viewModel)
         {
             InitializeComponent();

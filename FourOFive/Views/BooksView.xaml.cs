@@ -7,8 +7,8 @@ using ReactiveUI;
 using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Windows.Controls;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace FourOFive.Views
 {
@@ -37,7 +37,7 @@ namespace FourOFive.Views
                 ViewModel.WhenAnyValue(
                     vm => vm.IsSearching,
                     vm => vm.IsBorrowing,
-                    (s, b) => s || b? Visibility.Visible: Visibility.Collapsed)
+                    (s, b) => s || b ? Visibility.Visible : Visibility.Collapsed)
                 .BindTo(this, v => v.SearchStateLoadingLine.Visibility)
                 .DisposeWith(disposableRegistration);
                 this.WhenAnyValue(v => v.SearchResaultDataGrid.ActualHeight)

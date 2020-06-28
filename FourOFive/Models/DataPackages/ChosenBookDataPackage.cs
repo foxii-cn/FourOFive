@@ -11,7 +11,7 @@ namespace FourOFive.Models.DataPackages
             Id = dataSource.Id;
             Title = dataSource.Title;
         }
-        public Guid Id { get;  }
+        public Guid Id { get; }
         public string Title { get; set; }
         public override bool Equals(object obj)
         {

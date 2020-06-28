@@ -33,7 +33,7 @@ namespace FourOFive.ViewModels
         public SourceCache<BorrowLog, Guid> SelectedReturnableSearchResultsSource { get; private set; }
 
         public ReactiveCommand<Unit, List<BorrowLog>> SearchCommand { get; private set; }
-        public ReactiveCommand<Unit, List<(string,  string)>> ReturnBookCommand { get; private set; }
+        public ReactiveCommand<Unit, List<(string, string)>> ReturnBookCommand { get; private set; }
         private ObservableAsPropertyHelper<bool> isReturning;
         public bool IsReturning => isReturning.Value;
 
@@ -76,8 +76,8 @@ namespace FourOFive.ViewModels
                 .Subscribe(rs =>
                 {
                     SearchCommand.Execute().SubscribeOn(RxApp.MainThreadScheduler).Subscribe();
-                    List<string> successfulResults = rs.Where(r => r.Item2 ==null).Select(r => $"《{r.Item1}》").ToList();
-                    List<string> failedResults = rs.Where(r => r.Item2 !=null).Select(r => $"《{r.Item1}》({r.Item2})").ToList();
+                    List<string> successfulResults = rs.Where(r => r.Item2 == null).Select(r => $"《{r.Item1}》").ToList();
+                    List<string> failedResults = rs.Where(r => r.Item2 != null).Select(r => $"《{r.Item1}》({r.Item2})").ToList();
                     if (successfulResults.Count > 0)
                     {
                         string successful = $"还书成功: {string.Join(", ", successfulResults)}";
@@ -123,12 +123,12 @@ namespace FourOFive.ViewModels
         public async Task<List<(string, string)>> ReturnBookAsync()
         {
             // GUI无法防止异步操作时主线程对选择的查询结果的改动, 因此这边要做缓存
-            List<(Guid,string) > toReturnBooks = SelectedReturnableSearchResultsSource.Items.Select(bl => (bl.BookId,bl.Book.Title)).ToList();
+            List<(Guid, string)> toReturnBooks = SelectedReturnableSearchResultsSource.Items.Select(bl => (bl.BookId, bl.Book.Title)).ToList();
             User account = new User { Id = ParentViewModel.Account.Id };
-            List<(string, string)> returnResults = new List<(string,string)>(toReturnBooks.Count);
+            List<(string, string)> returnResults = new List<(string, string)>(toReturnBooks.Count);
             await Task.Run(async () =>
             {
-                foreach ((Guid bookId ,string title)in toReturnBooks)
+                foreach ((Guid bookId, string title) in toReturnBooks)
                 {
                     try
                     {

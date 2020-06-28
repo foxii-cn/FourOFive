@@ -14,7 +14,6 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace FourOFive.ViewModels
@@ -91,7 +90,7 @@ namespace FourOFive.ViewModels
                 Publisher.Select(t => t.Item2)
                 .BindTo(this, vm => vm.PageAmount);
                 searchResults = Publisher.Select(t => t.Item1)
-                .ToProperty(this, vm => vm.SearchResults,scheduler:RxApp.MainThreadScheduler);
+                .ToProperty(this, vm => vm.SearchResults, scheduler: RxApp.MainThreadScheduler);
                 Publisher.Connect();
                 SearchCommand.ThrownExceptions.Subscribe(ex => logger.Error(ex, "查询出错"));
                 isSearching = SearchCommand.IsExecuting
@@ -117,7 +116,7 @@ namespace FourOFive.ViewModels
                 .Subscribe()
                 .DisposeWith(disposableRegistration);
 
-                BorrowCommand = ReactiveCommand.CreateFromTask(BorrowBookAsync, 
+                BorrowCommand = ReactiveCommand.CreateFromTask(BorrowBookAsync,
                     ToBorrowBooksSource.CountChanged  // 待借书栏书本数量大于0时才可执行
                     .Select(c => c > 0)
                     .ObserveOn(RxApp.MainThreadScheduler)) // 主线程订阅

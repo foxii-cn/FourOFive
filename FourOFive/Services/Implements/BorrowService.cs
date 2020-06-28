@@ -27,9 +27,12 @@ namespace FourOFive.Services
             BorrowLog leaseLog = null;
             Book bCheck = (await database.SelectAsync<Book, Book>(b => b.Id == bookId.Id)).FirstOrDefault();
             User uCheck = (await database.SelectAsync<User, User>(u => u.Id == userId.Id)).FirstOrDefault();
-            _= (await database.SelectAsync<BorrowLog, BorrowLog>(null, pageIndex: 1, pageSize: 1)).FirstOrDefault();
-            if(bCheck == null||uCheck==null)
+            _ = (await database.SelectAsync<BorrowLog, BorrowLog>(null, pageIndex: 1, pageSize: 1)).FirstOrDefault();
+            if (bCheck == null || uCheck == null)
+            {
                 throw new Exception("借阅人或目标不合法");
+            }
+
             using IDatabaseTransactionManager transaction = database.StartTransaction();
             try
             {
@@ -94,7 +97,7 @@ namespace FourOFive.Services
             using IDatabaseTransactionManager transaction = database.StartTransaction();
             try
             {
-                await database.ForUpdateAsync<BorrowLog, BorrowLog>(bl => bl.Id== leaseLogCheck .Id&& bl.User.Id == bl.User.Id && bl.Book.Id == bl.Book.Id, transaction: transaction.GetTransaction());
+                await database.ForUpdateAsync<BorrowLog, BorrowLog>(bl => bl.Id == leaseLogCheck.Id && bl.User.Id == bl.User.Id && bl.Book.Id == bl.Book.Id, transaction: transaction.GetTransaction());
                 leaseLog = (await database.SelectAsync<BorrowLog, BorrowLog>(bl => bl.Id == leaseLogCheck.Id && bl.User.Id == bl.User.Id && bl.Book.Id == bl.Book.Id, transaction: transaction.GetTransaction())).FirstOrDefault();
                 if (leaseLog == null)
                 {
@@ -118,7 +121,7 @@ namespace FourOFive.Services
                     throw new Exception("更新借阅记录失败");
                 }
 
-                leaseLog = (await database.SelectAsync<BorrowLog, BorrowLog>(bl => bl.Id == leaseLog.Id&&bl.Book.Id== bl.Book.Id, transaction: transaction.GetTransaction())).FirstOrDefault();
+                leaseLog = (await database.SelectAsync<BorrowLog, BorrowLog>(bl => bl.Id == leaseLog.Id && bl.Book.Id == bl.Book.Id, transaction: transaction.GetTransaction())).FirstOrDefault();
                 if (leaseLog == null)
                 {
                     throw new Exception("更新借阅记录失败");
