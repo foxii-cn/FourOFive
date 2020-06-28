@@ -70,7 +70,7 @@
                     Width="120"
                     AutoSelect="False"
                     BorderThickness="1"
-                    ExpandMode="Accordion">
+                    ExpandMode="ShowAll">
                     <hc:SideMenuItem x:Name="AccountSideMenu" Header="账户">
                         <hc:SideMenuItem.Icon>
                             <Image
@@ -87,11 +87,6 @@
                         <hc:SideMenuItem x:Name="RegisterSideMenu" Header="注册">
                             <hc:SideMenuItem.Icon>
                                 <TextBlock Style="{StaticResource TextBlockFabricIcons}" Text="&#xED58;" />
-                            </hc:SideMenuItem.Icon>
-                        </hc:SideMenuItem>
-                        <hc:SideMenuItem x:Name="OverTimeLeaseSideMenu" Header="未还图书">
-                            <hc:SideMenuItem.Icon>
-                                <TextBlock Style="{StaticResource TextBlockFabricIcons}" Text="&#xEA41;" />
                             </hc:SideMenuItem.Icon>
                         </hc:SideMenuItem>
                         <hc:SideMenuItem x:Name="BorrowLogSideMenu" Header="借阅记录">

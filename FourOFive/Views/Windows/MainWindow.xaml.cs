@@ -41,11 +41,6 @@ namespace FourOFive.Views.Windows
                 .DisposeWith(disposableRegistration);
                 this.OneWayBind(ViewModel,
                     vm => vm.AccountAuthorityLevel,
-                    v => v.OverTimeLeaseSideMenu.Visibility,
-                    value => value >= AuthorityLevel.Member ? Visibility.Visible : Visibility.Collapsed)
-                .DisposeWith(disposableRegistration);
-                this.OneWayBind(ViewModel,
-                    vm => vm.AccountAuthorityLevel,
                     v => v.BorrowLogSideMenu.Visibility,
                     value => value >= AuthorityLevel.Member ? Visibility.Visible : Visibility.Collapsed)
                 .DisposeWith(disposableRegistration);

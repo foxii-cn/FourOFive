@@ -12,7 +12,7 @@
     x:TypeArguments="vm:BooksViewModel"
     mc:Ignorable="d">
     <Border
-        Background="{DynamicResource RegionBrush}"
+        Background="Transparent"
         BorderBrush="{DynamicResource BorderBrush}"
         BorderThickness="0,1,1,1">
         <Grid>
