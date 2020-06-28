@@ -14,6 +14,7 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FourOFive.ViewModels
@@ -45,9 +46,11 @@ namespace FourOFive.ViewModels
         private ObservableAsPropertyHelper<bool> isSearching;
         public bool IsSearching => isSearching.Value;
 
+        // 用户选中的搜索结果
         public SourceCache<Book, Guid> SelectedSearchResultsSource { get; private set; }
         public SourceCache<ChosenBookDataPackage, Guid> SelectedToBorrowBooksSource { get; private set; }
 
+        // 待借书栏, 注意这个元素会被异步线程操作
         private SourceCache<ChosenBookDataPackage, Guid> ToBorrowBooksSource { get; }
         private ReadOnlyObservableCollection<ChosenBookDataPackage> toBorrowBooks;
         public ReadOnlyObservableCollection<ChosenBookDataPackage> ToBorrowBooks => toBorrowBooks;
@@ -55,7 +58,7 @@ namespace FourOFive.ViewModels
         public ReactiveCommand<Unit, (List<Book>, int, long)> SearchCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> AddToBorrowCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> DeleteFromBorrowCommand { get; private set; }
-        
+
         public ReactiveCommand<Unit, List<(string, int, string)>> BorrowCommand { get; private set; }
         private ObservableAsPropertyHelper<bool> isBorrowing;
         public bool IsBorrowing => isBorrowing.Value;
@@ -82,7 +85,7 @@ namespace FourOFive.ViewModels
                 Publisher.Select(t => t.Item2)
                 .BindTo(this, vm => vm.PageAmount);
                 searchResults = Publisher.Select(t => t.Item1)
-                .ToProperty(this, vm => vm.SearchResults);
+                .ToProperty(this, vm => vm.SearchResults,scheduler:RxApp.MainThreadScheduler);
                 Publisher.Connect();
                 SearchCommand.ThrownExceptions.Subscribe(ex => logger.Error(ex, "查询出错"));
                 isSearching = SearchCommand.IsExecuting
@@ -103,16 +106,23 @@ namespace FourOFive.ViewModels
 
                 ToBorrowBooksSource
                 .Connect()
+                .ObserveOn(RxApp.MainThreadScheduler)  // 主线程订阅
                 .Bind(out toBorrowBooks)
                 .Subscribe()
                 .DisposeWith(disposableRegistration);
 
-                BorrowCommand = ReactiveCommand.CreateFromTask(BorrowBookAsync, ToBorrowBooksSource.CountChanged.Select(c => c > 0))
+                BorrowCommand = ReactiveCommand.CreateFromTask(BorrowBookAsync, 
+                    ToBorrowBooksSource.CountChanged  // 待借书栏书本数量大于0时才可执行
+                    .Select(c => c > 0)
+                    .ObserveOn(RxApp.MainThreadScheduler)) // 主线程订阅
                 .DisposeWith(disposableRegistration);
                 isBorrowing = BorrowCommand.IsExecuting
                 .ToProperty(this, vm => vm.IsBorrowing);
-                BorrowCommand.Subscribe(rs =>
+                BorrowCommand
+                .ObserveOn(RxApp.TaskpoolScheduler)
+                .Subscribe(rs =>
                 {
+                    ToBorrowBooksSource.Clear();  //清空待借书栏
                     List<string> successfulResults = rs.Where(r => r.Item2 >= 0).Select(r => $"《{r.Item1}》({r.Item2}天)").ToList();
                     List<string> failedResults = rs.Where(r => r.Item2 < 0).Select(r => $"《{r.Item1}》({r.Item3})").ToList();
                     if (successfulResults.Count > 0)
@@ -121,7 +131,7 @@ namespace FourOFive.ViewModels
                         ParentViewModel.GUINotify.Handle(new GUINotifyingDataPackage
                         {
                             Message = successful,
-                            Duration = TimeSpan.FromSeconds((int)(1 + 0.5 * successfulResults.Count)),
+                            Duration = TimeSpan.FromSeconds(1 + successfulResults.Count),
                             Type = NotifyingType.Success
                         })
                         .Subscribe();
@@ -132,12 +142,11 @@ namespace FourOFive.ViewModels
                         ParentViewModel.GUINotify.Handle(new GUINotifyingDataPackage
                         {
                             Message = failed,
-                            Duration = TimeSpan.FromSeconds((int)(1 + 0.5 * failedResults.Count)),
+                            Duration = TimeSpan.FromSeconds(1 + failedResults.Count),
                             Type = NotifyingType.Error
                         })
                         .Subscribe();
                     }
-                    ToBorrowBooksSource.Clear();
                 });
 
                 AddToBorrowCommand = ReactiveCommand.Create(
@@ -147,28 +156,33 @@ namespace FourOFive.ViewModels
 
                 DeleteFromBorrowCommand = ReactiveCommand.Create(
                     () => ToBorrowBooksSource.Remove(SelectedToBorrowBooksSource.Items),
-                    SelectedToBorrowBooksSource.CountChanged.Select(c => c > 0).CombineLatest(this.WhenAnyValue(vm => vm.IsBorrowing, b => !b),(c,b)=>c&&b))
+                    SelectedToBorrowBooksSource.CountChanged.Select(c => c > 0).CombineLatest(this.WhenAnyValue(vm => vm.IsBorrowing, b => !b), (c, b) => c && b))
                 .DisposeWith(disposableRegistration);
             });
         }
         public async Task<(List<Book>, int, long)> SearchAsync()
         {
-            Expression<Func<Book, bool>> whereExp;
-            if (SearchTerms != null)
+            int pageSize = PageSize;
+            int pageIndex = PageIndex;
+            return await Task.Run(async () =>
             {
-                whereExp = b => b.Author.Contains(SearchTerms) || b.PublishingHouse.Contains(SearchTerms) || b.Title.Contains(SearchTerms);
-            }
-            else
-            {
-                whereExp = null;
-            }
-            long bookAmount = await bookService.CountAsync(whereExp);
-            int pageAmount = (int)(bookAmount / PageSize);
-            if (bookAmount % PageSize > 0)
-            {
-                pageAmount++;
-            }
-            return (await bookService.QueryAsync(whereExp, Math.Min(PageIndex, pageAmount), PageSize), pageAmount, bookAmount);
+                Expression<Func<Book, bool>> whereExp;
+                if (SearchTerms != null)
+                {
+                    whereExp = b => b.Author.Contains(SearchTerms) || b.PublishingHouse.Contains(SearchTerms) || b.Title.Contains(SearchTerms);
+                }
+                else
+                {
+                    whereExp = null;
+                }
+                long bookAmount = await bookService.CountAsync(whereExp);
+                int pageAmount = (int)(bookAmount / pageSize);
+                if (bookAmount % pageSize > 0)
+                {
+                    pageAmount++;
+                }
+                return (await bookService.QueryAsync(whereExp, Math.Min(pageIndex, pageAmount), pageSize), pageAmount, bookAmount);
+            });
         }
 
         public async Task<List<(string, int, string)>> BorrowBookAsync()
@@ -176,18 +190,21 @@ namespace FourOFive.ViewModels
             Guid account = ParentViewModel.Account.Id;
             List<(string, int, string)> borrowResults = new List<(string, int, string)>(ToBorrowBooks.Count);
             DateTime now = DateTime.Now;
-            foreach (ChosenBookDataPackage cbdp in ToBorrowBooks)
+            await Task.Run(async () =>
             {
-                try
+                foreach (ChosenBookDataPackage cbdp in ToBorrowBooks)
                 {
-                    BorrowLog leaseLog = await borrowService.BorrowBookAsync(new User { Id = account }, new Book { Id = cbdp.Id });
-                    borrowResults.Add((cbdp.Title, (int)(leaseLog.Deadline - now).TotalDays, null));
+                    try
+                    {
+                        BorrowLog leaseLog = await borrowService.BorrowBookAsync(new User { Id = account }, new Book { Id = cbdp.Id });
+                        borrowResults.Add((cbdp.Title, (int)(leaseLog.Deadline - now).TotalDays, null));
+                    }
+                    catch (Exception ex)
+                    {
+                        borrowResults.Add((cbdp.Title, -1, ex.Message));
+                    }
                 }
-                catch (Exception ex)
-                {
-                    borrowResults.Add((cbdp.Title, -1, ex.Message));
-                }
-            }
+            });
             return borrowResults;
         }
     }

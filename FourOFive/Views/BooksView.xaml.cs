@@ -44,6 +44,8 @@ namespace FourOFive.Views
                 .Throttle(TimeSpan.FromMilliseconds(500))
                 .Select(h => Math.Max(1, ((int)(h - 56)) / 48))
                 .DistinctUntilChanged()
+                .SubscribeOn(RxApp.TaskpoolScheduler)
+                .ObserveOn(RxApp.TaskpoolScheduler)
                 .BindTo(ViewModel, vm => vm.PageSize)
                 .DisposeWith(disposableRegistration);
                 this.OneWayBind(ViewModel,

@@ -20,144 +20,147 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Border
-                Grid.Row="0"
-                Margin="20,15,20,5"
-                Effect="{StaticResource EffectShadow5}"
-                Style="{StaticResource BorderRegion}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="auto" />
-                    </Grid.RowDefinitions>
-                    <hc:SearchBar
-                        x:Name="BooksSearchBar"
-                        Grid.Row="0"
-                        MinWidth="600"
-                        Margin="10,0,10,10"
-                        hc:InfoElement.Placeholder="关键词"
-                        hc:InfoElement.Title="图书检索"
-                        Style="{StaticResource SearchBarExtend}" />
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock
-                            x:Name="SearchStateTextBlock"
-                            Grid.Column="0"
-                            Margin="10,0,0,0" />
-                        <hc:LoadingLine
-                            x:Name="SearchStateLoadingLine"
-                            Grid.Column="1"
-                            Margin="5,0,5,0" />
+            <hc:TransitioningContentControl Grid.Row="0">
+                <Border
+                    Margin="20,15,20,5"
+                    Effect="{StaticResource EffectShadow5}"
+                    Style="{StaticResource BorderRegion}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <hc:SearchBar
+                            x:Name="BooksSearchBar"
+                            Grid.Row="0"
+                            MinWidth="600"
+                            Margin="10,0,10,10"
+                            hc:InfoElement.Placeholder="关键词"
+                            hc:InfoElement.Title="图书检索"
+                            Style="{StaticResource SearchBarExtend}" />
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                x:Name="SearchStateTextBlock"
+                                Grid.Column="0"
+                                Margin="10,0,0,0" />
+                            <hc:LoadingLine
+                                x:Name="SearchStateLoadingLine"
+                                Grid.Column="1"
+                                Margin="5,0,5,0" />
+                        </Grid>
                     </Grid>
-                </Grid>
-            </Border>
+                </Border>
+            </hc:TransitioningContentControl>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
-                <Border
-                    Grid.Column="0"
-                    Margin="20,5,5,20"
-                    Effect="{StaticResource EffectShadow5}"
-                    Style="{StaticResource BorderRegion}">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="auto" />
-                        </Grid.RowDefinitions>
-                        <DataGrid
-                            x:Name="SearchResaultDataGrid"
-                            Grid.Row="0"
-                            MinWidth="600"
-                            AutoGenerateColumns="False"
-                            HeadersVisibility="All"
-                            IsReadOnly="True"
-                            RowHeaderWidth="60">
-                            <DataGrid.RowHeaderTemplate>
-                                <DataTemplate>
-                                    <CheckBox IsChecked="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=DataGridRow}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                </DataTemplate>
-                            </DataGrid.RowHeaderTemplate>
-                            <DataGrid.Columns>
-                                <DataGridTextColumn
-                                    Width="95"
-                                    Binding="{Binding Id}"
-                                    Header="识别码"
-                                    IsReadOnly="True" />
-                                <DataGridTextColumn
-                                    Width="200"
-                                    Binding="{Binding Title}"
-                                    Header="书名" />
-                                <DataGridTextColumn Binding="{Binding Author}" Header="作者" />
-                                <DataGridTextColumn Binding="{Binding PublishingHouse}" Header="出版社" />
-                                <DataGridTextColumn Binding="{Binding Margin}" Header="余量" />
-                                <DataGridTextColumn Binding="{Binding Sum}" Header="总数" />
-                                <DataGridTextColumn Binding="{Binding Position}" Header="位置" />
-                            </DataGrid.Columns>
-                        </DataGrid>
-                        <hc:Pagination
-                            x:Name="SearchResaultPagination"
-                            Grid.Row="1"
-                            Margin="0,10,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            IsJumpEnabled="True" />
-                    </Grid>
-                </Border>
-                <Border
-                    Grid.Column="1"
-                    Margin="5,5,20,20"
-                    Effect="{StaticResource EffectShadow5}"
-                    Style="{StaticResource BorderRegion}">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="auto" />
-                        </Grid.RowDefinitions>
-                        <DataGrid
-                            x:Name="ChosenToBorrowDataGrid"
-                            Grid.Row="0"
-                            AutoGenerateColumns="False"
-                            HeadersVisibility="Column"
-                            IsReadOnly="True">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn
-                                    Width="200"
-                                    Binding="{Binding Title}"
-                                    CanUserResize="False"
-                                    Header="待借书本" />
-                            </DataGrid.Columns>
-                        </DataGrid>
-                        <Button
-                            x:Name="AddToBorrowButton"
-                            Grid.Row="1"
-                            Width="60"
-                            Margin="0,10,5,0"
-                            HorizontalAlignment="Left"
-                            Content="添加"
-                            Style="{StaticResource ButtonSuccess}" />
-                        <Button
-                            x:Name="DeleteFromBorrowButton"
-                            Grid.Row="1"
-                            Width="60"
-                            Margin="5,10,5,0"
-                            HorizontalAlignment="Center"
-                            Content="移除"
-                            Style="{StaticResource ButtonDanger}" />
-                        <Button
-                            x:Name="BorrowButton"
-                            Grid.Row="1"
-                            Width="60"
-                            Margin="5,10,0,0"
-                            HorizontalAlignment="Right"
-                            Content="借阅"
-                            Style="{StaticResource ButtonPrimary}" />
-                    </Grid>
-                </Border>
+                <hc:TransitioningContentControl Grid.Column="0">
+                    <Border
+                        Margin="20,5,5,20"
+                        Effect="{StaticResource EffectShadow5}"
+                        Style="{StaticResource BorderRegion}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+                            <DataGrid
+                                x:Name="SearchResaultDataGrid"
+                                Grid.Row="0"
+                                MinWidth="600"
+                                AutoGenerateColumns="False"
+                                HeadersVisibility="All"
+                                IsReadOnly="True"
+                                RowHeaderWidth="60">
+                                <DataGrid.RowHeaderTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=DataGridRow}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    </DataTemplate>
+                                </DataGrid.RowHeaderTemplate>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn
+                                        Width="95"
+                                        Binding="{Binding Id}"
+                                        Header="识别码"
+                                        IsReadOnly="True" />
+                                    <DataGridTextColumn
+                                        Width="200"
+                                        Binding="{Binding Title}"
+                                        Header="书名" />
+                                    <DataGridTextColumn Binding="{Binding Author}" Header="作者" />
+                                    <DataGridTextColumn Binding="{Binding PublishingHouse}" Header="出版社" />
+                                    <DataGridTextColumn Binding="{Binding Margin}" Header="余量" />
+                                    <DataGridTextColumn Binding="{Binding Sum}" Header="总数" />
+                                    <DataGridTextColumn Binding="{Binding Position}" Header="位置" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <hc:Pagination
+                                x:Name="SearchResaultPagination"
+                                Grid.Row="1"
+                                Margin="0,10,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                IsJumpEnabled="True" />
+                        </Grid>
+                    </Border>
+                </hc:TransitioningContentControl>
+                <hc:TransitioningContentControl Grid.Column="1">
+                    <Border
+                        Margin="5,5,20,20"
+                        Effect="{StaticResource EffectShadow5}"
+                        Style="{StaticResource BorderRegion}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+                            <DataGrid
+                                x:Name="ChosenToBorrowDataGrid"
+                                Grid.Row="0"
+                                AutoGenerateColumns="False"
+                                HeadersVisibility="Column"
+                                IsReadOnly="True">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn
+                                        Width="200"
+                                        Binding="{Binding Title}"
+                                        CanUserResize="False"
+                                        Header="待借书本" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Button
+                                x:Name="AddToBorrowButton"
+                                Grid.Row="1"
+                                Width="60"
+                                Margin="0,10,5,0"
+                                HorizontalAlignment="Left"
+                                Content="添加"
+                                Style="{StaticResource ButtonSuccess}" />
+                            <Button
+                                x:Name="DeleteFromBorrowButton"
+                                Grid.Row="1"
+                                Width="60"
+                                Margin="5,10,5,0"
+                                HorizontalAlignment="Center"
+                                Content="移除"
+                                Style="{StaticResource ButtonDanger}" />
+                            <Button
+                                x:Name="BorrowButton"
+                                Grid.Row="1"
+                                Width="60"
+                                Margin="5,10,0,0"
+                                HorizontalAlignment="Right"
+                                Content="借阅"
+                                Style="{StaticResource ButtonPrimary}" />
+                        </Grid>
+                    </Border>
+                </hc:TransitioningContentControl>
             </Grid>
         </Grid>
     </Border>

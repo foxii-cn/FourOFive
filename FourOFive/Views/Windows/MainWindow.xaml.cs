@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace FourOFive.Views.Windows
@@ -19,10 +20,13 @@ namespace FourOFive.Views.Windows
         private readonly Dictionary<string, IChildrenView<MainWindow>> childrenViews = new Dictionary<string, IChildrenView<MainWindow>>();
         private readonly Dictionary<string, SideMenuItem> sideMenuItems = new Dictionary<string, SideMenuItem>();
         private string activatedKey;
+        private readonly string  growlToken;
         public MainWindow(MainWindowViewModel viewModel)
         {
             InitializeComponent();
             ViewModel = viewModel;
+            growlToken = GrowlStackPanel.Name;
+            Growl.Register(growlToken, GrowlStackPanel);
             this.WhenActivated(disposableRegistration =>
             {
                 this.OneWayBind(ViewModel,
@@ -67,43 +71,45 @@ namespace FourOFive.Views.Windows
                     sideMenuItems.Add(smi.Name, smi);
                 }
 
-                Growl.Register(GrowlStackPanel.Name, GrowlStackPanel);
-                ViewModel.GUINotify.RegisterHandler(interactioni =>
+                ViewModel.GUINotify.RegisterHandler(async interactioni =>
                 {
-                    GUINotifyingDataPackage info = interactioni.Input;
-                    interactioni.SetOutput(Unit.Default);
-                    GrowlInfo growlInfo = new GrowlInfo
+                    await Task.Run(() =>
                     {
-                        Message = info.Message,
-                        WaitTime = (int)info.Duration.TotalSeconds,
-                        Token = GrowlStackPanel.Name,
-                        StaysOpen = false,
-                        IsCustom = true
-                    };
-                    switch (info.Type)
-                    {
-                        case NotifyingType.Success:
-                            growlInfo.WaitTime = growlInfo.WaitTime == 0 ? 4 : growlInfo.WaitTime;
-                            Growl.Success(growlInfo);
-                            break;
-                        default:
-                        case NotifyingType.Info:
-                            growlInfo.WaitTime = growlInfo.WaitTime == 0 ? 4 : growlInfo.WaitTime;
-                            Growl.Info(growlInfo);
-                            break;
-                        case NotifyingType.Warning:
-                            growlInfo.WaitTime = growlInfo.WaitTime == 0 ? 6 : growlInfo.WaitTime;
-                            Growl.Warning(growlInfo);
-                            break;
-                        case NotifyingType.Error:
-                            growlInfo.WaitTime = growlInfo.WaitTime == 0 ? 8 : growlInfo.WaitTime;
-                            Growl.Error(growlInfo);
-                            break;
-                        case NotifyingType.Fatal:
-                            growlInfo.WaitTime = growlInfo.WaitTime == 0 ? 10 : growlInfo.WaitTime;
-                            Growl.Fatal(growlInfo);
-                            break;
-                    }
+                        GUINotifyingDataPackage info = interactioni.Input;
+                        interactioni.SetOutput(Unit.Default);
+                        GrowlInfo growlInfo = new GrowlInfo
+                        {
+                            Message = info.Message,
+                            WaitTime = (int)info.Duration.TotalSeconds,
+                            Token = growlToken,
+                            StaysOpen = false,
+                            IsCustom = true
+                        };
+                        switch (info.Type)
+                        {
+                            case NotifyingType.Success:
+                                growlInfo.WaitTime = growlInfo.WaitTime == 0 ? 4 : growlInfo.WaitTime;
+                                Growl.Success(growlInfo);
+                                break;
+                            default:
+                            case NotifyingType.Info:
+                                growlInfo.WaitTime = growlInfo.WaitTime == 0 ? 4 : growlInfo.WaitTime;
+                                Growl.Info(growlInfo);
+                                break;
+                            case NotifyingType.Warning:
+                                growlInfo.WaitTime = growlInfo.WaitTime == 0 ? 6 : growlInfo.WaitTime;
+                                Growl.Warning(growlInfo);
+                                break;
+                            case NotifyingType.Error:
+                                growlInfo.WaitTime = growlInfo.WaitTime == 0 ? 8 : growlInfo.WaitTime;
+                                Growl.Error(growlInfo);
+                                break;
+                            case NotifyingType.Fatal:
+                                growlInfo.WaitTime = growlInfo.WaitTime == 0 ? 10 : growlInfo.WaitTime;
+                                Growl.Fatal(growlInfo);
+                                break;
+                        }
+                    });
                 });
             });
         }

@@ -55,12 +55,10 @@ namespace FourOFive.ViewModels
                 LoginCommand.ThrownExceptions.Subscribe(ex => logger.Error(ex, "登录出错"));
                 isLoginning = LoginCommand.IsExecuting.ToProperty(this, vm => vm.IsLoginning);
             });
-
         }
         public async Task<User> LoginAsync()
         {
-            return await userService.LogInAsync(new User { UserName = userName, Password = password });
+            return await Task.Run(async () => await userService.LogInAsync(new User { UserName = userName, Password = password }));
         }
-
     }
 }
