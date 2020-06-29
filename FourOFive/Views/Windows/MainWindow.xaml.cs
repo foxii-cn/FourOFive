@@ -10,17 +10,20 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 
 namespace FourOFive.Views.Windows
 {
-    public partial class MainWindow : ReactiveGlowWindow<MainWindowViewModel>
+    public partial class MainWindow : ReactiveGlowWindow<MainWindowViewModel>, IViewsContainer<MainWindow>
     {
         private readonly Dictionary<string, IChildrenView<MainWindow>> childrenViews = new Dictionary<string, IChildrenView<MainWindow>>();
         private readonly Dictionary<string, SideMenuItem> sideMenuItems = new Dictionary<string, SideMenuItem>();
+        private System.Windows.Window aboutWindow;
         private string activatedKey;
         private readonly string growlToken;
+        
         public MainWindow(MainWindowViewModel viewModel)
         {
             InitializeComponent();
@@ -61,11 +64,16 @@ namespace FourOFive.Views.Windows
                 .Subscribe(smi => Navigate(smi.Name))
                 .DisposeWith(disposableRegistration);
 
+                Observable.FromEventPattern(AboutMenuItem, nameof(AboutMenuItem.Click))
+                .Subscribe(ep => aboutWindow.Show())
+                .DisposeWith(disposableRegistration);
+
                 foreach (SideMenuItem smi in MainSideMenu.Items.OfType<SideMenuItem>().SelectMany(smi => smi.Items).OfType<SideMenuItem>())
                 {
                     sideMenuItems.Add(smi.Name, smi);
                 }
 
+                // 注册右上角漂浮通知
                 ViewModel.GUINotify.RegisterHandler(async interactioni =>
                 {
                     await Task.Run(() =>
@@ -111,8 +119,16 @@ namespace FourOFive.Views.Windows
 
         public void RegisterChildrenView(string key, IChildrenView<MainWindow> childrenView)
         {
-            childrenViews.Add(key, childrenView);
-            childrenView.ParentView = this;
+            if (key == "AboutWindow" && childrenView is System.Windows.Window about)
+            {
+                aboutWindow = about;
+                aboutWindow.Owner = this;
+            }
+            else
+            {
+                childrenViews.Add(key, childrenView);
+                childrenView.ParentView = this;
+            }
         }
         public void Navigate(string key)
         {

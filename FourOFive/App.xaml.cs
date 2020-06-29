@@ -46,6 +46,7 @@ namespace FourOFive
                 .AddScoped<BorrowLogsView>()
                 .AddScoped<RegisterViewModel>()
                 .AddScoped<RegisterView>()
+                .AddScoped<AboutWindow>()
                 ;
 
             serviceProvider = serviceCollection.BuildServiceProvider();
@@ -57,6 +58,7 @@ namespace FourOFive
             await serviceProvider.GetService<IConfigurationManagerFactory>().InitializationAsync(configPath, configEncoding);
             MainWindow mainWindow = serviceProvider.GetService<MainWindow>();
             MainWindow = mainWindow;
+            mainWindow.RegisterChildrenView(nameof(AboutWindow), serviceProvider.GetService<AboutWindow>());
             mainWindow.RegisterChildrenView(mainWindow.LoginSideMenu.Name, serviceProvider.GetService<LogInView>());
             mainWindow.RegisterChildrenView(mainWindow.AccountInfoSideMenu.Name, serviceProvider.GetService<UserInfoView>());
             mainWindow.RegisterChildrenView(mainWindow.BooksQuerySideMenu.Name, serviceProvider.GetService<BooksView>());

@@ -1,13 +1,12 @@
 ﻿namespace FourOFive.Views.Windows
 {
-    /// <summary>
-    /// AboutWindow.xaml 的交互逻辑
-    /// </summary>
-    public partial class AboutWindow
+    public partial class AboutWindow:IChildrenView<MainWindow>
     {
         public AboutWindow()
         {
             InitializeComponent();
         }
+
+        public MainWindow ParentView { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
     }
 }

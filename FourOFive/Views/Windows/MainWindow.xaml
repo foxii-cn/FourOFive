@@ -28,7 +28,7 @@
                 <MenuItem.Header>
                     <TextBlock Style="{StaticResource TextBlockFabricIcons}" Text="&#xECF4;" />
                 </MenuItem.Header>
-                <MenuItem Width="100" Header="关于">
+                <MenuItem Width="100" Header="关于" x:Name="AboutMenuItem">
                     <MenuItem.Icon>
                         <TextBlock Style="{StaticResource TextBlockFabricIcons}" Text="&#xE9D5;" />
                     </MenuItem.Icon>

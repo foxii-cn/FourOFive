@@ -13,6 +13,8 @@
     ResizeMode="NoResize"
     ShowInTaskbar="False"
     ShowTitle="True"
+    ActiveGlowColor="OrangeRed"
+    InactiveGlowColor="GreenYellow"
     WindowStartupLocation="CenterOwner"
     mc:Ignorable="d">
     <hc:SimplePanel>
